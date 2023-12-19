@@ -1,7 +1,8 @@
 CC=cc
 CFLAGS=
 INCLUDES=-I./includes
-SOURCES= main.c utils/utils1.c utils/edgecases.c init.c
+DEBUG= debug.c
+SOURCES= $(DEBUG) main.c utils/utils1.c utils/edgecases.c init.c 
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 
@@ -12,7 +13,7 @@ all:$(NAME)
 $(NAME): build clean2
 
 build: $(OBJECTS)
-	@$(CC) $^ -o $(NAME) $(INCLUDES)
+	@$(CC) $(INCLUDES) $^ -o $(NAME) 
 	@echo "\033[32mBuild complete.\033[0m"
 
 %.o: %.c
