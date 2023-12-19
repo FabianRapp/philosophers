@@ -5,36 +5,38 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 22:51:55 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/10 00:27:21 by frapp            ###   ########.fr       */
+/*   Created: 2023/12/15 08:45:34 by frapp             #+#    #+#             */
+/*   Updated: 2023/12/15 09:10:42 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INCLUDES_H
 #define INCLUDES_H
 
-#include <string.h>
+# include <stdbool.h>
+
+# include <string.h>
 /*
 	void	*memset(void *b, int c, size_t len);
 */
 
-#include <stdio.h>
+# include <stdio.h>
 /*
 	printf
 */
 
-#include <stdlib.h>
+# include <stdlib.h>
 /*
 	malloc, free
 */
 
-#include <unistd.h>
+# include <unistd.h>
 /*
 	write
 	int	usleep(useconds_t microseconds); sleepts a trhead for MINIMUM microseconds
 */
 
-#include <sys/time.h>
+# include <sys/time.h>
 /*
 	struct timeval {
 			time_t       tv_sec;    seconds since Jan. 1, 1970 
@@ -43,7 +45,7 @@
 	int	gettimeofday(struct timeval *restrict tp, void *restrict tzp);
 */
 
-#include <pthread.h>
+# include <pthread.h>
 /*
 	PTHREAD_THREADS_MAX // max threads on system
 

@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils1.c                                           :+:      :+:    :+:   */
+/*   edgecases.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 03:57:48 by frapp             #+#    #+#             */
-/*   Updated: 2023/11/10 03:58:24 by frapp            ###   ########.fr       */
+/*   Created: 2023/12/15 09:17:02 by frapp             #+#    #+#             */
+/*   Updated: 2023/12/19 15:23:52 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include <philo.h>
 
-long long	get_time(void)
+void	handle_only_1_philo(t_general *general)
 {
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (((long long)time.tv_sec) * 1000 + ((long long)time.tv_usec) / 1000);
+	return ;
 }
+
