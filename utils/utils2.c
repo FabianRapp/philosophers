@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 10:06:24 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 11:31:59 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,6 @@ int	ft_atoi(const char *str)
 	}
 	return (num * sign);
 }
-
-// long long	get_time(void)
-// {
-// 	struct timeval	time;
-
-// 	gettimeofday(&time, NULL);
-// 	return (((long long)time.tv_sec) * 1000 + ((long long)time.tv_usec) / 1000);
-// }
 
 long long	my_gettime(void)
 {

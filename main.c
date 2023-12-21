@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 06:46:02 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 11:33:26 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ long long	action(t_philo *philo)
 	printf("%lld %d is thinking\n", philo->current_time - philo->total_start_t, philo->index);
 	if (!eat(philo))
 		return (0);
-	// printf("%lld %d is eating for the %d. time\n", my_gettime(philo->total_start_t), philo->index, ++eat_cout);
 	if (philo->eat_count > 0)
 		philo->eat_count--;
 	if (check_exit(philo, "action"))
@@ -96,5 +95,3 @@ int	main(int ac, char *av[])
 	wait_threads(&general);
 	return (0);
 }
-// 1703007331949
-// 1703007332150

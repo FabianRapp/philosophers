@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 10:05:31 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 11:32:58 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ int	fill_philo(t_general *general, int i)
 	if (pthread_mutex_init(&philo->main_fork.mutex_used, NULL))
 		return (0);
 	philo->next_eat = 0;
-	philo->eat_wait_time = philo->eat_ti >> 1;
-	//philo->eat_wait_time = (philo->eat_ti >> 1) + (philo->eat_ti >> 2) + (philo->eat_ti >> 3) + (philo->eat_ti >> 4);
+	//philo->eat_wait_time = philo->eat_ti >> 1;
 	philo->eat_wait_time = (philo->eat_ti >> 4);
 	if (!(general->count % 2))
 	{
@@ -86,46 +85,10 @@ int	fill_philo(t_general *general, int i)
 		{
 			philo->next_eat +=  0;
 		}
-		//philo->eat_wait_time += philo->eat_ti;
 		philo->eat_wait_time += (philo->eat_ti >> 4);
 	}
 	return (1);
 }
-
-	// if (general->count % 2)
-	// 	philo->even = false;
-	// if (general->count % 2)
-	// {
-	// 	philo->eat_wait_time = (philo->eat_ti >> 1) + (philo->eat_ti >> 2) + (philo->eat_ti >> 3) + (philo->eat_ti >> 4);
-	// 	if (i % 3 && !philo->even && !i % 2)
-	// 	{
-	// 		philo->eat_wait_time = (philo->eat_ti) + 5;
-	// 	}
-	// 	else if (i % 2 && !philo->even)
-	// 	{
-	// 		philo->eat_wait_time = 0;
-	// 	}
-	// 	else if (!philo->even)
-	// 	{
-	// 		philo->eat_wait_time = (philo->eat_ti) * 2 + 5;
-	// 	}
-	// }
-	// philo->next_eat += philo->eat_wait_time;
-
-	
-	// if (general->count % 2)
-	// 	philo->next_eat_offset = 0;
-	// else
-	// {
-	// 	philo->next_eat_offset = (int) (((((double)philo->starve_ti) / 3) * 2)) - 5;
-	// 	philo->next_eat_offset = 205;
-	// }
-	// printf("%lld\n",philo->next_eat_offset);
-	// // if (!i % 2 || i == general->count - 1)
-	// // {
-	// // 	philo->next_eat = 0;
-	// // }
-
 
 int	intit_threadding(t_general *general)
 {
@@ -163,7 +126,5 @@ int	init_philos(t_general *general)
 		fill_philo(general, i);
 		i++;
 	}
-	// if (i == 1)
-	// 	return (handle_only_1_philo(general), 1);
 	return (1);
 }
