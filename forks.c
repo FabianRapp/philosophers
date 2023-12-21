@@ -6,13 +6,13 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 06:31:32 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 07:09:44 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-#define DEBUG
+//#define DEBUG
 
 bool	pickup_left_fork(t_philo *philo)
 {
@@ -24,6 +24,7 @@ bool	pickup_left_fork(t_philo *philo)
 		while(philo->left_fork->used)
 		{
 			pthread_mutex_unlock(&philo->left_fork->mutex_used);
+			usleep(10);
 			if (check_exit(philo, "pickup left fork1"))
 				return (false);
 			pthread_mutex_lock(&philo->left_fork->mutex_used);

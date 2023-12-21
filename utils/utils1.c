@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 06:48:54 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 07:11:39 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ bool	eat(t_philo *philo)
 	if (!drop_forks(philo))
 		return (0);
 	philo->current_time += philo->eat_ti;
+	// if (philo->even)
+	// 	philo->next_eat = philo->current_time + (philo->eat_ti >> 1);
 	if (philo->even)
-		philo->next_eat = philo->current_time + (philo->eat_ti >> 1);
+		philo->next_eat = USLEEP_TIME * 2 + 2;
 	else
 		philo->next_eat = NEXT_EAT;
 	return (1);
@@ -94,6 +96,7 @@ bool	check_exit(t_philo *philo, char *str)
 		if (!(local_current_time > philo->death_time))
 		{
 			pthread_mutex_unlock(philo->mutex_exit);
+			return (false);
 		}
 		else
 		{
@@ -110,7 +113,6 @@ bool	check_exit(t_philo *philo, char *str)
 			pthread_mutex_unlock(philo->mutex_exit);
 			return (true);
 		}
-		return (false);
 	}
 	pthread_mutex_unlock(philo->mutex_exit);
 	return (true);

@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 06:51:32 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 07:08:05 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,21 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	int16_t				index;
-	int					starve_ti;
-	int					eat_ti;
-	int					sleep_ti;
-	int					eat_count;
+	uint8_t				index;
+	uint16_t			starve_ti;
+	uint16_t			eat_ti;
+	uint16_t			sleep_ti;
+	int16_t				eat_count;
 	long long			death_time;
 	long long			total_start_t;
 	long long			current_time;
+	bool				*exit;
+	pthread_mutex_t		*mutex_exit;
 	long long			next_eat;
 	bool				even;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
 	t_fork				main_fork;
-	bool				*exit;
-	pthread_mutex_t		*mutex_exit;
 }	t_philo;
 
 typedef struct	s_general
@@ -61,7 +61,7 @@ typedef struct	s_general
 	int					eat_ti;
 	int					sleep_ti;
 	int					eat_count;
-	long long	total_start_t;
+	long long			total_start_t;
 	pthread_t			*threads;
 	t_philo				*philos;
 	bool				exit;

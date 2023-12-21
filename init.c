@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 06:35:26 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 06:56:50 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int	input(int ac, char *av[], t_general *gen)
 		printf("invalid input: <./philosophers> <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [<number_of_times_each_philosopher_must_eat>]\n");
 		return (0);
 	}
+	if (!ft_atoi(av[1]))
+	{
+		printf("missing philo count\n");
+		return (0);
+	}
 	gen->count = ft_atoi(av[1]);
 	gen->starve_ti = ft_atoi(av[2]);
 	gen->eat_ti = ft_atoi(av[3]);
@@ -29,11 +34,7 @@ int	input(int ac, char *av[], t_general *gen)
 	{
 		gen->eat_count = -1;
 	}
-	if (!gen->count)
-	{
-		printf("missing philo count\n");
-		return (0);
-	}
+
 	return (1);
 }
 
