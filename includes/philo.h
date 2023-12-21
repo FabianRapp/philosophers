@@ -6,14 +6,14 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 07:08:05 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 10:19:32 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#define USLEEP_TIME 30
+#define USLEEP_TIME 10
 //#define NEXT_EAT (philo->current_time + philo->eat_ti)
 //#define NEXT_EAT (philo->starve_ti / 10)
 //#define 
@@ -34,20 +34,20 @@ typedef struct s_fork
 	pthread_mutex_t	mutex;
 } t_fork;
 
-
 typedef struct s_philo
 {
-	uint8_t				index;
-	uint16_t			starve_ti;
-	uint16_t			eat_ti;
-	uint16_t			sleep_ti;
-	int16_t				eat_count;
-	long long			death_time;
-	long long			total_start_t;
-	long long			current_time;
+	int16_t				index;
+	int16_t					starve_ti;
+	int16_t					eat_ti;
+	int16_t					sleep_ti;
+	int16_t					eat_count;
+	int16_t				eat_wait_time;
+	int64_t			death_time;
+	int64_t			total_start_t;
+	int64_t			current_time;
 	bool				*exit;
 	pthread_mutex_t		*mutex_exit;
-	long long			next_eat;
+	int64_t			next_eat;
 	bool				even;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
@@ -56,12 +56,12 @@ typedef struct s_philo
 
 typedef struct	s_general
 {
-	int					count;
-	int					starve_ti;
-	int					eat_ti;
-	int					sleep_ti;
-	int					eat_count;
-	long long			total_start_t;
+	int16_t					count;
+	int16_t					starve_ti;
+	int16_t					eat_ti;
+	int16_t					sleep_ti;
+	int16_t					eat_count;
+	int64_t			total_start_t;
 	pthread_t			*threads;
 	t_philo				*philos;
 	bool				exit;

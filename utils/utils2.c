@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 03:54:45 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 10:06:24 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ long long	my_gettime(void)
 
 	gettimeofday(&s_time, NULL);
 	time = (long long)s_time.tv_sec * 1000LL;
-	//time += (long long)s_time.tv_usec >> 10;
-	time += (long long)s_time.tv_usec / 1000LL;
+	time += (long long)s_time.tv_usec >> 10;
+	//time += (long long)s_time.tv_usec / 1000LL;
 	return (time);
 }

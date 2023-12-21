@@ -1,6 +1,6 @@
 CC=cc
 CFLAGS=
-INCLUDES=-I./includes
+INCLUDES=-I./includes -O2
 DEBUG= debug.c
 SOURCES= $(DEBUG) main.c utils/utils1.c init.c utils/utils2.c forks.c
 OBJECTS= $(SOURCES:.c=.o)
