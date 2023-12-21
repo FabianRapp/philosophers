@@ -6,11 +6,25 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 11:32:58 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 12:29:28 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+
+static inline long long	my_gettime(void)
+{
+	struct timeval s_time;
+	long long time;
+
+	gettimeofday(&s_time, NULL);
+	time = (long long)s_time.tv_sec * 1000LL;
+	//time = (long long)s_time.tv_sec << 10;
+	time += (long long)s_time.tv_usec >> 10;
+	//time += (long long)s_time.tv_usec / 1000LL;
+	return (time);
+}
 
 int	input(int ac, char *av[], t_general *gen)
 {
@@ -62,7 +76,7 @@ int	fill_philo(t_general *general, int i)
 		return (0);
 	philo->next_eat = 0;
 	//philo->eat_wait_time = philo->eat_ti >> 1;
-	philo->eat_wait_time = (philo->eat_ti >> 4);
+	philo->eat_wait_time = (philo->eat_ti >> 1)+ (philo->eat_ti >> 2) + (philo->eat_ti >> 3) + (philo->eat_ti >> 4);
 	if (!(general->count % 2))
 	{
 		philo->even = true;
@@ -123,8 +137,7 @@ int	init_philos(t_general *general)
 	i = 0;
 	while (i < general->count)
 	{
-		fill_philo(general, i);
-		i++;
+		fill_philo(general, i++);
 	}
 	return (1);
 }

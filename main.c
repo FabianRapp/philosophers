@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 11:33:26 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 11:41:10 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ long long	action(t_philo *philo)
 		return (0);
 	if (philo->eat_count > 0)
 		philo->eat_count--;
-	if (check_exit(philo, "action"))
+	if (check_exit(philo))
 		return (0);
 	printf("%lld %d is sleeping\n", philo->current_time - philo->total_start_t, philo->index);
 	next_time = philo->sleep_ti + philo->current_time;
 	//if (!(philo->sleep_ti < MIN_SLEEP_T))
-		my_sleep_until(next_time, philo, "action sleep");
+		my_sleep_until(next_time, philo);
 	//else
 	//	my_sleep_until(MIN_SLEEP_T + philo->current_time);
 	return (next_time);
@@ -54,15 +54,15 @@ void	*main_loop(void *arg)
 
 	philo = (t_philo *)arg;
 	philo->current_time = philo->total_start_t;
-	if (philo->even)
-	{
-		if (philo->index % 2)
-			philo->next_eat = philo->current_time + (philo->eat_ti >> 1);
-	}
-	else
-		philo->next_eat = NEXT_EAT;
+	// if (philo->even)
+	// {
+	// 	if (philo->index % 2)
+	// 		philo->next_eat = philo->current_time + (philo->eat_ti >> 1);
+	// }
+	// else
+	philo->next_eat += philo->current_time;
 	philo->death_time = philo->total_start_t + philo->starve_ti;
-	while (philo->eat_count && !check_exit(philo, "main loop condition"))
+	while (philo->eat_count && !check_exit(philo))
 	{
 		philo->current_time = action(philo);
 	}

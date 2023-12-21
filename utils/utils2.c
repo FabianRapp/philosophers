@@ -6,18 +6,11 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 11:31:59 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 12:28:44 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-
-static int	white_space(char c)
-{
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (1);
-	return (0);
-}
 
 int	ft_atoi(const char *str)
 {
@@ -48,14 +41,15 @@ int	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-long long	my_gettime(void)
-{
-	struct timeval s_time;
-	long long time;
+// static inline long long	my_gettime(void)
+// {
+// 	struct timeval s_time;
+// 	long long time;
 
-	gettimeofday(&s_time, NULL);
-	time = (long long)s_time.tv_sec * 1000LL;
-	time += (long long)s_time.tv_usec >> 10;
-	//time += (long long)s_time.tv_usec / 1000LL;
-	return (time);
-}
+// 	gettimeofday(&s_time, NULL);
+// 	//time = (long long)s_time.tv_sec * 1000LL;
+// 	time = (long long)s_time.tv_sec << 10;
+// 	time += (long long)s_time.tv_usec >> 10;
+// 	//time += (long long)s_time.tv_usec / 1000LL;
+// 	return (time);
+// }
