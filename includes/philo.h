@@ -6,13 +6,15 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/19 19:16:47 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 05:06:18 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
-
 # define PHILO_H
+
+#define NEXT_EAT (philo->starve_ti / 10)
+
 # include "includes.h"
 
 # ifndef MIN_SLEEP_T
@@ -37,6 +39,7 @@ typedef struct s_philo
 	long long			death_time;
 	long long			total_start_t;
 	long long			current_time;
+	long long			next_eat;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
 	t_fork				main_fork;
@@ -72,17 +75,15 @@ int					intit_threadding(t_general *general);
 int					init_philos(t_general *general);
 
 // utils
-long long			get_time(void);
 int					ft_atoi(const char *str);
-void				handle_only_1_philo(t_general *general);
 long long			my_gettime(void);
 bool				pickup_left_fork(t_philo *philo);
 bool				pickup_right_fork(t_philo *philo);
 bool				drop_forks(t_philo *philo);
-bool				check_exit(t_philo *philo, char *str);
+bool			check_exit(t_philo *philo, char *str);
 //bool				check_starvation(t_philo *philo, char *str);
-long long			eat(t_philo *philo);
-void				my_sleep_until(long long target_time);
+bool				eat(t_philo *philo);
+void				my_sleep_until(long long target_time, t_philo *philo, char *str);
 
 
 // debug

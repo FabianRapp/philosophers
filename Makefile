@@ -2,9 +2,10 @@ CC=cc
 CFLAGS=
 INCLUDES=-I./includes
 DEBUG= debug.c
-SOURCES= $(DEBUG) main.c utils/utils1.c utils/edgecases.c init.c 
+SOURCES= $(DEBUG) main.c utils/utils1.c utils/edgecases.c init.c utils/utils2.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
+tool=drd
 
 .PHONY: all clean fclean re clean2
 
@@ -32,3 +33,6 @@ re: fclean all
 clean2:
 	@rm -f $(OBJECTS)
 	@echo "\033[33mObject files removed.\033[0m"
+
+run_valgrind:
+	valgrind --tool=$(tool) ./$(NAME)

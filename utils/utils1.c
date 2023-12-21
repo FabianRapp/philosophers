@@ -6,72 +6,19 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/19 19:24:20 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 05:06:44 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+//#define DEBUG
 
-static int	white_space(char c)
-{
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (1);
-	return (0);
-}
-
-int	ft_atoi(const char *str)
-{
-	int	num;
-	int	sign;
-	int	digit;
-
-	num = 0;
-	sign = 1;
-	while ((*str >= 9 && *str <= 13) || *str == ' ')
-		str++;
-	if (*str == '-')
-	{
-		str++;
-		sign = -1;
-	}
-	else if (*str == '+')
-		str++;
-	while ( (*str >= 48 && *str <= 57))
-	{
-		num *= 10;
-		digit = (int)(*str - '0');
-		if (digit < 0)
-			digit = -digit;
-		num += digit;
-		str++;
-	}
-	return (num * sign);
-}
-
-long long	get_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (((long long)time.tv_sec) * 1000 + ((long long)time.tv_usec) / 1000);
-}
-
-long long	my_gettime(void)
-{
-	struct timeval s_time;
-	long long time;
-
-	gettimeofday(&s_time, NULL);
-	time = (long long)s_time.tv_sec * 1000LL;
-	//time += (long long)s_time.tv_usec >> 10;
-	time += (long long)s_time.tv_usec / 1000LL;
-	return (time);
-}
-
-void	my_sleep_until(long long target_time)
+void	my_sleep_until(long long target_time, t_philo *philo, char *str)
 {
 	while(my_gettime() < target_time)
 	{
+		if (check_exit(philo, str))
+			return ;
 	}
 }
 
@@ -79,9 +26,24 @@ bool	pickup_left_fork(t_philo *philo)
 {
 	if (check_exit(philo, "pick up left fork"))
 		return (false);
+
+	#ifndef DEBUG
+		pthread_mutex_lock(&philo->left_fork->mutex_used);
+		while(philo->left_fork->used)
+		{
+			pthread_mutex_unlock(&philo->left_fork->mutex_used);
+			if (check_exit(philo, "pickup left fork1"))
+				return (false);
+			pthread_mutex_lock(&philo->left_fork->mutex_used);
+		}
+		philo->left_fork->used = true;
+		pthread_mutex_unlock(&philo->left_fork->mutex_used);
+	#endif
 	pthread_mutex_lock(&philo->left_fork->mutex);
-	printf("%lld %d has taken the left fork\n", my_gettime() - philo->total_start_t, philo->index);
-	if (check_exit(philo, "pick up left fork"))
+	philo->current_time = my_gettime();
+	printf("%lld %d has taken the left fork\n", philo->current_time - philo->total_start_t, philo->index);
+	//printf("%lld %d has taken the left fork\n", my_gettime() - philo->total_start_t, philo->index);
+	if (check_exit(philo, "pick up left fork2"))
 	{
 		pthread_mutex_unlock(&philo->left_fork->mutex);
 		return (false);
@@ -91,10 +53,25 @@ bool	pickup_left_fork(t_philo *philo)
 
 bool	pickup_right_fork(t_philo *philo)
 {
-	if (check_exit(philo, "pickup right fork"))
+	if (check_exit(philo, "pickup right fork1"))
 		return (false);
+
+	#ifndef DEBUG
+		pthread_mutex_lock(&philo->right_fork->mutex_used);
+		while (philo->right_fork->used)
+		{
+			pthread_mutex_unlock(&philo->right_fork->mutex_used);
+			if (check_exit(philo, "pickup right fork2"))
+				return (false);
+			pthread_mutex_lock(&philo->right_fork->mutex_used);
+		}
+		philo->right_fork->used = true;
+		pthread_mutex_unlock(&philo->right_fork->mutex_used);
+	#endif
 	pthread_mutex_lock(&philo->right_fork->mutex);
-	printf("%lld %d has taken the right fork\n", my_gettime() - philo->total_start_t, philo->index);
+	//printf("%lld %d has taken the right fork\n", my_gettime() - philo->total_start_t, philo->index);
+	philo->current_time = my_gettime();
+	printf("%lld %d has taken the right fork\n", philo->current_time - philo->total_start_t, philo->index);
 	if (check_exit(philo, "pickup right fork"))
 	{
 		pthread_mutex_unlock(&philo->right_fork->mutex);
@@ -103,10 +80,11 @@ bool	pickup_right_fork(t_philo *philo)
 	return (true);
 }
 
-long long	eat(t_philo *philo)
+bool	eat(t_philo *philo)
 {
 	static __thread int		eat_cout = 0; //debugging
 
+	my_sleep_until(philo->next_eat, philo, "waiting eat sleep");
 	if (philo->index % 2)
 	{
 		if (!pickup_left_fork(philo))
@@ -127,51 +105,61 @@ long long	eat(t_philo *philo)
 			return (0);
 		}
 	}
-	philo->current_time = my_gettime();
-	//printf("time left philo %d: %lld\n", philo->index, (long long)philo->death_time - (long long)philo->current_time);
-	printf("%lld %d is eating for the %d. time\n", my_gettime() - philo->total_start_t, philo->index, ++eat_cout);
+	printf("time left philo %d: %lld\n", philo->index, (long long)philo->death_time - (long long)philo->current_time);
+	if (check_exit(philo, "pickup right fork"))
+	 	return (false);
+	printf("%lld %d is eating for the %d. time\n", philo->current_time - philo->total_start_t, philo->index, ++eat_cout);
 	if (check_exit(philo, "end of eating"))
 		return (0);
-	my_sleep_until(philo->current_time + philo->eat_ti);
 	philo->death_time = philo->current_time + philo->starve_ti;
+	philo->next_eat = NEXT_EAT;//philo->death_time + philo->eat_ti / 2 + philo->sleep_ti / 2;
+	my_sleep_until(philo->current_time + philo->eat_ti, philo, "eat sleep");
 	if (!drop_forks(philo))
 		return (0);
-	return (philo->current_time + philo->eat_ti);
+	philo->current_time += philo->eat_ti;
+	return (1);
 }
 
-bool	drop_forks(t_philo *philo)
+void	drop_right_fork(t_philo *philo)
+{
+	#ifndef DEBUG
+		pthread_mutex_lock(&philo->right_fork->mutex_used);
+		philo->right_fork->used = false;
+		pthread_mutex_unlock(&philo->right_fork->mutex_used);
+		pthread_mutex_unlock(&philo->right_fork->mutex);
+	#else
+		pthread_mutex_unlock(&philo->right_fork->mutex);
+	#endif
+}
+
+void	drop_left_fork(t_philo *philo)
+{
+	#ifndef DEBUG
+		pthread_mutex_lock(&philo->left_fork->mutex_used);
+		philo->left_fork->used = false;
+		pthread_mutex_unlock(&philo->left_fork->mutex_used);
+		pthread_mutex_unlock(&philo->left_fork->mutex);
+	#else
+		pthread_mutex_unlock(&philo->left_fork->mutex);
+	#endif
+}
+
+bool drop_forks(t_philo *philo)
 {
 	if (philo->index % 2)
 	{
-		pthread_mutex_unlock(&philo->right_fork->mutex);
-		pthread_mutex_unlock(&philo->left_fork->mutex);
-		
+		drop_right_fork(philo);
+		drop_left_fork(philo);
 	}
 	else
 	{
-		pthread_mutex_unlock(&philo->left_fork->mutex);
-		pthread_mutex_unlock(&philo->right_fork->mutex);
+		drop_left_fork(philo);
+		drop_right_fork(philo);
 	}
 	if (check_exit(philo, "drop forks"))
 		return (false);
 	return (true);
 }
-
-// bool	check_exit(t_philo *philo, char *str)
-// {
-// 	pthread_mutex_lock(philo->mutex_exit);
-// 	if (*(philo->exit))
-// 	{
-// 		pthread_mutex_unlock(philo->mutex_exit);
-// 		return (true);
-// 	}
-// 	pthread_mutex_unlock(philo->mutex_exit);
-// 	if (check_starvation(philo, str))
-// 	{
-// 		return (true);
-// 	}
-// 	return (false);
-// }
 
 bool	check_exit(t_philo *philo, char *str)
 {
@@ -187,7 +175,7 @@ bool	check_exit(t_philo *philo, char *str)
 		}
 		else
 		{
-			printf("%lld %d died in %s\n", philo->current_time - philo->total_start_t, philo->index, str);
+			printf("%lld %d died in %s; %lld before next eat\n", philo->current_time - philo->total_start_t, philo->index, str, philo->next_eat - my_gettime());
 			*(philo->exit) = true;
 			pthread_mutex_unlock(philo->mutex_exit);
 			return (true);

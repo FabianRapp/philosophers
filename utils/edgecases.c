@@ -6,14 +6,8 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 09:17:02 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/19 15:23:52 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 04:16:45 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-
-void	handle_only_1_philo(t_general *general)
-{
-	return ;
-}
-

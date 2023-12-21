@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/19 19:03:55 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 05:06:31 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,39 @@ int	input(int ac, char *av[], t_general *gen)
 
 int	fill_philo(t_general *general, int i)
 {
-	(general->philos + i)->index = i;
-	(general->philos + i)->starve_ti = general->starve_ti;
-	(general->philos + i)->eat_ti = general->eat_ti;
-	(general->philos + i)->sleep_ti = general->sleep_ti;
-	(general->philos + i)->eat_count = general->eat_count;
-	(general->philos + i)->left_fork = &((general->philos + i)->main_fork);
-	((general->philos + i)->exit) = &(general->exit);
-	((general->philos + i)->mutex_exit) = &(general->mutex_exit);
+	t_philo	*philo;
+
+	philo = (general->philos + i);
+	philo->index = i;
+	philo->starve_ti = general->starve_ti;
+	philo->eat_ti = general->eat_ti;
+	philo->sleep_ti = general->sleep_ti;
+	philo->eat_count = general->eat_count;
+	philo->left_fork = &(philo->main_fork);
+	(philo->exit) = &(general->exit);
+	(philo->mutex_exit) = &(general->mutex_exit);
+	philo->main_fork.used = false;
 	if (i > 0)
-		(general->philos + i)->right_fork = &((general->philos + i - 1)->main_fork);
+		philo->right_fork = &((general->philos + i - 1)->main_fork);
 	if (i == general->count - 1)
-		(general->philos)->right_fork = &((general->philos + i)->main_fork);
-	if (pthread_mutex_init(&(general->philos + i)->main_fork.mutex, NULL))
+		(general->philos)->right_fork = &(philo->main_fork);
+	if (pthread_mutex_init(&philo->main_fork.mutex, NULL))
 		return (0);
-	if (pthread_mutex_init(&(general->philos + i)->main_fork.mutex_used, NULL))
+	if (pthread_mutex_init(&philo->main_fork.mutex_used, NULL))
 		return (0);
+	philo->next_eat = NEXT_EAT;
+	if (!i % 2 || i == general->count - 1)
+	{
+		philo->next_eat = 0;
+	}
 	return (1);
 }
 
 int	intit_threadding(t_general *general)
 {
 	int		i;
+	t_philo	*philo;
 
-	
 	general->threads = malloc(sizeof(pthread_t) * (general->count + 1));
 	if (!general->threads)
 		return (0);
@@ -70,16 +79,10 @@ int	intit_threadding(t_general *general)
 	i = 0;
 	while (i < general->count)
 	{
-		(general->philos)[i].total_start_t = general->total_start_t;
-		(general->philos)[i].death_time = general->total_start_t + general->starve_ti;
-		i++;
-	}
-	i = 0;
-	while (i < general->count)
-	{
-		if (pthread_create(general->threads + i, NULL, main_loop, general->philos + i))
+		philo = general->philos + i++;
+		philo->total_start_t = general->total_start_t;
+		if (pthread_create(general->threads + i, NULL, main_loop, philo))
 			return (0);
-		i++;
 	}
 	return (1);
 }
@@ -100,7 +103,7 @@ int	init_philos(t_general *general)
 		fill_philo(general, i);
 		i++;
 	}
-	if (i == 1)
-		return (handle_only_1_philo(general), 1);
+	// if (i == 1)
+	// 	return (handle_only_1_philo(general), 1);
 	return (1);
 }

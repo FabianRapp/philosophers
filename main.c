@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/19 19:19:33 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 05:03:15 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 /*
 TODO:
 	- handle philos death while waiting for forks
+	- handle philos death in my_sleep_until
 	- handle 1 philo only
 	- handle early error returns and cleanup
-
 Tests:
-	- 1 800 200 200			need better fork logic
-	- 1 800 200 200			does not work (one dies)
-	- 5 800 200 200 7		does not work (one dies)
-	- 4 410 200 200			works (none should die)
-	- 4 310 200 100			works (one should die)
+	- 1 800 200 200		works (should die		)
+	- 5 800 200 200		does not work (should not die)
+	- 5 800 200 200 7	""
+	- 4 410 200 200		works (does not die)
+	- 4 310 200 100		works (should die)
 */
 
 long long	action(t_philo *philo)
@@ -32,9 +32,8 @@ long long	action(t_philo *philo)
 
 	// if (check_exit(philo, "start action"))
 	// 	return (0);
-	printf("%lld %d is thinking\n", my_gettime() - philo->total_start_t, philo->index);
-	philo->current_time = eat(philo);
-	if (!philo->current_time)
+	printf("%lld %d is thinking\n", philo->current_time - philo->total_start_t, philo->index);
+	if (!eat(philo))
 		return (0);
 	// printf("%lld %d is eating for the %d. time\n", my_gettime(philo->total_start_t), philo->index, ++eat_cout);
 	if (philo->eat_count > 0)
@@ -42,10 +41,10 @@ long long	action(t_philo *philo)
 	if (check_exit(philo, "action"))
 		return (0);
 	printf("%lld %d is sleeping\n", philo->current_time - philo->total_start_t, philo->index);
-	//if (!(philo->sleep_ti < MIN_SLEEP_T))
 	next_time = philo->sleep_ti + philo->current_time;
-		my_sleep_until(next_time);
-//else
+	//if (!(philo->sleep_ti < MIN_SLEEP_T))
+		my_sleep_until(next_time, philo, "action sleep");
+	//else
 	//	my_sleep_until(MIN_SLEEP_T + philo->current_time);
 	return (next_time);
 }
@@ -55,9 +54,8 @@ void	*main_loop(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (check_exit(philo, "main loop start, debug"))
-		return (arg);
-	printf("main loop thread %d\n", philo->index);
+	philo->current_time = philo->total_start_t;
+	philo->death_time = philo->total_start_t + philo->starve_ti;
 	while (philo->eat_count && !check_exit(philo, "main loop condition"))
 	{
 		philo->current_time = action(philo);
