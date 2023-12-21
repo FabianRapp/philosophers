@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 05:06:31 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 06:35:26 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,33 @@ int	fill_philo(t_general *general, int i)
 		return (0);
 	if (pthread_mutex_init(&philo->main_fork.mutex_used, NULL))
 		return (0);
-	philo->next_eat = NEXT_EAT;
-	if (!i % 2 || i == general->count - 1)
+	//philo->next_eat = 0;//my_gettime() + general->eat_ti / 2 + general->sleep_ti / 2;
+	philo->even = true;
+	if (general->count % 2) // || i == general->count - 1
 	{
-		philo->next_eat = 0;
+		philo->even = false;
 	}
+	// else if (i % 2)
+	// {
+	// 	philo->even = false;
+	// }
 	return (1);
 }
+
+
+	// if (general->count % 2)
+	// 	philo->next_eat_offset = 0;
+	// else
+	// {
+	// 	philo->next_eat_offset = (int) (((((double)philo->starve_ti) / 3) * 2)) - 5;
+	// 	philo->next_eat_offset = 205;
+	// }
+	// printf("%lld\n",philo->next_eat_offset);
+	// // if (!i % 2 || i == general->count - 1)
+	// // {
+	// // 	philo->next_eat = 0;
+	// // }
+
 
 int	intit_threadding(t_general *general)
 {

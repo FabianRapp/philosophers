@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 05:03:15 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 06:46:02 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ TODO:
 	- handle early error returns and cleanup
 Tests:
 	- 1 800 200 200		works (should die		)
-	- 5 800 200 200		does not work (should not die)
+	- 5 800 200 200		does not works SOMETIMES(should not die)
 	- 5 800 200 200 7	""
 	- 4 410 200 200		works (does not die)
 	- 4 310 200 100		works (should die)
@@ -55,6 +55,13 @@ void	*main_loop(void *arg)
 
 	philo = (t_philo *)arg;
 	philo->current_time = philo->total_start_t;
+	if (philo->even)
+	{
+		if (philo->index % 2)
+			philo->next_eat = philo->current_time + (philo->eat_ti >> 1);
+	}
+	else
+		philo->next_eat = NEXT_EAT;
 	philo->death_time = philo->total_start_t + philo->starve_ti;
 	while (philo->eat_count && !check_exit(philo, "main loop condition"))
 	{

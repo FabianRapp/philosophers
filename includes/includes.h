@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:34 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/15 09:10:42 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 06:50:53 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define INCLUDES_H
 
 # include <stdbool.h>
+# include <stdint.h>
 
 # include <string.h>
 /*

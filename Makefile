@@ -2,7 +2,7 @@ CC=cc
 CFLAGS=
 INCLUDES=-I./includes
 DEBUG= debug.c
-SOURCES= $(DEBUG) main.c utils/utils1.c utils/edgecases.c init.c utils/utils2.c
+SOURCES= $(DEBUG) main.c utils/utils1.c init.c utils/utils2.c forks.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 tool=drd

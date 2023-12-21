@@ -6,14 +6,20 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 05:06:18 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/21 06:51:32 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#define NEXT_EAT (philo->starve_ti / 10)
+#define USLEEP_TIME 30
+//#define NEXT_EAT (philo->current_time + philo->eat_ti)
+//#define NEXT_EAT (philo->starve_ti / 10)
+//#define 
+#define NEXT_EAT USLEEP_TIME + 1
+//#define NEXT_EAT 10
+
 
 # include "includes.h"
 
@@ -31,7 +37,7 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	int					index;
+	int16_t				index;
 	int					starve_ti;
 	int					eat_ti;
 	int					sleep_ti;
@@ -40,6 +46,7 @@ typedef struct s_philo
 	long long			total_start_t;
 	long long			current_time;
 	long long			next_eat;
+	bool				even;
 	t_fork				*left_fork;
 	t_fork				*right_fork;
 	t_fork				main_fork;
