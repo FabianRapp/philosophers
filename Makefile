@@ -2,7 +2,7 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror -O3 -march=native -ftree-vectorize -pthread -funroll-loops
 INCLUDES=-I./includes
 DEBUG= debug.c
-SOURCES= $(DEBUG) main.c utils/utils1.c init.c utils/utils2.c forks.c
+SOURCES= $(DEBUG) main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 tool=drd
@@ -14,7 +14,7 @@ all:$(NAME)
 $(NAME): build clean2
 
 build: $(OBJECTS)
-	@$(CC) $(INCLUDES) $^ -o $(NAME) 
+	@$(CC) $(INCLUDES) $^ -o $(NAME)
 	@echo "\033[32mBuild complete.\033[0m"
 
 %.o: %.c

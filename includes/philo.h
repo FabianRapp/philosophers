@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 12:35:31 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/29 09:57:46 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define PHILO_H
 
 #define USLEEP_TIME 1
-#define USLEEP_TIME_MINI 1
+
+// #define USLEEP_TIME_MINI 1
 
 # include "includes.h"
 
@@ -66,7 +67,7 @@ typedef struct	s_general
 
 // main.c
 void					*main_loop(void *arg);
-long long				action(t_philo *philo);
+bool					action(t_philo *philo);
 void					wait_threads(t_general *general);
 int						main(int ac, char *av[]);
 
@@ -78,15 +79,15 @@ int						init_philos(t_general *general);
 
 // utils
 int						ft_atoi(const char *str);
-//long long				my_gettime(void);
+int64_t					my_gettime(void);
 bool					pickup_left_fork(t_philo *philo);
 bool					pickup_right_fork(t_philo *philo);
 bool					drop_forks(t_philo *philo);
 bool					check_exit(t_philo *philo);
 //bool					check_starvation(t_philo *philo, char *str);
 bool					eat(t_philo *philo);
-void					my_sleep_until(long long target_time, t_philo *philo);
-
+bool					my_sleep_until(int64_t target_time, t_philo *philo);
+bool					print_status(t_philo *philo, char *status);
 
 // debug
 void					print_philo(t_philo *philo, bool timings, bool check_mutexes);

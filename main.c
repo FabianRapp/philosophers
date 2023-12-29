@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 11:41:10 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/29 09:49:58 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,18 @@ Tests:
 	- 4 310 200 100		works (should die)
 */
 
-long long	action(t_philo *philo)
+bool	action(t_philo *philo)
 {
-	long long	next_time;
-
-	// if (check_exit(philo, "start action"))
-	// 	return (0);
-	printf("%lld %d is thinking\n", philo->current_time - philo->total_start_t, philo->index);
 	if (!eat(philo))
 		return (0);
 	if (philo->eat_count > 0)
 		philo->eat_count--;
-	if (check_exit(philo))
-		return (0);
-	printf("%lld %d is sleeping\n", philo->current_time - philo->total_start_t, philo->index);
-	next_time = philo->sleep_ti + philo->current_time;
-	//if (!(philo->sleep_ti < MIN_SLEEP_T))
-		my_sleep_until(next_time, philo);
-	//else
-	//	my_sleep_until(MIN_SLEEP_T + philo->current_time);
-	return (next_time);
+	if (!print_status(philo, "is sleeping"))
+		return (false);
+	philo->current_time = philo->sleep_ti + philo->current_time;
+	if (!my_sleep_until(philo->current_time, philo))
+		return (false);
+	return (true);
 }
 
 void	*main_loop(void *arg)
@@ -62,11 +54,30 @@ void	*main_loop(void *arg)
 	// else
 	philo->next_eat += philo->current_time;
 	philo->death_time = philo->total_start_t + philo->starve_ti;
-	while (philo->eat_count && !check_exit(philo))
+	// WILL NEED MODIFACTION FOR UNEVEN COUNT
+	// if (!print_status(philo, "is thinking"))
+	// 	return (false);
+	if (!philo->index % 2)
+		my_sleep_until(philo->current_time, philo);
+	else
 	{
-		philo->current_time = action(philo);
+		my_sleep_until((philo->current_time + philo->eat_ti) >> 1, philo);
 	}
-	return (arg);
+	while (philo->eat_count)
+	{
+		if (!print_status(philo, "is thinking"))
+			break ;
+		if (!eat(philo))
+			break ;
+		if (philo->eat_count > 0)
+			philo->eat_count--;
+		if (!print_status(philo, "is sleeping"))
+			break ;
+		philo->current_time = philo->sleep_ti + philo->current_time;
+		if (!my_sleep_until(philo->current_time, philo))
+			break ;
+	}
+	return (NULL);
 }
 
 void	wait_threads(t_general *general)
@@ -77,7 +88,7 @@ void	wait_threads(t_general *general)
 	while (i < general->count)
 	{
 		pthread_join(general->threads[i], NULL);
-		printf("thread %d joined\n", i);
+		//printf("thread %d joined\n", i);
 		i++;
 	}
 }

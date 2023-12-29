@@ -19,9 +19,9 @@ void	print_philo(t_philo *philo, bool timings, bool check_mutexes)
 	if (timings)
 	{
 		printf("\tstarve_ti: %d\n\teat_ti: %d\n\tsleep_ti: %d\n", philo->starve_ti, philo->eat_ti, philo->sleep_ti);
-		printf("---\n\teat_count: %d\n\ttotal_start_t %lld\n", philo->eat_count, philo->total_start_t);
+		printf("---\n\teat_count: %d\n\ttotal_start_t %lld\n", philo->eat_count, (long long)(philo->total_start_t));
 	}
-	printf("\tdeath_time: %lld\n", philo->death_time);
+	printf("\tdeath_time: %lld\n", (long long)(philo->death_time));
 	if (check_mutexes)
 	{
 		printf("---\n");
