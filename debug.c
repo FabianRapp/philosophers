@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 17:14:06 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/19 18:57:50 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/03 13:57:25 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 void	print_philo(t_philo *philo, bool timings, bool check_mutexes)
 {
 	printf("--------------\n");
-	printf("philo %d:\n", philo->index);
+	printf("philo %u:\n", philo->index);
 	if (timings)
 	{
-		printf("\tstarve_ti: %d\n\teat_ti: %d\n\tsleep_ti: %d\n", philo->starve_ti, philo->eat_ti, philo->sleep_ti);
-		printf("---\n\teat_count: %d\n\ttotal_start_t %lld\n", philo->eat_count, (long long)(philo->total_start_t));
+		printf("\tstarve_ti: " DATA_TYPE_SPECIFIER "\n\teat_ti: " DATA_TYPE_SPECIFIER "\n\tsleep_ti: " DATA_TYPE_SPECIFIER "\n", philo->starve_dur / MICROSEC_TO_MILLISEC, philo->eat_dur / MICROSEC_TO_MILLISEC, philo->sleep_dur / MICROSEC_TO_MILLISEC);
+		printf("---\n\teat_count: " DATA_TYPE_SPECIFIER "\n\tstart_t %lld\n", philo->eat_count, (long long)philo->start_t / MICROSEC_TO_MILLISEC);
 	}
-	printf("\tdeath_time: %lld\n", (long long)(philo->death_time));
+	printf("\tdeath_time: %lld\n", (long long)(philo->death_t / MICROSEC_TO_MILLISEC));
 	if (check_mutexes)
 	{
 		printf("---\n");
@@ -31,9 +31,9 @@ void	print_philo(t_philo *philo, bool timings, bool check_mutexes)
 		pthread_mutex_lock(&philo->right_fork->mutex_used);
 		(philo->right_fork->used) ? printf("\tright_fork->used: true\n") : printf("\tright_fork->used: false\n");
 		pthread_mutex_unlock(&philo->right_fork->mutex_used);
-		pthread_mutex_lock(philo->mutex_exit);
+		pthread_mutex_lock(philo->status);
 		(*philo->exit) ? printf("\texit: true\n") : printf("\texit: false\n");
-		pthread_mutex_unlock(philo->mutex_exit);
+		pthread_mutex_unlock(philo->status);
 		printf("--------------\n");
 	}
 }

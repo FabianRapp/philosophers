@@ -6,16 +6,16 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:31:41 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/03 10:48:29 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 17:25:38 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-int64_t	get_microseconds(void)
+static inline int64_t	get_microseconds_time(void)
 {
-	struct timeval s_time;
-	int64_t time;
+	struct timeval	s_time;
+	int64_t			time;
 
 	gettimeofday(&s_time, NULL);
 	time = (int64_t)s_time.tv_sec * 1000000;
@@ -23,66 +23,40 @@ int64_t	get_microseconds(void)
 	return (time);
 }
 
-static inline int64_t	get_microseconds_static(void)
+bool	my_sleep_until_small(int64_t target_t, t_philo *philo)
 {
-	struct timeval s_time;
-	int64_t time;
+	int32_t	first_sleep;
+	int64_t	first_target;
 
-	gettimeofday(&s_time, NULL);
-	time = (int64_t)s_time.tv_sec * 1000000;
-	time += s_time.tv_usec;
-	return (time);
-}
-
-int64_t	my_gettime(void)
-{
-	struct timeval s_time;
-	int64_t time;
-
-	gettimeofday(&s_time, NULL);
-	time = (int64_t)s_time.tv_sec * 1000;
-	time += s_time.tv_usec >> 10;
-	return (time);
-}
-
-int64_t	get_millisecond_fast(void)
-{
-	struct timeval s_time;
-	int64_t time;
-
-	gettimeofday(&s_time, NULL);
-	time = (int64_t)s_time.tv_sec * 1000;
-	time += s_time.tv_usec >> 10;
-	return (time);
-}
-
-int64_t	get_millisecond_precise(void)
-{
-	struct timeval s_time;
-	int64_t time;
-
-	gettimeofday(&s_time, NULL);
-	time = (int64_t)s_time.tv_sec * 1000;
-	time += s_time.tv_usec / 10;
-	return (time);
-}
-
-void	my_sleep(int milliseconds)
-{
-	int64_t	target_time = get_millisecond_fast() + milliseconds - 2;
-	while (get_millisecond_fast() < target_time) {
-		usleep(1000);
-	}
-	target_time += 2;
-	while (get_millisecond_precise() < target_time) {
-		usleep(1000);
-	}
-}
-
-bool	my_sleep_until(int64_t target_time, t_philo *philo)
-{
-	target_time *= 1000;
-	while (get_microseconds_static() < target_time)
+	first_sleep = target_t - get_microseconds_time();
+	if (first_sleep <= 0)
+		return (true);
+	first_sleep = (first_sleep >> 4);
+	first_target = target_t - first_sleep - 1000;
+	if (get_microseconds_time() < first_target)
+		usleep(first_sleep);
+	if (check_exit(philo))
+		return (false);
+	first_sleep = first_sleep >> 1;
+	if (get_microseconds_time() < first_target)
+		usleep(first_sleep);
+	if (check_exit(philo))
+		return (false);
+	if (get_microseconds_time() < first_target)
+		usleep(first_sleep);
+	if (check_exit(philo))
+		return (false);
+	if (get_microseconds_time() < first_target)
+		usleep(first_sleep);
+	if (check_exit(philo))
+		return (false);
+	if (get_microseconds_time() < first_target)
+		usleep(first_sleep);
+	if (check_exit(philo))
+		return (false);
+	if (get_microseconds_time() < first_target)
+		usleep(first_sleep);
+	while (get_microseconds_time() < target_t)
 	{
 		if (check_exit(philo))
 			return (false);
@@ -93,17 +67,35 @@ bool	my_sleep_until(int64_t target_time, t_philo *philo)
 	return (true);
 }
 
+bool	my_sleep_until_large(int64_t target_t, t_philo *philo)
+{
+	int64_t	first_target;
+	int64_t	first_sleep;
 
-// bool	my_sleep_until(int64_t target_time, t_philo *philo)
-// {
-// 	//target_time1 *= 1000;
-// 	while (my_gettime() < target_time)
-// 	{
-// 		if (check_exit(philo))
-// 			return (false);
-// 		usleep(5000);
-// 	}
-// 	if (check_exit(philo))
-// 		return (false);
-// 	return (true);
-// }
+	first_sleep = (target_t - get_microseconds_time());
+	first_sleep >>= 1;
+	first_target = target_t - first_sleep - 1000;
+	if (get_microseconds_time() < first_target)
+	{
+		usleep(first_sleep);
+		first_sleep >>= 1;
+		if (check_exit(philo))
+			return (false);
+		if (get_microseconds_time() < first_target)
+			usleep(first_sleep);
+		first_sleep >>= 1;
+		if (check_exit(philo))
+			return (false);
+		if (get_microseconds_time() < first_target)
+			usleep(first_sleep);
+	}
+	while (get_microseconds_time() < target_t)
+	{
+		if (check_exit(philo))
+			return (false);
+		usleep(1000);
+	}
+	if (check_exit(philo))
+		return (false);
+	return (true);
+}

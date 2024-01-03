@@ -1,0 +1,286 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  us/call  us/call  name    
+ 64.69      2.73     2.73 43650395     0.06     0.07  check_exit
+ 10.55      3.17     0.45   215684     2.06    10.04  my_sleep_until_small
+  7.82      3.50     0.33    68576     4.81    25.43  pickup_right_fork
+  6.64      3.79     0.28 45772336     0.01     0.01  get_microseconds_sync
+  5.21      4.00     0.22 21901660     0.01     0.01  get_microseconds_time
+  3.55      4.16     0.15                             _init
+  0.71      4.18     0.03   345756     0.09     0.09  print_status
+  0.36      4.20     0.01      751    19.97   113.05  my_sleep_until_large
+  0.24      4.21     0.01    62801     0.16     0.64  pickup_left_fork
+  0.24      4.22     0.01                             death_time_millisec
+  0.00      4.22     0.00   351715     0.00     0.00  cur_time_millisec
+  0.00      4.22     0.00    72214     0.00    44.96  eat
+  0.00      4.22     0.00    68568     0.00     0.00  drop_right_fork
+  0.00      4.22     0.00    67394     0.00     0.07  drop_forks
+  0.00      4.22     0.00    66871     0.00     0.00  drop_left_fork
+  0.00      4.22     0.00      751     0.00     0.00  fill_odd_even
+  0.00      4.22     0.00      751     0.00     0.00  fill_philo
+  0.00      4.22     0.00      751     0.00   113.05  intit_thread
+  0.00      4.22     0.00        6     0.00     0.00  ft_atoi
+  0.00      4.22     0.00        1     0.00     0.00  cleanup
+  0.00      4.22     0.00        1     0.00     0.00  get_microseconds_init
+  0.00      4.22     0.00        1     0.00     0.00  init_philos
+  0.00      4.22     0.00        1     0.00     0.00  input
+  0.00      4.22     0.00        1     0.00     0.00  intit_threadding
+  0.00      4.22     0.00        1     0.00     0.00  wait_threads
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.24% of 4.22 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     96.2    0.00    4.06                 main_loop [1]
+                0.00    3.25   72214/72214       eat [2]
+                0.15    0.57   71239/215684      my_sleep_until_small [4]
+                0.00    0.08     751/751         intit_thread [9]
+                0.01    0.00  137015/345756      print_status [12]
+-----------------------------------------------
+                0.00    3.25   72214/72214       main_loop [1]
+[2]     76.9    0.00    3.25   72214         eat [2]
+                0.33    1.41   68576/68576       pickup_right_fork [5]
+                0.30    1.15  144445/215684      my_sleep_until_small [4]
+                0.01    0.03   62801/62801       pickup_left_fork [11]
+                0.01    0.00   72413/345756      print_status [12]
+                0.00    0.00   67394/67394       drop_forks [14]
+-----------------------------------------------
+                0.00    0.00   66168/43650395     drop_forks [14]
+                0.02    0.00  354077/43650395     pickup_left_fork [11]
+                0.06    0.01  891056/43650395     my_sleep_until_large [10]
+                1.28    0.13 20427843/43650395     pickup_right_fork [5]
+                1.37    0.14 21911251/43650395     my_sleep_until_small [4]
+[3]     71.3    2.73    0.28 43650395         check_exit [3]
+                0.28    0.00 45421585/45772336     get_microseconds_sync [6]
+-----------------------------------------------
+                0.15    0.57   71239/215684      main_loop [1]
+                0.30    1.15  144445/215684      eat [2]
+[4]     51.3    0.45    1.72  215684         my_sleep_until_small [4]
+                1.37    0.14 21911251/43650395     check_exit [3]
+                0.21    0.00 21055165/21901660     get_microseconds_time [7]
+-----------------------------------------------
+                0.33    1.41   68576/68576       eat [2]
+[5]     41.3    0.33    1.41   68576         pickup_right_fork [5]
+                1.28    0.13 20427843/43650395     check_exit [3]
+                0.01    0.00   70884/345756      print_status [12]
+-----------------------------------------------
+                0.00    0.00  350751/45772336     print_status [12]
+                0.28    0.00 45421585/45772336     check_exit [3]
+[6]      6.6    0.28    0.00 45772336         get_microseconds_sync [6]
+-----------------------------------------------
+                0.01    0.00  846495/21901660     my_sleep_until_large [10]
+                0.21    0.00 21055165/21901660     my_sleep_until_small [4]
+[7]      5.2    0.22    0.00 21901660         get_microseconds_time [7]
+-----------------------------------------------
+                                                 <spontaneous>
+[8]      3.6    0.15    0.00                 _init [8]
+-----------------------------------------------
+                0.00    0.08     751/751         main_loop [1]
+[9]      2.0    0.00    0.08     751         intit_thread [9]
+                0.01    0.07     751/751         my_sleep_until_large [10]
+-----------------------------------------------
+                0.01    0.07     751/751         intit_thread [9]
+[10]     2.0    0.01    0.07     751         my_sleep_until_large [10]
+                0.06    0.01  891056/43650395     check_exit [3]
+                0.01    0.00  846495/21901660     get_microseconds_time [7]
+-----------------------------------------------
+                0.01    0.03   62801/62801       eat [2]
+[11]     1.0    0.01    0.03   62801         pickup_left_fork [11]
+                0.02    0.00  354077/43650395     check_exit [3]
+                0.01    0.00   65444/345756      print_status [12]
+-----------------------------------------------
+                0.01    0.00   65444/345756      pickup_left_fork [11]
+                0.01    0.00   70884/345756      pickup_right_fork [5]
+                0.01    0.00   72413/345756      eat [2]
+                0.01    0.00  137015/345756      main_loop [1]
+[12]     0.8    0.03    0.00  345756         print_status [12]
+                0.00    0.00  350751/45772336     get_microseconds_sync [6]
+                0.00    0.00  351715/351715      cur_time_millisec [15]
+-----------------------------------------------
+                                                 <spontaneous>
+[13]     0.2    0.01    0.00                 death_time_millisec [13]
+-----------------------------------------------
+                0.00    0.00   67394/67394       eat [2]
+[14]     0.1    0.00    0.00   67394         drop_forks [14]
+                0.00    0.00   66168/43650395     check_exit [3]
+                0.00    0.00   68568/68568       drop_right_fork [16]
+                0.00    0.00   66871/66871       drop_left_fork [17]
+-----------------------------------------------
+                0.00    0.00  351715/351715      print_status [12]
+[15]     0.0    0.00    0.00  351715         cur_time_millisec [15]
+-----------------------------------------------
+                0.00    0.00   68568/68568       drop_forks [14]
+[16]     0.0    0.00    0.00   68568         drop_right_fork [16]
+-----------------------------------------------
+                0.00    0.00   66871/66871       drop_forks [14]
+[17]     0.0    0.00    0.00   66871         drop_left_fork [17]
+-----------------------------------------------
+                0.00    0.00     751/751         fill_philo [19]
+[18]     0.0    0.00    0.00     751         fill_odd_even [18]
+-----------------------------------------------
+                0.00    0.00     751/751         init_philos [23]
+[19]     0.0    0.00    0.00     751         fill_philo [19]
+                0.00    0.00     751/751         fill_odd_even [18]
+-----------------------------------------------
+                0.00    0.00       6/6           input [24]
+[20]     0.0    0.00    0.00       6         ft_atoi [20]
+-----------------------------------------------
+                0.00    0.00       1/1           main [33]
+[21]     0.0    0.00    0.00       1         cleanup [21]
+-----------------------------------------------
+                0.00    0.00       1/1           intit_threadding [25]
+[22]     0.0    0.00    0.00       1         get_microseconds_init [22]
+-----------------------------------------------
+                0.00    0.00       1/1           main [33]
+[23]     0.0    0.00    0.00       1         init_philos [23]
+                0.00    0.00     751/751         fill_philo [19]
+-----------------------------------------------
+                0.00    0.00       1/1           main [33]
+[24]     0.0    0.00    0.00       1         input [24]
+                0.00    0.00       6/6           ft_atoi [20]
+-----------------------------------------------
+                0.00    0.00       1/1           main [33]
+[25]     0.0    0.00    0.00       1         intit_threadding [25]
+                0.00    0.00       1/1           get_microseconds_init [22]
+-----------------------------------------------
+                0.00    0.00       1/1           main [33]
+[26]     0.0    0.00    0.00       1         wait_threads [26]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [8] _init                  [18] fill_odd_even          [25] intit_threadding
+   [3] check_exit             [19] fill_philo             [10] my_sleep_until_large
+  [21] cleanup                [20] ft_atoi                 [4] my_sleep_until_small
+  [15] cur_time_millisec      [22] get_microseconds_init  [11] pickup_left_fork
+  [13] death_time_millisec     [6] get_microseconds_sync   [5] pickup_right_fork
+  [14] drop_forks              [7] get_microseconds_time  [12] print_status
+  [17] drop_left_fork         [23] init_philos            [26] wait_threads
+  [16] drop_right_fork        [24] input
+   [2] eat                     [9] intit_thread

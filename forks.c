@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/29 19:24:32 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 11:06:53 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ bool	pickup_left_fork(t_philo *philo)
 	pthread_mutex_unlock(&philo->left_fork->mutex_used);
 
 	pthread_mutex_lock(&philo->left_fork->mutex);
-	//philo->current_time = my_gettime();
+	// philo->current_time_precise = get_microseconds();
+	// philo->current_time = philo->current_time_precise >> 10;
 	if (!print_status(philo, "has taken the left fork"))
 		return (false);
 	return (true);
@@ -46,7 +47,8 @@ bool	pickup_right_fork(t_philo *philo)
 	pthread_mutex_unlock(&philo->right_fork->mutex_used);
 
 	pthread_mutex_lock(&philo->right_fork->mutex);
-	//philo->current_time = my_gettime();
+	// philo->current_time_precise = get_microseconds();
+	// philo->current_time = philo->current_time_precise >> 10;
 	if (!print_status(philo, "has taken the right fork"))
 		return (false);
 	return (true);

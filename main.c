@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/29 19:26:47 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 16:26:23 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ Tests:
 
 static inline void	intit_thread(t_philo *philo)
 {
-	philo->current_time = philo->total_start_t;
-	philo->next_eat += philo->current_time;
-	philo->death_time = philo->total_start_t + philo->starve_ti;
-	my_sleep_until(philo->current_time, philo);
+	philo->current_t = philo->start_t;
+	philo->next_eat_t += philo->current_t;
+	philo->death_t = philo->start_t;
+	philo->death_t += philo->starve_dur;
+	my_sleep_until_large(philo->current_t, philo);
 }
 
 void	*main_loop(void *arg)
@@ -50,8 +51,8 @@ void	*main_loop(void *arg)
 			philo->eat_count--;
 		if (!print_status(philo, "is sleeping"))
 			break ;
-		philo->current_time = philo->sleep_ti + philo->current_time;
-		if (!my_sleep_until(philo->current_time, philo))
+		philo->current_t += philo->sleep_dur;
+		if (!my_sleep_until_small(philo->current_t, philo))
 			break ;
 	}
 	return (arg);
