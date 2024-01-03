@@ -6,24 +6,11 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/29 10:02:19 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/29 19:24:32 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-
-
-// static inline long long	my_gettime(void)
-// {
-// 	struct timeval s_time;
-// 	long long time;
-
-// 	gettimeofday(&s_time, NULL);
-// 	time = (long long)s_time.tv_sec * 1000LL;
-// 	time += (long long)s_time.tv_usec >> 10;
-// 	//time += (long long)s_time.tv_usec / 1000LL;
-// 	return (time);
-// }
 
 bool	pickup_left_fork(t_philo *philo)
 {
@@ -83,17 +70,8 @@ void	drop_left_fork(t_philo *philo)
 
 bool drop_forks(t_philo *philo)
 {
-	// if (philo->index % 2)
-	// {
-		drop_right_fork(philo);
-		drop_left_fork(philo);
-		printf("%ld %d has droped the forks\n", my_gettime() - philo->total_start_t, philo->index);
-	// }
-	// else
-	// {
-	// 	drop_left_fork(philo);
-	// 	drop_right_fork(philo);
-	// }
+	drop_right_fork(philo);
+	drop_left_fork(philo);
 	if (check_exit(philo))
 		return (false);
 	return (true);

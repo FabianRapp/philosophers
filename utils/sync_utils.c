@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2023/12/29 08:57:31 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/29 19:55:11 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ bool	check_exit(t_philo *philo)
 		{
 			philo->current_time = local_current_time;
 			kill_philo(philo);
-			printf("in check exit\n");
 			return (true);
 		}
 	}
@@ -65,7 +64,6 @@ bool	print_status(t_philo *philo, char *status)
 		{
 			philo->current_time = local_current_time;
 			kill_philo(philo);
-			printf("in %s\n", status);
 			return (false);
 		}
 	}

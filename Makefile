@@ -2,7 +2,7 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror -O3 -march=native -ftree-vectorize -pthread -funroll-loops
 INCLUDES=-I./includes
 DEBUG= debug.c
-SOURCES= $(DEBUG) main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c
+SOURCES= $(DEBUG) main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 tool=drd

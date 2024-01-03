@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/21 12:28:44 by frapp            ###   ########.fr       */
+/*   Updated: 2023/12/29 19:26:43 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,28 @@ int	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-// static inline long long	my_gettime(void)
-// {
-// 	struct timeval s_time;
-// 	long long time;
+int	cleanup(t_general *general)
+{
+	int	i;
 
-// 	gettimeofday(&s_time, NULL);
-// 	//time = (long long)s_time.tv_sec * 1000LL;
-// 	time = (long long)s_time.tv_sec << 10;
-// 	time += (long long)s_time.tv_usec >> 10;
-// 	//time += (long long)s_time.tv_usec / 1000LL;
-// 	return (time);
-// }
+	if (general->philos && general->threads)
+	{
+		i = 0;
+		pthread_mutex_destroy(&(general->mutex_exit));
+		while (i < general->count)
+		{
+			if (((general->philos) + i)->index >= 0)
+				pthread_mutex_destroy(&(((general->philos) + i)->main_fork.mutex));
+			if ((general->philos)[i].starve_ti >= 0)
+				pthread_mutex_destroy(&(((general->philos) + i)->main_fork.mutex_used));
+			i++;
+		}
+	}
+	if (general->philos)
+		free(general->philos);
+	general->philos = NULL;
+	if (general->threads)
+		free(general->threads);
+	general->threads = NULL;
+	return (0);
+}

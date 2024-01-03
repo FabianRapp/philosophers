@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2023/12/29 09:49:58 by fabi             ###   ########.fr       */
+/*   Updated: 2023/12/29 19:26:47 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,19 @@ TODO:
 	- handle 1 philo only
 	- handle early error returns and cleanup
 Tests:
-	- 1 800 200 200		works (should die		)
-	- 5 800 200 200		does not works SOMETIMES(should not die)
+	- 1 800 200 200		does not work, litterly does nothing?
+	- 5 800 200 200		works
 	- 5 800 200 200 7	""
 	- 4 410 200 200		works (does not die)
 	- 4 310 200 100		works (should die)
 */
 
-bool	action(t_philo *philo)
+static inline void	intit_thread(t_philo *philo)
 {
-	if (!eat(philo))
-		return (0);
-	if (philo->eat_count > 0)
-		philo->eat_count--;
-	if (!print_status(philo, "is sleeping"))
-		return (false);
-	philo->current_time = philo->sleep_ti + philo->current_time;
-	if (!my_sleep_until(philo->current_time, philo))
-		return (false);
-	return (true);
+	philo->current_time = philo->total_start_t;
+	philo->next_eat += philo->current_time;
+	philo->death_time = philo->total_start_t + philo->starve_ti;
+	my_sleep_until(philo->current_time, philo);
 }
 
 void	*main_loop(void *arg)
@@ -45,24 +39,7 @@ void	*main_loop(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	philo->current_time = philo->total_start_t;
-	// if (philo->even)
-	// {
-	// 	if (philo->index % 2)
-	// 		philo->next_eat = philo->current_time + (philo->eat_ti >> 1);
-	// }
-	// else
-	philo->next_eat += philo->current_time;
-	philo->death_time = philo->total_start_t + philo->starve_ti;
-	// WILL NEED MODIFACTION FOR UNEVEN COUNT
-	// if (!print_status(philo, "is thinking"))
-	// 	return (false);
-	if (!philo->index % 2)
-		my_sleep_until(philo->current_time, philo);
-	else
-	{
-		my_sleep_until((philo->current_time + philo->eat_ti) >> 1, philo);
-	}
+	intit_thread(philo);
 	while (philo->eat_count)
 	{
 		if (!print_status(philo, "is thinking"))
@@ -77,7 +54,7 @@ void	*main_loop(void *arg)
 		if (!my_sleep_until(philo->current_time, philo))
 			break ;
 	}
-	return (NULL);
+	return (arg);
 }
 
 void	wait_threads(t_general *general)
@@ -91,6 +68,7 @@ void	wait_threads(t_general *general)
 		//printf("thread %d joined\n", i);
 		i++;
 	}
+
 }
 
 int	main(int ac, char *av[])
@@ -104,5 +82,6 @@ int	main(int ac, char *av[])
 	if (!intit_threadding(&general))
 		return (0);
 	wait_threads(&general);
+	cleanup(&general);
 	return (0);
 }
