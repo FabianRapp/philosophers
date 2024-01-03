@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 11:06:53 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 22:57:03 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 bool	pickup_left_fork(t_philo *philo)
 {
+	__builtin_prefetch(&philo->death_t, 0, 3);
 	pthread_mutex_lock(&philo->left_fork->mutex_used);
 	while(philo->left_fork->used)
 	{
@@ -35,6 +36,7 @@ bool	pickup_left_fork(t_philo *philo)
 
 bool	pickup_right_fork(t_philo *philo)
 {
+	__builtin_prefetch(&philo->death_t, 0, 1);
 	pthread_mutex_lock(&philo->right_fork->mutex_used);
 	while (philo->right_fork->used)
 	{
@@ -72,8 +74,9 @@ void	drop_left_fork(t_philo *philo)
 
 bool drop_forks(t_philo *philo)
 {
+	__builtin_prefetch(&philo->death_t, 0, 3);
+	drop_left_fork(philo);// left first should be better for cache
 	drop_right_fork(philo);
-	drop_left_fork(philo);
 	if (check_exit(philo))
 		return (false);
 	return (true);

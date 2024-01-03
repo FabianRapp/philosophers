@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/03 17:30:47 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 23:28:45 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,70 +33,105 @@ static inline int64_t	cur_time_millisec(t_philo *philo)
 	return ((philo->current_t - philo->start_t) >> SHIFT_DIV_ESTIMATE);
 }
 
-static inline void	kill_philo(t_philo *philo)
+static void	kill_philo(t_philo *philo)
 {
-	printf("%ld %u died\n", death_time_millisec(philo), philo->index);
+	if (*(philo->exit))
+	{
+		pthread_mutex_unlock(philo->status);
+		return ;
+	}
+	printf("%ld %ld died\n", death_time_millisec(philo), philo->index);
 	*(philo->exit) = true;
 	pthread_mutex_unlock(philo->status);
 }
 
+// bool	check_exit(t_philo *philo)
+// {
+// 	pthread_mutex_lock(philo->status);
+// 	if (!(*philo->exit))
+// 	{
+// 		pthread_mutex_unlock(philo->status);
+// 		if (get_microseconds_sync() <= philo->death_t)
+// 		{
+// 			__builtin_prefetch(&philo->death_t, 0, 3);
+// 			return (false); // 99.99999999 the returns of this function
+// 		}
+// 		else
+// 		{
+// 			pthread_mutex_lock(philo->status);
+// 		}
+// 	}
+// 	philo->current_t = get_microseconds_sync();
+// 	if (!(*philo->exit))
+// 		kill_philo(philo);
+// 	pthread_mutex_unlock(philo->status);
+// 	return (true);
+// }
+
 bool	check_exit(t_philo *philo)
 {
-	int64_t	local_current_t;
+	int64_t			local_current_t;
+	bool			*local_ptr;
+	int64_t			local_death_t;
+	pthread_mutex_t	*local_mutex_ptr;
 
 	local_current_t = get_microseconds_sync();
-	usleep(1);
-	pthread_mutex_lock(philo->status);
-	if (!(*(philo->exit)))
+	local_death_t = philo->death_t;
+	local_ptr = philo->exit;
+	local_mutex_ptr = philo->status;
+	pthread_mutex_lock(local_mutex_ptr);
+	if (!(*local_ptr))
 	{
-		if ((local_current_t <= philo->death_t))
+		pthread_mutex_unlock(local_mutex_ptr);
+		if (local_current_t <= local_death_t)
 		{
-			pthread_mutex_unlock(philo->status);
-			return (false);
+			__builtin_prefetch(&philo->death_t, 0, 3);
+			return (false); // 99.99999999 the returns of this function
 		}
 		else
 		{
-			if (*(philo->exit))
-			{
-				pthread_mutex_unlock(philo->status);
-				return (true);
-			}
-			//philo->current_t = get_microseconds_sync();
-			philo->current_t = local_current_t;
-			kill_philo(philo);
-			return (true);
+			pthread_mutex_lock(local_mutex_ptr);
 		}
 	}
-	pthread_mutex_unlock(philo->status);
+	philo->current_t = get_microseconds_sync();
+	if (!(*local_ptr))
+		kill_philo(philo);
+	pthread_mutex_unlock(local_mutex_ptr);
 	return (true);
 }
 
 bool	print_status(t_philo *philo, char *status)
 {
-	int64_t	local_current_time;
+	int64_t			local_current_t;
+	bool			*local_ptr;
+	int64_t			local_death_t;
+	pthread_mutex_t	*local_mutex_ptr;
 
-	local_current_time = get_microseconds_sync();
-	pthread_mutex_lock(philo->status);
-	if (!(*(philo->exit)))
+	local_current_t = get_microseconds_sync();
+	local_death_t = philo->death_t;
+	local_ptr = philo->exit;
+	local_mutex_ptr = philo->status;
+	pthread_mutex_lock(local_mutex_ptr);
+	if (!(*local_ptr))
 	{
-		if ((local_current_time <= philo->death_t))
+		if ((local_current_t <= local_death_t))
 		{
-			printf("%ld %u %s\n", cur_time_millisec(philo), philo->index, status);
-			pthread_mutex_unlock(philo->status);
+			printf("%ld %ld %s\n", cur_time_millisec(philo), philo->index, status);
+			pthread_mutex_unlock(local_mutex_ptr);
 			return (true);
 		}
 		else
 		{
-			if (*(philo->exit))
-			{
-				pthread_mutex_unlock(philo->status);
-				return (true);
-			}
-			philo->current_t = local_current_time;
+			//if (*(philo->exit))
+			//{
+				//pthread_mutex_unlock(local_mutex_ptr);
+				//return (true);
+			//}
+			philo->current_t = local_current_t;
 			kill_philo(philo);
 			return (false);
 		}
 	}
-	pthread_mutex_unlock(philo->status);
+	pthread_mutex_unlock(local_mutex_ptr);
 	return (false);
 }

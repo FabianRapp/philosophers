@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 17:06:29 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 20:50:29 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	cleanup(t_general *general)
 		}
 	}
 	if (general->philos)
-		free(general->philos);
+		free(general->ptr_to_free_philos);
 	general->philos = NULL;
 	if (general->threads)
 		free(general->threads);

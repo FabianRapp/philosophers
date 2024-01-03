@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 17:06:48 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 22:20:47 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool	eat(t_philo *philo)
 	philo->current_t = philo->next_eat_t;
 	if (!my_sleep_until_small(philo->next_eat_t, philo))
 		return (false);
-	if (!pickup_left_fork(philo))
+	if (!pickup_left_fork(philo)) // left first should be better for cache
 		return (false);
 	if (!pickup_right_fork(philo))
 	{
@@ -39,4 +39,14 @@ bool	eat(t_philo *philo)
 	drop_forks(philo);
 	philo->current_t += philo->eat_dur;
 	return (1);
+}
+
+void	align_ptr(int8_t **ptr)
+{
+	int		size_past_last_line;
+
+	size_past_last_line = ((uintptr_t)((*ptr)) % CACHE_LINE_SIZE);
+	if (!size_past_last_line)
+		return ;
+	*ptr = *ptr + CACHE_LINE_SIZE - size_past_last_line;
 }

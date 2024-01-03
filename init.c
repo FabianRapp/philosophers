@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 17:06:17 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/03 22:20:41 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,14 @@ int	fill_philo(t_general *general, COUNT_TYPE i)
 	return (1);
 }
 
-int	intit_threadding(t_general *general)
+int	intit_threading(t_general *general)
 {
 	int			i;
 	t_philo		*philo;
 	pthread_t	*thread;
 
 	general->start_t = get_microseconds_init();
-	general->start_t += general->count * THREADDING_INIT_TIME_MICRO;
+	general->start_t += general->count * THREADING_INIT_TIME_MICRO;
 	i = 0;
 	while (i < general->count)
 	{
@@ -120,6 +120,8 @@ int	intit_threadding(t_general *general)
 	return (1);
 }
 
+
+
 int	init_philos(t_general *general)
 {
 	COUNT_TYPE	i;
@@ -128,9 +130,11 @@ int	init_philos(t_general *general)
 	general->threads = NULL;
 	general->philos = NULL;
 	general->threads = malloc(sizeof(pthread_t) * (general->count + 1));
-	general->philos = malloc(sizeof(t_philo) * (general->count + 1));
+	general->philos = malloc(sizeof(t_philo) * (general->count + 1) + CACHE_LINE_SIZE);
 	if (!(general->philos) || ! (general->threads))
 		return (cleanup(general));
+	general->ptr_to_free_philos = general->philos;
+	align_ptr((int8_t **)(&(general->philos)));
 	general->exit = false;
 	if (pthread_mutex_init(&general->status, NULL))
 		return (0);
