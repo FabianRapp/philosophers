@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:07:28 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:46:34 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static inline int64_t	get_microseconds_eat(void)
 	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
 }
 
-bool	eat(t_philo *const philo)
+bool	eat(t_philo *restrict const philo)
 {
 	if (!my_sleep_until_small(philo->next_eat_t, philo))
 		return (false);

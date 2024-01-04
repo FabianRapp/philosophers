@@ -6,13 +6,13 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 17:14:06 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:07:43 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:46:44 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-void	print_philo(t_philo *const philo, bool timings, bool check_mutexes)
+void	print_philo(t_philo *restrict const philo, bool timings, bool check_mutexes)
 {
 	printf("--------------\n");
 	printf("philo %u:\n", philo->index);

@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:08:40 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:46:56 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static inline int64_t	get_microseconds_main(void)
 	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
 }
 
-static inline void	intit_thread(t_philo *const philo)
+static inline void	intit_thread(t_philo *restrict const philo)
 {
 	philo->current_t = philo->start_t;
 	philo->next_eat_t += philo->current_t;

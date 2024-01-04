@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:08:30 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 22:18:01 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	input(int ac, char *av[], t_general *const gen)
 	return (1);
 }
 
-static void	fill_odd_even(t_general *const general, t_philo *const philo, int i)
+static void	fill_odd_even(t_general *const general, t_philo *restrict const philo, int i)
 {
 	philo->next_eat_t = 0;
 	if (!(general->count % 2))
@@ -57,12 +57,20 @@ static void	fill_odd_even(t_general *const general, t_philo *const philo, int i)
 	}
 	else
 	{
-		philo->eat_wait_dur = (2 * philo->eat_dur) + philo->sleep_dur;
-		// philo->eat_wait_dur = philo->eat_dur;
-		// if (philo->sleep_dur > philo->eat_dur)
-		// 	philo->eat_wait_dur += philo->sleep_dur;
-		// else
-		// 	philo->eat_wait_dur += philo->eat_dur;
+		//philo->eat_wait_dur = (2 * philo->eat_dur) + philo->sleep_dur;
+		////////////
+		philo->eat_wait_dur = philo->eat_dur;
+		if (philo->sleep_dur > philo->eat_dur)
+		{
+			philo->eat_wait_dur += philo->sleep_dur;
+			philo->eat_wait_dur += ((int) philo->eat_dur * 0.5);
+		}
+		else
+		{
+			philo->eat_wait_dur += philo->eat_dur;
+			philo->eat_wait_dur += ((int) philo->sleep_dur * 0.5);
+		}
+		//////////////////
 		if (!(i % 3))
 			philo->next_eat_t = 0;
 		else if (!((i + 2) % 3))
@@ -122,8 +130,6 @@ int	intit_threading(t_general *const general)
 	}
 	return (1);
 }
-
-
 
 int	init_philos(t_general *const general)
 {

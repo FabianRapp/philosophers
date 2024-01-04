@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:31:41 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/04 21:07:19 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 22:25:56 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static inline int64_t __attribute__((always_inline))	get_microseconds_time(void)
 	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
 }
 
-static inline bool __attribute__((always_inline))	check_exit_inline(t_philo *const philo)
+static inline bool __attribute__((always_inline))	check_exit_inline(t_philo *restrict const philo)
 {
 	bool			*local_ptr;
 	pthread_mutex_t	*local_mutex_ptr;
@@ -41,221 +41,55 @@ static inline bool __attribute__((always_inline))	check_exit_inline(t_philo *con
 	return (do_exit(philo, true));
 }
 
-bool	my_sleep_eating(const int64_t target_t)
+void	my_sleep_eating(const int64_t target_t)
 {
-	int32_t			first_sleep;
-	int64_t			first_target;
+	int64_t			time_diff;
+	int64_t			temp_sleep;
 
-	first_sleep = target_t - get_microseconds_time();
-	if (first_sleep <= 0)
-		return (true);
-	first_sleep = (first_sleep >> 4);
-	first_target = target_t - (first_sleep * 15) - 1000;
-	for (int i = 0; i < 16; i++)
+	time_diff = target_t - get_microseconds_time();
+	temp_sleep = time_diff - (time_diff >> 3);
+	while (temp_sleep > SLEEP_TOLERANCE)
 	{
-		if (get_microseconds_time() < first_target)
-			usleep(first_sleep);
+		usleep(temp_sleep);
+		time_diff = target_t - get_microseconds_time();
+		temp_sleep = time_diff - (time_diff >> 3);
 	}
-	first_sleep = target_t - get_microseconds_time();
-	first_sleep = (first_sleep >> 4);
-	first_target = target_t - (first_sleep * 15) - 1000;
-	for (int i = 0; i < 16; i++)
-	{
-		if (get_microseconds_time() < first_target)
-			usleep(first_sleep);
-	}
-	while (get_microseconds_time() < target_t)
-	{
-		usleep(1000);
-	}
-	return (true);
+	usleep(HARDCODE_SLEEP);
 }
 
-bool	my_sleep_until_small(const int64_t target_t, t_philo *const philo)
+bool	my_sleep_until_small(const int64_t target_t, t_philo *restrict const philo)
 {
-	int32_t			first_sleep;
-	int64_t			first_target;
+	int64_t			time_diff;
+	int64_t			temp_sleep;
 
-	first_sleep = target_t - get_microseconds_time();
-	if (first_sleep <= 0)
-		return (true);
-	first_sleep = (first_sleep >> 4);
-	first_target = target_t - (first_sleep * 15) - 1000;
-	for (int i = 0; i < 16; i++)
+	time_diff = target_t - get_microseconds_time();
+	temp_sleep = time_diff - (time_diff >> 3);
+	while (temp_sleep > SLEEP_TOLERANCE)
 	{
-		if (get_microseconds_time() < first_target)
-			usleep(first_sleep);
-		__asm__ volatile("PREFETCHNTA %0" : : "m" (philo->death_t));
+		usleep(temp_sleep);
+		PREFETCH_EXIT;
 		if (check_exit_inline(philo))
 			return (false);
+		time_diff = target_t - get_microseconds_time();
+		temp_sleep = time_diff - (time_diff >> 3);
 	}
-	first_sleep = target_t - get_microseconds_time();
-	first_sleep = (first_sleep >> 4);
-	first_target = target_t - (first_sleep * 15) - 1000;
-	for (int i = 0; i < 16; i++)
-	{
-		if (get_microseconds_time() < first_target)
-			usleep(first_sleep);
-		__asm__ volatile("PREFETCHNTA %0" : : "m" (philo->death_t));
-		if (check_exit_inline(philo))
-			return (false);
-	}
-	while (get_microseconds_time() < target_t)
-	{
-		__asm__ volatile("PREFETCHNTA %0" : : "m" (philo->death_t));
-		if (check_exit_inline(philo))
-			return (false);
-		usleep(1000);
-	}
-	if (check_exit_inline(philo))
-		return (false);
-	return (true);
+	usleep(HARDCODE_SLEEP);
+	PREFETCH_EXIT;
+	return (!check_exit_inline(philo));
 }
 
-
-bool	my_sleep_init(const int64_t target_t)
+void	my_sleep_init(const int64_t target_t)
 {
-	int32_t			first_sleep;
-	int64_t			first_target;
+	int64_t			time_diff;
+	int64_t			temp_sleep;
 
-	first_sleep = target_t - get_microseconds_time();
-	if (first_sleep <= 0)
-		return (true);
-	first_sleep = (first_sleep >> 4);
-	first_target = target_t - (first_sleep * 15) - 1000;
-	for (int i = 0; i < 16; i++)
+	time_diff = target_t - get_microseconds_time();
+	temp_sleep = time_diff - (time_diff >> 3);
+	while (temp_sleep > SLEEP_TOLERANCE)
 	{
-		if (get_microseconds_time() < first_target)
-			usleep(first_sleep);
+		usleep(temp_sleep);
+		time_diff = target_t - get_microseconds_time();
+		temp_sleep = time_diff - (time_diff >> 3);
 	}
-	first_sleep = target_t - get_microseconds_time();
-	first_sleep = (first_sleep >> 4);
-	first_target = target_t - (first_sleep * 15) - 1000;
-	for (int i = 0; i < 16; i++)
-	{
-		if (get_microseconds_time() < first_target)
-			usleep(first_sleep);
-	}
-	while (get_microseconds_time() < target_t)
-	{
-		usleep(1000);
-	}
-	return (true);
+	usleep(HARDCODE_SLEEP);
 }
-
-
-// bool	my_sleep_until_small(int64_t target_t, t_philo *philo)
-// {
-// 	int32_t			first_sleep;
-// 	int64_t			first_target;
-
-// 	first_sleep = target_t - get_microseconds_time();
-// 	if (first_sleep <= 0)
-// 		return (true);
-// 	first_sleep = (first_sleep >> 4);
-// 	first_target = target_t - (first_sleep * 15) - 1000;
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-
-// 	if (get_microseconds_time() < first_target)
-// 		usleep(first_sleep);
-// 	__builtin_prefetch(&philo->death_t, 0, 3);
-// 	if (check_exit_inline(philo))
-// 		return (false);
-// 	while (get_microseconds_time() < target_t)
-// 	{
-// 		__builtin_prefetch(&philo->death_t, 0, 3);
-// 		if (check_exit_inline(philo))
-// 			return (false);
-// 		usleep(1000);
-// 	}
-// 	if (check_exit_inline(philo))
-// 		return (false);
-// 	return (true);
-// }

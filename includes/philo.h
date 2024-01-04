@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:07:05 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 22:26:07 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@
 #define	SHIFT_DIV_ESTIMATE 10
 #define	MICROSEC_TO_MILLISEC 1000
 #define CACHE_LINE_SIZE 64
+
+
+#define	SLEEP_TOLERANCE 150
+#define	HARDCODE_SLEEP 100
+
+#define PREFETCH_EXIT __asm__ volatile("PREFETCHT1 %0" : : "m" (philo->death_t))
 
 // testing
 //#define DATA_TYPE_INT64
@@ -156,24 +162,24 @@ int						init_philos(t_general *const general);
 D_TYPE					ft_atoi(const char *str);
 void					align_ptr(int8_t **ptr);
 
-bool					pickup_left_fork(t_philo *const philo);
-bool					pickup_right_fork(t_philo *const philo);
-bool					drop_forks(t_philo *const philo);
-bool					check_exit(t_philo *const philo);
-bool					eat(t_philo *const philo);
-bool					print_status(t_philo *const philo, char *const status);
+bool					pickup_left_fork(t_philo *restrict const philo);
+bool					pickup_right_fork(t_philo *restrict const philo);
+bool					drop_forks(t_philo *restrict const philo);
+bool					check_exit(t_philo *restrict const philo);
+bool					eat(t_philo *restrict const philo);
+bool					print_status(t_philo *restrict const philo, char *const status);
 
-bool					do_exit(t_philo *const philo, const bool locked_mutex);
+bool					do_exit(t_philo *restrict const philo, const bool locked_mutex);
 
 // time
 //bool					my_sleep_until(int64_t target_t, t_philo *philo);
-bool					my_sleep_until_small(const int64_t target_t, t_philo *const philo);
-bool					my_sleep_eating(const int64_t target_t);
-bool					my_sleep_init(const int64_t target_t);
+bool					my_sleep_until_small(const int64_t target_t, t_philo *restrict const philo);
+void					my_sleep_eating(const int64_t target_t);
+void					my_sleep_init(const int64_t target_t);
 
 int						cleanup(t_general *const general);
 
 // debug
-void					print_philo(t_philo *const philo, bool timings, bool check_mutexes);
+void					print_philo(t_philo *restrict const philo, bool timings, bool check_mutexes);
 
 #endif
