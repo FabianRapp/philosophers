@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 20:50:29 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:07:38 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ D_TYPE	ft_atoi(const char *str)
 	return (num * sign);
 }
 
-int	cleanup(t_general *general)
+int	cleanup(t_general *const general)
 {
 	int	i;
 

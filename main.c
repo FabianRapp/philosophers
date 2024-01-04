@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 22:22:05 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:08:40 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,21 @@ Tests:
 	- 4 310 200 100		works (should die)
 */
 
-static inline void	intit_thread(t_philo *philo)
+static inline int64_t	get_microseconds_main(void)
+{
+	struct timeval	s_time;
+
+	gettimeofday(&s_time, NULL);
+	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
+}
+
+static inline void	intit_thread(t_philo *const philo)
 {
 	philo->current_t = philo->start_t;
 	philo->next_eat_t += philo->current_t;
 	philo->death_t = philo->start_t;
 	philo->death_t += philo->starve_dur;
-	my_sleep_until_small(philo->current_t, philo);
+	my_sleep_init(philo->current_t); // cant die before start
 }
 
 void	*main_loop(void *arg)
@@ -51,14 +59,14 @@ void	*main_loop(void *arg)
 			philo->eat_count--;
 		if (!print_status(philo, "is sleeping"))
 			break ;
-		philo->current_t += philo->sleep_dur;
-		if (!my_sleep_until_small(philo->current_t, philo))
+		if (!my_sleep_until_small(philo->current_t + philo->sleep_dur, philo))
 			break ;
+		philo->current_t = get_microseconds_main();
 	}
 	return (arg);
 }
 
-void	wait_threads(t_general *general)
+void	wait_threads(t_general *const general)
 {
 	int	i;
 

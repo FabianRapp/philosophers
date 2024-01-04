@@ -2,71 +2,94 @@ Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
- time   seconds   seconds    calls  ns/call  ns/call  name    
- 11.32      0.42     0.42                             my_sleep_until_small (time.c:130 @ 2bf1)
- 11.32      0.84     0.42                             my_sleep_until_small (time.c:132 @ 2c08)
- 11.32      1.26     0.42                             my_sleep_until_small (time.c:127 @ 2c12)
-  7.82      1.55     0.29 39220243     7.39     7.39  get_microseconds_time (time.c:16 @ 27c5)
-  5.12      1.74     0.19                             check_exit (sync_utils.c:83 @ 265d)
-  3.91      1.89     0.14                             pickup_right_fork (forks.c:46 @ 230a)
-  3.77      2.02     0.14                             get_microseconds_sync (sync_utils.c:21 @ 24d7)
-  3.77      2.17     0.14                             get_microseconds_sync (sync_utils.c:23 @ 24ee)
-  3.23      2.29     0.12                             _init
-  3.23      2.40     0.12                             my_sleep_until_small (time.c:129 @ 2be9)
-  2.96      2.52     0.11                             check_exit (sync_utils.c:82 @ 2651)
-  2.96      2.62     0.11                             check_exit (sync_utils.c:89 @ 268c)
-  2.96      2.73     0.11                             get_microseconds_sync (sync_utils.c:24 @ 24f2)
-  2.16      2.81     0.08 87699379     0.91     1.31  check_exit (sync_utils.c:72 @ 260f)
-  2.16      2.90     0.08                             get_microseconds_sync (sync_utils.c:22 @ 24e6)
-  2.02      2.97     0.07                             check_exit (sync_utils.c:79 @ 262e)
-  1.75      3.04     0.07                             check_exit (sync_utils.c:81 @ 2646)
-  1.62      3.10     0.06   543410   110.41   110.81  print_status (sync_utils.c:104 @ 26d9)
-  1.62      3.15     0.06                             check_exit (sync_utils.c:88 @ 2681)
-  1.48      3.21     0.06                             get_microseconds_time (time.c:20 @ 27f3)
-  1.21      3.25     0.04                             get_microseconds_sync (sync_utils.c:20 @ 24c6)
-  1.08      3.29     0.04                             get_microseconds_time (time.c:21 @ 2805)
-  0.94      3.33     0.04 91194188     0.38     0.38  get_microseconds_sync (sync_utils.c:16 @ 24a9)
-  0.81      3.36     0.03   346668    86.54    86.54  my_sleep_until_small (time.c:24 @ 281b)
-  0.81      3.39     0.03                             check_exit (sync_utils.c:78 @ 2625)
-  0.81      3.42     0.03                             check_exit (sync_utils.c:80 @ 263a)
-  0.67      3.44     0.03                             check_exit (sync_utils.c:85 @ 266b)
-  0.67      3.47     0.03                             check_exit (sync_utils.c:86 @ 2677)
-  0.54      3.49     0.02                             pickup_left_fork (forks.c:32 @ 227c)
-  0.54      3.51     0.02                             pickup_right_fork (forks.c:43 @ 22dd)
-  0.54      3.53     0.02                             pickup_right_fork (forks.c:44 @ 22f0)
-  0.54      3.55     0.02                             pickup_right_fork (forks.c:41 @ 231d)
-  0.54      3.57     0.02                             print_status (sync_utils.c:120 @ 277c)
-  0.40      3.58     0.01                             get_microseconds_time (time.c:19 @ 27e2)
-  0.40      3.60     0.01                             pickup_right_fork (forks.c:45 @ 2300)
-  0.27      3.61     0.01                             check_exit (sync_utils.c:93 @ 2693)
-  0.27      3.62     0.01                             eat (utils1.c:32 @ 171e)
-  0.27      3.63     0.01                             main_loop (main.c:50 @ 1461)
-  0.27      3.64     0.01                             main_loop (main.c:44 @ 14e4)
-  0.27      3.65     0.01                             my_sleep_until_small (time.c:35 @ 2891)
-  0.27      3.66     0.01                             my_sleep_until_small (time.c:36 @ 2899)
-  0.27      3.67     0.01                             my_sleep_until_small (time.c:137 @ 2c39)
-  0.27      3.68     0.01                             pickup_right_fork (forks.c:56 @ 238d)
-  0.27      3.69     0.01                             print_status (sync_utils.c:119 @ 2744)
-  0.27      3.70     0.01                             wait_threads (main.c:68 @ 1529)
-  0.13      3.71     0.01   113048    44.23    44.23  pickup_right_fork (forks.c:38 @ 22a7)
-  0.13      3.71     0.01                             pickup_left_fork (forks.c:35 @ 22a5)
-  0.00      3.71     0.00   552342     0.00     0.00  cur_time_millisec (sync_utils.c:32 @ 2556)
-  0.00      3.71     0.00   113787     0.00     0.00  eat (utils1.c:16 @ 1649)
-  0.00      3.71     0.00   109492     0.00     0.00  drop_left_fork (forks.c:68 @ 23f9)
-  0.00      3.71     0.00   107613     0.00     0.00  drop_forks (forks.c:76 @ 2452)
-  0.00      3.71     0.00   104725     0.00     0.00  drop_right_fork (forks.c:60 @ 2394)
-  0.00      3.71     0.00    94544     0.00     0.00  pickup_left_fork (forks.c:16 @ 21d2)
-  0.00      3.71     0.00     1201     0.00     0.00  fill_odd_even (init.c:50 @ 19a4)
-  0.00      3.71     0.00     1201     0.00     0.00  fill_philo (init.c:73 @ 1b2f)
-  0.00      3.71     0.00     1201     0.00     0.00  intit_thread (main.c:30 @ 1369)
-  0.00      3.71     0.00        6     0.00     0.00  ft_atoi (utils2.c:16 @ 1fb0)
-  0.00      3.71     0.00        2     0.00     0.00  align_ptr (utils1.c:45 @ 17cd)
-  0.00      3.71     0.00        1     0.00     0.00  cleanup (utils2.c:45 @ 208b)
-  0.00      3.71     0.00        1     0.00     0.00  get_microseconds_init (init.c:16 @ 1819)
-  0.00      3.71     0.00        1     0.00     0.00  init_philos (init.c:126 @ 1dd4)
-  0.00      3.71     0.00        1     0.00     0.00  input (init.c:27 @ 1878)
-  0.00      3.71     0.00        1     0.00     0.00  intit_threading (init.c:101 @ 1cf2)
-  0.00      3.71     0.00        1     0.00     0.00  wait_threads (main.c:62 @ 150a)
+ time   seconds   seconds    calls  ps/call  ps/call  name    
+ 13.51      0.69     0.69                             my_sleep_until_small (time.c:105 @ 2dfb)
+ 13.41      1.36     0.68                             check_exit_inline (time.c:28 @ 2e11)
+  7.30      1.74     0.37                             _init
+  5.82      2.03     0.29                             get_microseconds_time (time.c:19 @ 2ed1)
+  5.82      2.33     0.29                             my_sleep_until_small (time.c:103 @ 2df6)
+  5.13      2.58     0.26                             check_exit_inline (time.c:35 @ 2e79)
+  4.14      2.79     0.21                             get_microseconds_sync (sync_utils.c:23 @ 2584)
+  3.55      2.98     0.18                             check_exit (sync_utils.c:127 @ 2768)
+  2.96      3.12     0.15                             get_microseconds_sync (sync_utils.c:24 @ 2588)
+  2.96      3.27     0.15                             pickup_right_fork (forks.c:52 @ 2393)
+  2.76      3.42     0.14                             check_exit (sync_utils.c:125 @ 2750)
+  2.76      3.56     0.14                             get_microseconds_sync (sync_utils.c:21 @ 256d)
+  2.56      3.69     0.13                             check_exit (sync_utils.c:126 @ 275c)
+  1.87      3.78     0.10                             get_microseconds_time (time.c:19 @ 2a2e)
+  1.78      3.87     0.09                             check_exit_inline (time.c:32 @ 2e5f)
+  1.68      3.96     0.09 105345444   806.87   806.87  get_microseconds_sync (sync_utils.c:16 @ 253f)
+  1.38      4.03     0.07                             get_microseconds_sync (sync_utils.c:20 @ 255c)
+  1.38      4.09     0.07                             get_microseconds_time (time.c:19 @ 3154)
+  1.18      4.16     0.06 101859782   589.05   589.05  check_exit (sync_utils.c:115 @ 270e)
+  1.18      4.21     0.06                             check_exit (sync_utils.c:121 @ 2724)
+  1.08      4.27     0.06                             check_exit (sync_utils.c:123 @ 273c)
+  1.08      4.33     0.06                             get_microseconds_time (time.c:20 @ 2e39)
+  0.99      4.38     0.05                             check_exit (sync_utils.c:122 @ 2730)
+  0.99      4.42     0.05                             check_exit_inline (time.c:29 @ 2e1d)
+  0.99      4.47     0.05                             get_microseconds_sync (sync_utils.c:22 @ 257c)
+  0.89      4.52     0.04                             check_exit (sync_utils.c:124 @ 2747)
+  0.89      4.57     0.04                             get_microseconds_time (time.c:20 @ 2ee2)
+  0.89      4.61     0.04                             my_sleep_eating (time.c:69 @ 2a24)
+  0.79      4.65     0.04                             check_exit (sync_utils.c:129 @ 2776)
+  0.79      4.69     0.04                             pickup_right_fork (forks.c:50 @ 2379)
+  0.59      4.72     0.03                             pickup_right_fork (forks.c:47 @ 23a6)
+  0.49      4.75     0.03                             check_exit (sync_utils.c:132 @ 278c)
+  0.49      4.77     0.03                             print_status (sync_utils.c:161 @ 2843)
+  0.39      4.79     0.02                             check_exit_inline (time.c:28 @ 2b83)
+  0.39      4.81     0.02                             get_microseconds_time (time.c:20 @ 2a3f)
+  0.39      4.83     0.02                             my_sleep_until_small (time.c:84 @ 2c54)
+  0.30      4.84     0.01                             print_status (sync_utils.c:162 @ 287b)
+  0.20      4.86     0.01                             check_exit (sync_utils.c:130 @ 2782)
+  0.20      4.87     0.01                             check_exit_inline (time.c:32 @ 2bdd)
+  0.20      4.88     0.01                             check_exit_inline (time.c:35 @ 2bfa)
+  0.20      4.88     0.01                             check_exit_inline (time.c:31 @ 2e53)
+  0.20      4.89     0.01                             check_exit_inline (time.c:34 @ 2e6d)
+  0.20      4.91     0.01                             check_exit_inline (time.c:32 @ 2f5a)
+  0.20      4.92     0.01                             death_time_millisec (sync_utils.c:27 @ 259e)
+  0.20      4.92     0.01                             do_exit (sync_utils.c:81 @ 270c)
+  0.20      4.93     0.01                             get_microseconds_time (time.c:19 @ 2b31)
+  0.20      4.95     0.01                             get_microseconds_time (time.c:19 @ 2e28)
+  0.20      4.96     0.01                             main_loop (main.c:54 @ 1478)
+  0.20      4.96     0.01                             my_sleep_eating (time.c:67 @ 2a51)
+  0.20      4.97     0.01                             my_sleep_until_small (time.c:83 @ 2afb)
+  0.20      4.99     0.01                             my_sleep_until_small (time.c:88 @ 2b6a)
+  0.20      5.00     0.01                             my_sleep_until_small (time.c:97 @ 2d00)
+  0.20      5.00     0.01                             my_sleep_until_small (time.c:103 @ 2ef4)
+  0.20      5.01     0.01                             pickup_right_fork (forks.c:49 @ 2366)
+  0.20      5.03     0.01                             pickup_right_fork (forks.c:51 @ 2389)
+  0.20      5.04     0.01                             print_status (sync_utils.c:151 @ 27e7)
+  0.20      5.04     0.01                             print_status (sync_utils.c:157 @ 282b)
+  0.10      5.05     0.01                             check_exit (sync_utils.c:134 @ 2793)
+  0.10      5.05     0.01                             check_exit_inline (time.c:30 @ 2e4b)
+  0.10      5.06     0.01                             drop_forks (forks.c:87 @ 253d)
+  0.10      5.07     0.01                             get_microseconds_time (time.c:20 @ 3165)
+  0.10      5.07     0.01                             my_sleep_init (time.c:139 @ 3177)
+  0.00      5.07     0.00   572608     0.00     0.00  cur_time_millisec (sync_utils.c:32 @ 25ec)
+  0.00      5.07     0.00   568550     0.00     0.00  print_status (sync_utils.c:144 @ 27cc)
+  0.00      5.07     0.00   248825     0.00     0.00  my_sleep_until_small (time.c:75 @ 2a76)
+  0.00      5.07     0.00   223043     0.00     0.00  get_microseconds_forks (forks.c:16 @ 21f5)
+  0.00      5.07     0.00   125775     0.00     0.00  my_sleep_eating (time.c:45 @ 28b8)
+  0.00      5.07     0.00   123850     0.00     0.00  eat (utils1.c:24 @ 16eb)
+  0.00      5.07     0.00   122529     0.00     0.00  pickup_right_fork (forks.c:44 @ 2330)
+  0.00      5.07     0.00   116244     0.00     0.00  drop_left_fork (forks.c:72 @ 248f)
+  0.00      5.07     0.00   114109     0.00     0.00  drop_forks (forks.c:80 @ 24e8)
+  0.00      5.07     0.00   112542     0.00     0.00  get_microseconds_main (main.c:30 @ 1369)
+  0.00      5.07     0.00   110626     0.00     0.00  drop_right_fork (forks.c:64 @ 242a)
+  0.00      5.07     0.00   109422     0.00     0.00  get_microseconds_eat (utils1.c:16 @ 1695)
+  0.00      5.07     0.00   107893     0.00     0.00  pickup_left_fork (forks.c:24 @ 224b)
+  0.00      5.07     0.00     1301     0.00     0.00  fill_odd_even (init.c:50 @ 1a0c)
+  0.00      5.07     0.00     1301     0.00     0.00  fill_philo (init.c:76 @ 1b52)
+  0.00      5.07     0.00     1301     0.00     0.00  intit_thread (main.c:38 @ 13bf)
+  0.00      5.07     0.00     1301     0.00     0.00  my_sleep_init (time.c:117 @ 2fde)
+  0.00      5.07     0.00        6     0.00     0.00  ft_atoi (utils2.c:16 @ 1fd3)
+  0.00      5.07     0.00        2     0.00     0.00  align_ptr (utils1.c:51 @ 1835)
+  0.00      5.07     0.00        1     0.00     0.00  cleanup (utils2.c:45 @ 20ae)
+  0.00      5.07     0.00        1     0.00     0.00  get_microseconds_init (init.c:16 @ 1881)
+  0.00      5.07     0.00        1     0.00     0.00  init_philos (init.c:129 @ 1df7)
+  0.00      5.07     0.00        1     0.00     0.00  input (init.c:27 @ 18e0)
+  0.00      5.07     0.00        1     0.00     0.00  intit_threading (init.c:104 @ 1d15)
+  0.00      5.07     0.00        1     0.00     0.00  wait_threads (main.c:70 @ 1556)
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -104,134 +127,109 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 0.27% of 3.71 seconds
+granularity: each sample hit covers 4 byte(s) for 0.20% of 5.07 seconds
 
 index % time    self  children    called     name
-                0.00    0.00  208293/39220243     my_sleep_until_small (time.c:37 @ 28a9) [72]
-                0.00    0.00  212280/39220243     my_sleep_until_small (time.c:42 @ 28e0) [71]
-                0.00    0.00  214413/39220243     my_sleep_until_small (time.c:48 @ 2917) [70]
-                0.00    0.00  215362/39220243     my_sleep_until_small (time.c:66 @ 29bc) [69]
-                0.00    0.00  215540/39220243     my_sleep_until_small (time.c:74 @ 29fd) [68]
-                0.00    0.00  216138/39220243     my_sleep_until_small (time.c:62 @ 298f) [67]
-                0.00    0.00  217501/39220243     my_sleep_until_small (time.c:96 @ 2acf) [66]
-                0.00    0.00  217593/39220243     my_sleep_until_small (time.c:54 @ 294e) [65]
-                0.00    0.00  217671/39220243     my_sleep_until_small (time.c:78 @ 2a2a) [64]
-                0.00    0.00  218129/39220243     my_sleep_until_small (time.c:116 @ 2b7e) [63]
-                0.00    0.00  218359/39220243     my_sleep_until_small (time.c:86 @ 2a6b) [62]
-                0.00    0.00  218823/39220243     my_sleep_until_small (time.c:90 @ 2a98) [61]
-                0.00    0.00  219434/39220243     my_sleep_until_small (time.c:104 @ 2b10) [60]
-                0.00    0.00  219648/39220243     my_sleep_until_small (time.c:120 @ 2bab) [59]
-                0.00    0.00  220337/39220243     my_sleep_until_small (time.c:108 @ 2b3d) [58]
-                0.00    0.00  312797/39220243     my_sleep_until_small (time.c:33 @ 287c) [57]
-                0.00    0.00  349998/39220243     my_sleep_until_small (time.c:28 @ 2836) [56]
-                0.26    0.00 35307927/39220243     my_sleep_until_small (time.c:132 @ 2c08) [1]
-[4]      7.8    0.29    0.00 39220243         get_microseconds_time (time.c:16 @ 27c5) [4]
+                                                 <spontaneous>
+[3]      7.3    0.37    0.00                 _init [3]
+-----------------------------------------------
+                0.00    0.00  581040/105345444     print_status (sync_utils.c:153 @ 27ff) [63]
+                0.08    0.00 104764404/105345444     check_exit (sync_utils.c:123 @ 273c) [13]
+[18]     1.7    0.09    0.00 105345444         get_microseconds_sync (sync_utils.c:16 @ 253f) [18]
+-----------------------------------------------
+                0.00    0.00  111970/101859782     drop_forks (forks.c:83 @ 2515) [64]
+                0.06    0.00 101747812/101859782     pickup_right_fork (forks.c:50 @ 2379) [15]
+[21]     1.2    0.06    0.00 101859782         check_exit (sync_utils.c:115 @ 270e) [21]
 -----------------------------------------------
                                                  <spontaneous>
-[10]     3.2    0.12    0.00                 _init [10]
+[44]     0.2    0.01    0.00                 death_time_millisec (sync_utils.c:27 @ 259e) [44]
 -----------------------------------------------
-                0.00    0.00  104553/87699379     drop_forks (forks.c:80 @ 248b) [90]
-                0.00    0.00  213162/87699379     my_sleep_until_small (time.c:36 @ 2899) [40]
-                0.00    0.00  224624/87699379     my_sleep_until_small (time.c:41 @ 28d0) [89]
-                0.00    0.00  230003/87699379     my_sleep_until_small (time.c:77 @ 2a1a) [88]
-                0.00    0.00  230336/87699379     my_sleep_until_small (time.c:65 @ 29ac) [87]
-                0.00    0.00  230682/87699379     my_sleep_until_small (time.c:53 @ 293e) [86]
-                0.00    0.00  230832/87699379     my_sleep_until_small (time.c:70 @ 29db) [85]
-                0.00    0.00  230980/87699379     my_sleep_until_small (time.c:47 @ 2907) [84]
-                0.00    0.00  232046/87699379     my_sleep_until_small (time.c:89 @ 2a88) [83]
-                0.00    0.00  232433/87699379     my_sleep_until_small (time.c:95 @ 2abf) [82]
-                0.00    0.00  232571/87699379     my_sleep_until_small (time.c:119 @ 2b9b) [81]
-                0.00    0.00  233004/87699379     my_sleep_until_small (time.c:101 @ 2af6) [80]
-                0.00    0.00  233341/87699379     my_sleep_until_small (time.c:124 @ 2bca) [79]
-                0.00    0.00  233440/87699379     my_sleep_until_small (time.c:113 @ 2b64) [78]
-                0.00    0.00  235910/87699379     my_sleep_until_small (time.c:107 @ 2b2d) [77]
-                0.00    0.00  237365/87699379     my_sleep_until_small (time.c:59 @ 2975) [76]
-                0.00    0.00  237383/87699379     my_sleep_until_small (time.c:82 @ 2a49) [75]
-                0.00    0.00  242718/87699379     my_sleep_until_small (time.c:134 @ 2c1d) [74]
-                0.00    0.00  873023/87699379     pickup_left_fork (forks.c:22 @ 2215) [73]
-                0.04    0.02 39225839/87699379     my_sleep_until_small (time.c:129 @ 2be9) [6]
-                0.04    0.02 43555134/87699379     pickup_right_fork (forks.c:44 @ 22f0) [16]
-[11]     3.1    0.08    0.03 87699379         check_exit (sync_utils.c:72 @ 260f) [11]
-                0.03    0.00 90638469/91194188     get_microseconds_sync (sync_utils.c:16 @ 24a9) [24]
+                0.00    0.00  572608/572608      print_status (sync_utils.c:161 @ 2843) [33]
+[65]     0.0    0.00    0.00  572608         cur_time_millisec (sync_utils.c:32 @ 25ec) [65]
 -----------------------------------------------
-                0.01    0.00   99800/543410      pickup_left_fork (forks.c:32 @ 227c) [25]
-                0.01    0.00  107288/543410      main_loop (main.c:52 @ 148b) [39]
-                0.01    0.00  107810/543410      main_loop (main.c:46 @ 1429) [38]
-                0.01    0.00  111307/543410      pickup_right_fork (forks.c:54 @ 2369) [37]
-                0.01    0.00  117205/543410      eat (utils1.c:27 @ 16eb) [36]
-[19]     1.6    0.06    0.00  543410         print_status (sync_utils.c:104 @ 26d9) [19]
-                0.00    0.00  555719/91194188     get_microseconds_sync (sync_utils.c:16 @ 24a9) [24]
+                0.00    0.00  106976/568550      pickup_left_fork (forks.c:38 @ 2305) [472]
+                0.00    0.00  109194/568550      main_loop (main.c:60 @ 14da) [380]
+                0.00    0.00  109665/568550      main_loop (main.c:54 @ 1478) [48]
+                0.00    0.00  117463/568550      pickup_right_fork (forks.c:58 @ 23ff) [483]
+                0.00    0.00  125252/568550      eat (utils1.c:34 @ 177a) [182]
+[66]     0.0    0.00    0.00  568550         print_status (sync_utils.c:144 @ 27cc) [66]
 -----------------------------------------------
-                0.00    0.00  555719/91194188     print_status (sync_utils.c:104 @ 26d9) [19]
-                0.03    0.00 90638469/91194188     check_exit (sync_utils.c:72 @ 260f) [11]
-[24]     0.9    0.04    0.00 91194188         get_microseconds_sync (sync_utils.c:16 @ 24a9) [24]
+                0.00    0.00  123994/248825      main_loop (main.c:62 @ 14f7) [381]
+                0.00    0.00  124831/248825      eat (utils1.c:25 @ 1701) [175]
+[67]     0.0    0.00    0.00  248825         my_sleep_until_small (time.c:75 @ 2a76) [67]
 -----------------------------------------------
-                0.00    0.00    1201/346668      intit_thread (main.c:35 @ 13e0) [91]
-                0.01    0.00  113553/346668      eat (utils1.c:18 @ 1672) [52]
-                0.01    0.00  114883/346668      main_loop (main.c:55 @ 14c6) [51]
-                0.01    0.00  117031/346668      eat (utils1.c:34 @ 175d) [41]
-[28]     0.8    0.03    0.00  346668         my_sleep_until_small (time.c:24 @ 281b) [28]
+                0.00    0.00  104866/223043      pickup_left_fork (forks.c:35 @ 22d4) [469]
+                0.00    0.00  118177/223043      pickup_right_fork (forks.c:56 @ 23db) [481]
+[68]     0.0    0.00    0.00  223043         get_microseconds_forks (forks.c:16 @ 21f5) [68]
 -----------------------------------------------
-                0.01    0.00  113048/113048      eat (utils1.c:22 @ 16ba) [54]
-[53]     0.1    0.01    0.00  113048         pickup_right_fork (forks.c:38 @ 22a7) [53]
+                0.00    0.00  125775/125775      eat (utils1.c:41 @ 17ec) [187]
+[69]     0.0    0.00    0.00  125775         my_sleep_eating (time.c:45 @ 28b8) [69]
 -----------------------------------------------
-                0.00    0.00  552342/552342      print_status (sync_utils.c:119 @ 2744) [49]
-[92]     0.0    0.00    0.00  552342         cur_time_millisec (sync_utils.c:32 @ 2556) [92]
+                0.00    0.00  123850/123850      main_loop (main.c:56 @ 1499) [377]
+[70]     0.0    0.00    0.00  123850         eat (utils1.c:24 @ 16eb) [70]
 -----------------------------------------------
-                0.00    0.00  113787/113787      main_loop (main.c:48 @ 144a) [322]
-[93]     0.0    0.00    0.00  113787         eat (utils1.c:16 @ 1649) [93]
+                0.00    0.00  122529/122529      eat (utils1.c:29 @ 1749) [179]
+[71]     0.0    0.00    0.00  122529         pickup_right_fork (forks.c:44 @ 2330) [71]
 -----------------------------------------------
-                0.00    0.00  109492/109492      drop_forks (forks.c:77 @ 2468) [145]
-[94]     0.0    0.00    0.00  109492         drop_left_fork (forks.c:68 @ 23f9) [94]
+                0.00    0.00  116244/116244      drop_forks (forks.c:82 @ 2509) [161]
+[72]     0.0    0.00    0.00  116244         drop_left_fork (forks.c:72 @ 248f) [72]
 -----------------------------------------------
-                0.00    0.00  107613/107613      eat (utils1.c:39 @ 179c) [172]
-[95]     0.0    0.00    0.00  107613         drop_forks (forks.c:76 @ 2452) [95]
+                0.00    0.00  114109/114109      eat (utils1.c:42 @ 180a) [188]
+[73]     0.0    0.00    0.00  114109         drop_forks (forks.c:80 @ 24e8) [73]
 -----------------------------------------------
-                0.00    0.00  104725/104725      drop_forks (forks.c:79 @ 247f) [147]
-[96]     0.0    0.00    0.00  104725         drop_right_fork (forks.c:60 @ 2394) [96]
+                0.00    0.00  112542/112542      main_loop (main.c:62 @ 14f7) [381]
+[74]     0.0    0.00    0.00  112542         get_microseconds_main (main.c:30 @ 1369) [74]
 -----------------------------------------------
-                0.00    0.00   94544/94544       eat (utils1.c:20 @ 169d) [163]
-[97]     0.0    0.00    0.00   94544         pickup_left_fork (forks.c:16 @ 21d2) [97]
+                0.00    0.00  110626/110626      drop_forks (forks.c:83 @ 2515) [64]
+[75]     0.0    0.00    0.00  110626         drop_right_fork (forks.c:64 @ 242a) [75]
 -----------------------------------------------
-                0.00    0.00    1201/1201        fill_philo (init.c:96 @ 1cd2) [213]
-[98]     0.0    0.00    0.00    1201         fill_odd_even (init.c:50 @ 19a4) [98]
+                0.00    0.00  109422/109422      eat (utils1.c:42 @ 180a) [188]
+[76]     0.0    0.00    0.00  109422         get_microseconds_eat (utils1.c:16 @ 1695) [76]
 -----------------------------------------------
-                0.00    0.00    1201/1201        init_philos (init.c:151 @ 1f63) [260]
-[99]     0.0    0.00    0.00    1201         fill_philo (init.c:73 @ 1b2f) [99]
+                0.00    0.00  107893/107893      eat (utils1.c:27 @ 172c) [177]
+[77]     0.0    0.00    0.00  107893         pickup_left_fork (forks.c:24 @ 224b) [77]
 -----------------------------------------------
-                0.00    0.00    1201/1201        main_loop (main.c:43 @ 1418) [320]
-[100]    0.0    0.00    0.00    1201         intit_thread (main.c:30 @ 1369) [100]
+                0.00    0.00    1301/1301        fill_philo (init.c:99 @ 1cf5) [229]
+[78]     0.0    0.00    0.00    1301         fill_odd_even (init.c:50 @ 1a0c) [78]
 -----------------------------------------------
-                0.00    0.00       1/6           input (init.c:33 @ 18ba) [267]
-                0.00    0.00       1/6           input (init.c:38 @ 18eb) [270]
-                0.00    0.00       1/6           input (init.c:39 @ 1908) [271]
-                0.00    0.00       1/6           input (init.c:40 @ 192a) [272]
-                0.00    0.00       1/6           input (init.c:41 @ 194c) [273]
-                0.00    0.00       1/6           input (init.c:43 @ 1974) [275]
-[101]    0.0    0.00    0.00       6         ft_atoi (utils2.c:16 @ 1fb0) [101]
+                0.00    0.00    1301/1301        init_philos (init.c:154 @ 1f86) [314]
+[79]     0.0    0.00    0.00    1301         fill_philo (init.c:76 @ 1b52) [79]
 -----------------------------------------------
-                0.00    0.00       1/2           main (main.c:81 @ 15a4) [307]
-                0.00    0.00       1/2           init_philos (init.c:137 @ 1ec5) [249]
-[102]    0.0    0.00    0.00       2         align_ptr (utils1.c:45 @ 17cd) [102]
+                0.00    0.00    1301/1301        main_loop (main.c:51 @ 1467) [375]
+[80]     0.0    0.00    0.00    1301         intit_thread (main.c:38 @ 13bf) [80]
 -----------------------------------------------
-                0.00    0.00       1/1           main (main.c:89 @ 161f) [315]
-[103]    0.0    0.00    0.00       1         cleanup (utils2.c:45 @ 208b) [103]
+                0.00    0.00    1301/1301        intit_thread (main.c:43 @ 1436) [337]
+[81]     0.0    0.00    0.00    1301         my_sleep_init (time.c:117 @ 2fde) [81]
 -----------------------------------------------
-                0.00    0.00       1/1           intit_threading (init.c:101 @ 1cf2) [107]
-[104]    0.0    0.00    0.00       1         get_microseconds_init (init.c:16 @ 1819) [104]
+                0.00    0.00       1/6           input (init.c:33 @ 1922) [321]
+                0.00    0.00       1/6           input (init.c:38 @ 1953) [324]
+                0.00    0.00       1/6           input (init.c:39 @ 1970) [325]
+                0.00    0.00       1/6           input (init.c:40 @ 1992) [326]
+                0.00    0.00       1/6           input (init.c:41 @ 19b4) [327]
+                0.00    0.00       1/6           input (init.c:43 @ 19dc) [329]
+[82]     0.0    0.00    0.00       6         ft_atoi (utils2.c:16 @ 1fd3) [82]
 -----------------------------------------------
-                0.00    0.00       1/1           main (main.c:84 @ 15dc) [310]
-[105]    0.0    0.00    0.00       1         init_philos (init.c:126 @ 1dd4) [105]
+                0.00    0.00       1/2           main (main.c:89 @ 15f0) [362]
+                0.00    0.00       1/2           init_philos (init.c:140 @ 1ee8) [303]
+[83]     0.0    0.00    0.00       2         align_ptr (utils1.c:51 @ 1835) [83]
 -----------------------------------------------
-                0.00    0.00       1/1           main (main.c:82 @ 15b3) [308]
-[106]    0.0    0.00    0.00       1         input (init.c:27 @ 1878) [106]
+                0.00    0.00       1/1           main (main.c:97 @ 166b) [370]
+[84]     0.0    0.00    0.00       1         cleanup (utils2.c:45 @ 20ae) [84]
 -----------------------------------------------
-                0.00    0.00       1/1           main (main.c:86 @ 15f6) [312]
-[107]    0.0    0.00    0.00       1         intit_threading (init.c:101 @ 1cf2) [107]
-                0.00    0.00       1/1           get_microseconds_init (init.c:16 @ 1819) [104]
+                0.00    0.00       1/1           intit_threading (init.c:109 @ 1d2b) [339]
+[85]     0.0    0.00    0.00       1         get_microseconds_init (init.c:16 @ 1881) [85]
 -----------------------------------------------
-                0.00    0.00       1/1           main (main.c:88 @ 1610) [314]
-[108]    0.0    0.00    0.00       1         wait_threads (main.c:62 @ 150a) [108]
+                0.00    0.00       1/1           main (main.c:92 @ 1628) [365]
+[86]     0.0    0.00    0.00       1         init_philos (init.c:129 @ 1df7) [86]
+-----------------------------------------------
+                0.00    0.00       1/1           main (main.c:90 @ 15ff) [363]
+[87]     0.0    0.00    0.00       1         input (init.c:27 @ 18e0) [87]
+-----------------------------------------------
+                0.00    0.00       1/1           main (main.c:94 @ 1642) [367]
+[88]     0.0    0.00    0.00       1         intit_threading (init.c:104 @ 1d15) [88]
+-----------------------------------------------
+                0.00    0.00       1/1           main (main.c:96 @ 165c) [369]
+[89]     0.0    0.00    0.00       1         wait_threads (main.c:70 @ 1556) [89]
 -----------------------------------------------
 
  This table describes the call tree of the program, and was sorted by
@@ -324,25 +322,32 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [10] _init                  [99] fill_philo (init.c:73 @ 1b2f) [6] my_sleep_until_small (time.c:129 @ 2be9)
- [102] align_ptr (utils1.c:45 @ 17cd) [101] ft_atoi (utils2.c:16 @ 1fb0) [2] my_sleep_until_small (time.c:130 @ 2bf1)
-  [11] check_exit (sync_utils.c:72 @ 260f) [104] get_microseconds_init (init.c:16 @ 1819) [1] my_sleep_until_small (time.c:132 @ 2c08)
-  [26] check_exit (sync_utils.c:78 @ 2625) [24] get_microseconds_sync (sync_utils.c:16 @ 24a9) [3] my_sleep_until_small (time.c:127 @ 2c12)
-  [17] check_exit (sync_utils.c:79 @ 262e) [22] get_microseconds_sync (sync_utils.c:20 @ 24c6) [47] my_sleep_until_small (time.c:137 @ 2c39)
-  [27] check_exit (sync_utils.c:80 @ 263a) [8] get_microseconds_sync (sync_utils.c:21 @ 24d7) [97] pickup_left_fork (forks.c:16 @ 21d2)
-  [18] check_exit (sync_utils.c:81 @ 2646) [15] get_microseconds_sync (sync_utils.c:22 @ 24e6) [25] pickup_left_fork (forks.c:32 @ 227c)
-  [12] check_exit (sync_utils.c:82 @ 2651) [9] get_microseconds_sync (sync_utils.c:23 @ 24ee) [55] pickup_left_fork (forks.c:35 @ 22a5)
-   [5] check_exit (sync_utils.c:83 @ 265d) [14] get_microseconds_sync (sync_utils.c:24 @ 24f2) [53] pickup_right_fork (forks.c:38 @ 22a7)
-  [29] check_exit (sync_utils.c:85 @ 266b) [4] get_microseconds_time (time.c:16 @ 27c5) [31] pickup_right_fork (forks.c:43 @ 22dd)
-  [30] check_exit (sync_utils.c:86 @ 2677) [34] get_microseconds_time (time.c:19 @ 27e2) [16] pickup_right_fork (forks.c:44 @ 22f0)
-  [20] check_exit (sync_utils.c:88 @ 2681) [21] get_microseconds_time (time.c:20 @ 27f3) [35] pickup_right_fork (forks.c:45 @ 2300)
-  [13] check_exit (sync_utils.c:89 @ 268c) [23] get_microseconds_time (time.c:21 @ 2805) [7] pickup_right_fork (forks.c:46 @ 230a)
-  [42] check_exit (sync_utils.c:93 @ 2693) [105] init_philos (init.c:126 @ 1dd4) [32] pickup_right_fork (forks.c:41 @ 231d)
- [103] cleanup (utils2.c:45 @ 208b) [106] input (init.c:27 @ 1878) [48] pickup_right_fork (forks.c:56 @ 238d)
-  [92] cur_time_millisec (sync_utils.c:32 @ 2556) [100] intit_thread (main.c:30 @ 1369) [19] print_status (sync_utils.c:104 @ 26d9)
-  [95] drop_forks (forks.c:76 @ 2452) [107] intit_threading (init.c:101 @ 1cf2) [49] print_status (sync_utils.c:119 @ 2744)
-  [94] drop_left_fork (forks.c:68 @ 23f9) [44] main_loop (main.c:50 @ 1461) [33] print_status (sync_utils.c:120 @ 277c)
-  [96] drop_right_fork (forks.c:60 @ 2394) [45] main_loop (main.c:44 @ 14e4) [108] wait_threads (main.c:62 @ 150a)
-  [93] eat (utils1.c:16 @ 1649) [28] my_sleep_until_small (time.c:24 @ 281b) [50] wait_threads (main.c:68 @ 1529)
-  [43] eat (utils1.c:32 @ 171e) [46] my_sleep_until_small (time.c:35 @ 2891)
-  [98] fill_odd_even (init.c:50 @ 19a4) [40] my_sleep_until_small (time.c:36 @ 2899)
+   [3] _init                  [73] drop_forks (forks.c:80 @ 24e8) [80] intit_thread (main.c:38 @ 13bf)
+  [83] align_ptr (utils1.c:51 @ 1835) [60] drop_forks (forks.c:87 @ 253d) [88] intit_threading (init.c:104 @ 1d15)
+  [21] check_exit (sync_utils.c:115 @ 270e) [72] drop_left_fork (forks.c:72 @ 248f) [48] main_loop (main.c:54 @ 1478)
+  [22] check_exit (sync_utils.c:121 @ 2724) [75] drop_right_fork (forks.c:64 @ 242a) [69] my_sleep_eating (time.c:45 @ 28b8)
+  [24] check_exit (sync_utils.c:122 @ 2730) [70] eat (utils1.c:24 @ 16eb) [29] my_sleep_eating (time.c:69 @ 2a24)
+  [13] check_exit (sync_utils.c:123 @ 273c) [78] fill_odd_even (init.c:50 @ 1a0c) [49] my_sleep_eating (time.c:67 @ 2a51)
+  [27] check_exit (sync_utils.c:124 @ 2747) [79] fill_philo (init.c:76 @ 1b52) [81] my_sleep_init (time.c:117 @ 2fde)
+  [11] check_exit (sync_utils.c:125 @ 2750) [82] ft_atoi (utils2.c:16 @ 1fd3) [62] my_sleep_init (time.c:139 @ 3177)
+  [14] check_exit (sync_utils.c:126 @ 275c) [76] get_microseconds_eat (utils1.c:16 @ 1695) [67] my_sleep_until_small (time.c:75 @ 2a76)
+   [8] check_exit (sync_utils.c:127 @ 2768) [68] get_microseconds_forks (forks.c:16 @ 21f5) [50] my_sleep_until_small (time.c:83 @ 2afb)
+  [30] check_exit (sync_utils.c:129 @ 2776) [85] get_microseconds_init (init.c:16 @ 1881) [51] my_sleep_until_small (time.c:88 @ 2b6a)
+  [38] check_exit (sync_utils.c:130 @ 2782) [74] get_microseconds_main (main.c:30 @ 1369) [36] my_sleep_until_small (time.c:84 @ 2c54)
+  [32] check_exit (sync_utils.c:132 @ 278c) [18] get_microseconds_sync (sync_utils.c:16 @ 253f) [52] my_sleep_until_small (time.c:97 @ 2d00)
+  [58] check_exit (sync_utils.c:134 @ 2793) [19] get_microseconds_sync (sync_utils.c:20 @ 255c) [5] my_sleep_until_small (time.c:103 @ 2df6)
+  [34] check_exit_inline (time.c:28 @ 2b83) [12] get_microseconds_sync (sync_utils.c:21 @ 256d) [1] my_sleep_until_small (time.c:105 @ 2dfb)
+  [39] check_exit_inline (time.c:32 @ 2bdd) [26] get_microseconds_sync (sync_utils.c:22 @ 257c) [53] my_sleep_until_small (time.c:103 @ 2ef4)
+  [40] check_exit_inline (time.c:35 @ 2bfa) [7] get_microseconds_sync (sync_utils.c:23 @ 2584) [77] pickup_left_fork (forks.c:24 @ 224b)
+   [2] check_exit_inline (time.c:28 @ 2e11) [9] get_microseconds_sync (sync_utils.c:24 @ 2588) [71] pickup_right_fork (forks.c:44 @ 2330)
+  [25] check_exit_inline (time.c:29 @ 2e1d) [16] get_microseconds_time (time.c:19 @ 2a2e) [54] pickup_right_fork (forks.c:49 @ 2366)
+  [59] check_exit_inline (time.c:30 @ 2e4b) [35] get_microseconds_time (time.c:20 @ 2a3f) [15] pickup_right_fork (forks.c:50 @ 2379)
+  [41] check_exit_inline (time.c:31 @ 2e53) [46] get_microseconds_time (time.c:19 @ 2b31) [55] pickup_right_fork (forks.c:51 @ 2389)
+  [17] check_exit_inline (time.c:32 @ 2e5f) [47] get_microseconds_time (time.c:19 @ 2e28) [10] pickup_right_fork (forks.c:52 @ 2393)
+  [42] check_exit_inline (time.c:34 @ 2e6d) [23] get_microseconds_time (time.c:20 @ 2e39) [31] pickup_right_fork (forks.c:47 @ 23a6)
+   [6] check_exit_inline (time.c:35 @ 2e79) [4] get_microseconds_time (time.c:19 @ 2ed1) [66] print_status (sync_utils.c:144 @ 27cc)
+  [43] check_exit_inline (time.c:32 @ 2f5a) [28] get_microseconds_time (time.c:20 @ 2ee2) [56] print_status (sync_utils.c:151 @ 27e7)
+  [84] cleanup (utils2.c:45 @ 20ae) [20] get_microseconds_time (time.c:19 @ 3154) [57] print_status (sync_utils.c:157 @ 282b)
+  [65] cur_time_millisec (sync_utils.c:32 @ 25ec) [61] get_microseconds_time (time.c:20 @ 3165) [33] print_status (sync_utils.c:161 @ 2843)
+  [44] death_time_millisec (sync_utils.c:27 @ 259e) [86] init_philos (init.c:129 @ 1df7) [37] print_status (sync_utils.c:162 @ 287b)
+  [45] do_exit (sync_utils.c:81 @ 270c) [87] input (init.c:27 @ 18e0) [89] wait_threads (main.c:70 @ 1556)

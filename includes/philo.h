@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 23:15:58 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:07:05 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-#define	THREADING_INIT_TIME_MICRO 4000
+#define	THREADING_INIT_TIME_MICRO 6000
 #define	MUTEX_FAIL_CHECK_VAL -1
 #define	SHIFT_DIV_ESTIMATE 10
 #define	MICROSEC_TO_MILLISEC 1000
@@ -79,12 +79,13 @@ typedef struct s_philo
 	pthread_mutex_t		*status; // shared between thread and will point to status in a t_general object
 	int64_t				death_t; // important to be with exit and status; part of tight inner loop
 	bool				*exit; // shared between thread and will point to exit in a t_general object
+	int64_t				current_t;
 	/* this had to be in the same cache line
 		int64_t				death_t;
 		bool				*exit;
 		pthread_mutex_t		*status;
+		int64_t				current_t;
 	*/
-	int64_t				current_t; // medium important, should fit within the first cache line
 	int64_t				my_padding1;
 	int64_t				my_padding2;
 	int64_t				my_padding3;
@@ -142,33 +143,37 @@ typedef struct	s_general
 
 // main.c
 void					*main_loop(void *arg);
-void					wait_threads(t_general *general);
+void					wait_threads(t_general *const general);
 //int						main(int ac, char *av[]);
 
 // init.c
-int						input(int ac, char *av[], t_general *gen);
-int						fill_philo(t_general *general, COUNT_TYPE i);
-int						intit_threading(t_general *general);
-int						init_philos(t_general *general);
+int						input(int ac, char *av[], t_general *const gen);
+int						fill_philo(t_general *const general, COUNT_TYPE i);
+int						intit_threading(t_general *const general);
+int						init_philos(t_general *const general);
 
 // utils
 D_TYPE					ft_atoi(const char *str);
 void					align_ptr(int8_t **ptr);
 
-bool					pickup_left_fork(t_philo *philo);
-bool					pickup_right_fork(t_philo *philo);
-bool					drop_forks(t_philo *philo);
-bool					check_exit(t_philo *philo);
-bool					eat(t_philo *philo);
-bool					print_status(t_philo *philo, char *status);
+bool					pickup_left_fork(t_philo *const philo);
+bool					pickup_right_fork(t_philo *const philo);
+bool					drop_forks(t_philo *const philo);
+bool					check_exit(t_philo *const philo);
+bool					eat(t_philo *const philo);
+bool					print_status(t_philo *const philo, char *const status);
+
+bool					do_exit(t_philo *const philo, const bool locked_mutex);
 
 // time
 //bool					my_sleep_until(int64_t target_t, t_philo *philo);
-bool					my_sleep_until_small(int64_t target_t, t_philo *philo);
+bool					my_sleep_until_small(const int64_t target_t, t_philo *const philo);
+bool					my_sleep_eating(const int64_t target_t);
+bool					my_sleep_init(const int64_t target_t);
 
-int						cleanup(t_general *general);
+int						cleanup(t_general *const general);
 
 // debug
-void					print_philo(t_philo *philo, bool timings, bool check_mutexes);
+void					print_philo(t_philo *const philo, bool timings, bool check_mutexes);
 
 #endif

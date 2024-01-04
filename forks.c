@@ -6,13 +6,21 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 22:57:03 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:08:01 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-bool	pickup_left_fork(t_philo *philo)
+static inline int64_t	get_microseconds_forks(void)
+{
+	struct timeval	s_time;
+
+	gettimeofday(&s_time, NULL);
+	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
+}
+
+bool	pickup_left_fork(t_philo *const philo)
 {
 	__builtin_prefetch(&philo->death_t, 0, 3);
 	pthread_mutex_lock(&philo->left_fork->mutex_used);
@@ -25,16 +33,14 @@ bool	pickup_left_fork(t_philo *philo)
 	}
 	philo->left_fork->used = true;
 	pthread_mutex_unlock(&philo->left_fork->mutex_used);
-
+	philo->current_t = get_microseconds_forks();
 	pthread_mutex_lock(&philo->left_fork->mutex);
-	// philo->current_time_precise = get_microseconds();
-	// philo->current_time = philo->current_time_precise >> 10;
 	if (!print_status(philo, "has taken the left fork"))
 		return (false);
 	return (true);
 }
 
-bool	pickup_right_fork(t_philo *philo)
+bool	pickup_right_fork(t_philo *const philo)
 {
 	__builtin_prefetch(&philo->death_t, 0, 1);
 	pthread_mutex_lock(&philo->right_fork->mutex_used);
@@ -47,16 +53,14 @@ bool	pickup_right_fork(t_philo *philo)
 	}
 	philo->right_fork->used = true;
 	pthread_mutex_unlock(&philo->right_fork->mutex_used);
-
+	philo->current_t = get_microseconds_forks();
 	pthread_mutex_lock(&philo->right_fork->mutex);
-	// philo->current_time_precise = get_microseconds();
-	// philo->current_time = philo->current_time_precise >> 10;
 	if (!print_status(philo, "has taken the right fork"))
 		return (false);
 	return (true);
 }
 
-void	drop_right_fork(t_philo *philo)
+void	drop_right_fork(t_philo *const philo)
 {
 	pthread_mutex_lock(&philo->right_fork->mutex_used);
 	philo->right_fork->used = false;
@@ -64,7 +68,7 @@ void	drop_right_fork(t_philo *philo)
 	pthread_mutex_unlock(&philo->right_fork->mutex);
 }
 
-void	drop_left_fork(t_philo *philo)
+void	drop_left_fork(t_philo *const philo)
 {
 	pthread_mutex_lock(&philo->left_fork->mutex_used);
 	philo->left_fork->used = false;
@@ -72,7 +76,7 @@ void	drop_left_fork(t_philo *philo)
 	pthread_mutex_unlock(&philo->left_fork->mutex);
 }
 
-bool drop_forks(t_philo *philo)
+bool drop_forks(t_philo *const philo)
 {
 	__builtin_prefetch(&philo->death_t, 0, 3);
 	drop_left_fork(philo);// left first should be better for cache

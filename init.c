@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 22:20:41 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:08:30 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static inline int64_t	get_microseconds_init(void)
 	return (time);
 }
 
-int	input(int ac, char *av[], t_general *gen)
+int	input(int ac, char *av[], t_general *const gen)
 {
 	if (ac !=5 && ac !=6)
 	{
@@ -46,30 +46,33 @@ int	input(int ac, char *av[], t_general *gen)
 	return (1);
 }
 
-static void	fill_odd_even(t_general *general, t_philo *philo, int i)
+static void	fill_odd_even(t_general *const general, t_philo *const philo, int i)
 {
 	philo->next_eat_t = 0;
 	if (!(general->count % 2))
 	{
 		philo->eat_wait_dur = philo->eat_dur + philo->sleep_dur;
 		if (i % 2)
-			philo->next_eat_t = philo->eat_dur;
+			philo->next_eat_t = philo->sleep_dur;
 	}
 	else
 	{
-		philo->eat_wait_dur = philo->eat_dur + philo->sleep_dur;
-		philo->eat_wait_dur += (int)(philo->eat_dur * 0.9);
-		//philo->eat_wait_dur += (philo->eat_dur >> 1) + (philo->eat_dur >> 2) + (philo->eat_dur >> 3) + (philo->eat_dur >> 4);
+		philo->eat_wait_dur = (2 * philo->eat_dur) + philo->sleep_dur;
+		// philo->eat_wait_dur = philo->eat_dur;
+		// if (philo->sleep_dur > philo->eat_dur)
+		// 	philo->eat_wait_dur += philo->sleep_dur;
+		// else
+		// 	philo->eat_wait_dur += philo->eat_dur;
 		if (!(i % 3))
 			philo->next_eat_t = 0;
 		else if (!((i + 2) % 3))
-			philo->next_eat_t =  philo->eat_dur + philo->sleep_dur;
+			philo->next_eat_t =  philo->eat_dur;
 		else
-			philo->next_eat_t = philo->eat_wait_dur;
+			philo->next_eat_t = philo->eat_dur * 2;
 	}
 }
 
-int	fill_philo(t_general *general, COUNT_TYPE i)
+int	fill_philo(t_general *const general, COUNT_TYPE i)
 {
 	t_philo	*philo;
 
@@ -97,7 +100,7 @@ int	fill_philo(t_general *general, COUNT_TYPE i)
 	return (1);
 }
 
-int	intit_threading(t_general *general)
+int	intit_threading(t_general *const general)
 {
 	int			i;
 	t_philo		*philo;
@@ -122,7 +125,7 @@ int	intit_threading(t_general *general)
 
 
 
-int	init_philos(t_general *general)
+int	init_philos(t_general *const general)
 {
 	COUNT_TYPE	i;
 	t_fork		solo_fork;

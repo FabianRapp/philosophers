@@ -6,15 +6,22 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/03 22:20:47 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:07:28 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-bool	eat(t_philo *philo)
+static inline int64_t	get_microseconds_eat(void)
 {
-	philo->current_t = philo->next_eat_t;
+	struct timeval	s_time;
+
+	gettimeofday(&s_time, NULL);
+	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
+}
+
+bool	eat(t_philo *const philo)
+{
 	if (!my_sleep_until_small(philo->next_eat_t, philo))
 		return (false);
 	if (!pickup_left_fork(philo)) // left first should be better for cache
@@ -31,14 +38,13 @@ bool	eat(t_philo *philo)
 	}
 	philo->death_t = philo->current_t + philo->starve_dur;
 	philo->next_eat_t = philo->current_t + philo->eat_wait_dur;
-	if (!my_sleep_until_small(philo->current_t + philo->eat_dur, philo))
+	my_sleep_eating(philo->current_t + philo->eat_dur);
+	if (drop_forks(philo))
 	{
-		drop_forks(philo);
-		return (false);
+		philo->current_t = get_microseconds_eat();
+		return (true);
 	}
-	drop_forks(philo);
-	philo->current_t += philo->eat_dur;
-	return (1);
+	return (false);
 }
 
 void	align_ptr(int8_t **ptr)

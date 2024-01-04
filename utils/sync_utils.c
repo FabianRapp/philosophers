@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/03 23:28:45 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 21:06:34 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,49 +68,91 @@ static void	kill_philo(t_philo *philo)
 // 	return (true);
 // }
 
-bool	check_exit(t_philo *philo)
+// irrelevant performence part
+bool	do_exit(t_philo *const philo, const bool locked_mutex)
+{
+	if (!locked_mutex)
+		pthread_mutex_lock(philo->status);
+	// philo->current_t = get_microseconds_sync();
+	if (!(*(philo->exit)))
+		kill_philo(philo);
+	pthread_mutex_unlock(philo->status);
+	return (true);
+}
+
+
+
+// static inline bool	check_exit(t_philo *philo)
+// {
+// 	int64_t			local_current_t;
+// 	bool			*local_ptr;
+// 	int64_t			local_death_t;
+// 	pthread_mutex_t	*local_mutex_ptr;
+
+// 	local_death_t = philo->death_t;
+// 	local_ptr = philo->exit;
+// 	local_mutex_ptr = philo->status;
+// 	local_current_t = get_microseconds_sync();
+// 	philo->current_t = local_current_t;
+// 	pthread_mutex_lock(local_mutex_ptr);
+// 	if (!(*local_ptr))
+// 	{
+// 		pthread_mutex_unlock(local_mutex_ptr);
+// 		if (local_current_t <= local_death_t)
+// 		{
+// 			return (false); // 99.99999999 the returns of this function
+// 		}
+// 		pthread_mutex_lock(local_mutex_ptr);
+// 	}
+// 	do_exit(philo);
+// }
+
+
+
+
+
+bool	check_exit(t_philo *const philo)
 {
 	int64_t			local_current_t;
 	bool			*local_ptr;
 	int64_t			local_death_t;
 	pthread_mutex_t	*local_mutex_ptr;
 
-	local_current_t = get_microseconds_sync();
 	local_death_t = philo->death_t;
 	local_ptr = philo->exit;
 	local_mutex_ptr = philo->status;
+	local_current_t = get_microseconds_sync();
+	philo->current_t = local_current_t;
 	pthread_mutex_lock(local_mutex_ptr);
 	if (!(*local_ptr))
 	{
 		pthread_mutex_unlock(local_mutex_ptr);
 		if (local_current_t <= local_death_t)
 		{
-			__builtin_prefetch(&philo->death_t, 0, 3);
 			return (false); // 99.99999999 the returns of this function
 		}
-		else
-		{
-			pthread_mutex_lock(local_mutex_ptr);
-		}
+		pthread_mutex_lock(local_mutex_ptr);
 	}
-	philo->current_t = get_microseconds_sync();
+	// philo->current_t = get_microseconds_sync();
 	if (!(*local_ptr))
 		kill_philo(philo);
 	pthread_mutex_unlock(local_mutex_ptr);
 	return (true);
 }
 
-bool	print_status(t_philo *philo, char *status)
+bool	print_status(t_philo *const philo, char *const status)
 {
 	int64_t			local_current_t;
 	bool			*local_ptr;
 	int64_t			local_death_t;
 	pthread_mutex_t	*local_mutex_ptr;
 
-	local_current_t = get_microseconds_sync();
+
 	local_death_t = philo->death_t;
 	local_ptr = philo->exit;
 	local_mutex_ptr = philo->status;
+	local_current_t = get_microseconds_sync();
+	philo->current_t = local_current_t;
 	pthread_mutex_lock(local_mutex_ptr);
 	if (!(*local_ptr))
 	{
@@ -126,8 +168,7 @@ bool	print_status(t_philo *philo, char *status)
 			//{
 				//pthread_mutex_unlock(local_mutex_ptr);
 				//return (true);
-			//}
-			philo->current_t = local_current_t;
+			//
 			kill_philo(philo);
 			return (false);
 		}
