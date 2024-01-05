@@ -19,6 +19,10 @@ build: $(OBJECTS)
 	@$(CC) $(INCLUDES) $^ -o $(NAME)
 	@echo "\033[32mBuild complete.\033[0m"
 
+fsanitize_thread: fclean
+	@$(CC) $(INCLUDES) -g $(SOURCES) -o $(NAME) -fsanitize=thread
+	@echo "\033[32mBuild complete.\033[0m"
+
 profile: PROFILE_FLAGS=-pg -g
 profile: fclean
 	@$(CC) $(INCLUDES) $(SOURCES) -o $(NAME_PROFILE) $(PROFILE_FLAGS)
@@ -40,6 +44,3 @@ re: fclean all
 clean2:
 	@rm -f $(OBJECTS)
 	@echo "\033[33mObject files removed.\033[0m"
-
-run_valgrind:
-	valgrind --tool=$(tool) ./$(NAME)

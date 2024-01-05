@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:46:41 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 22:50:25 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ bool	pickup_left_fork(t_philo *restrict const philo)
 	philo->current_t = get_microseconds_forks();
 	pthread_mutex_lock(&philo->left_fork->mutex);
 	if (!print_status(philo, "has taken the left fork"))
+	{
+		drop_left_fork(philo);
 		return (false);
+	}
 	return (true);
 }
 
@@ -56,7 +59,10 @@ bool	pickup_right_fork(t_philo *restrict const philo)
 	philo->current_t = get_microseconds_forks();
 	pthread_mutex_lock(&philo->right_fork->mutex);
 	if (!print_status(philo, "has taken the right fork"))
+	{
+		drop_right_fork(philo);
 		return (false);
+	}
 	return (true);
 }
 

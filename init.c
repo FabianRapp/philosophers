@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 22:18:01 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 00:46:52 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	fill_odd_even(t_general *const general, t_philo *restrict const phil
 	philo->next_eat_t = 0;
 	if (!(general->count % 2))
 	{
-		philo->eat_wait_dur = philo->eat_dur + philo->sleep_dur;
+		philo->eat_wait_dur = philo->eat_dur + ((int)(philo->sleep_dur * 0.8));
 		if (i % 2)
 			philo->next_eat_t = philo->sleep_dur;
 	}
@@ -108,26 +108,53 @@ int	fill_philo(t_general *const general, COUNT_TYPE i)
 	return (1);
 }
 
+void	wait_threads(t_general *const general)
+{
+	int	i;
+
+	i = 0;
+	while (i <= general->count)
+	{
+		pthread_join(general->threads[i], NULL);
+		//printf("thread %d joined\n", i);
+		i++;
+	}
+
+}
+
 int	intit_threading(t_general *const general)
 {
-	int			i;
-	t_philo		*philo;
-	pthread_t	*thread;
+	int				i;
+	t_philo			*philo;
+	pthread_t		*thread;
+	t_fork			right_fork_solo;
 
+	right_fork_solo.used = true;
+	pthread_mutex_init(&right_fork_solo.mutex, NULL);
+	pthread_mutex_init(&right_fork_solo.mutex_used, NULL);
 	general->start_t = get_microseconds_init();
 	general->start_t += general->count * THREADING_INIT_TIME_MICRO;
 	i = 0;
+	pthread_mutex_lock(&(general->status));
 	while (i < general->count)
 	{
+
 		philo = general->philos + i;
 		thread = general->threads + i;
+
 		philo->start_t = general->start_t;
+		if (general->count == 1)
+			philo->right_fork = &right_fork_solo;
 		if (pthread_create(thread + 1, NULL, main_loop, philo))
 		{
 			return (0);
 		}
 		i++;
 	}
+	pthread_mutex_unlock(&(general->status));
+	wait_threads(general);
+	pthread_mutex_destroy(&right_fork_solo.mutex);
+	pthread_mutex_destroy(&right_fork_solo.mutex_used);
 	return (1);
 }
 

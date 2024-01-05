@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 22:26:07 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 01:15:37 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 #define CACHE_LINE_SIZE 64
 
 
-#define	SLEEP_TOLERANCE 150
-#define	HARDCODE_SLEEP 100
+#define	SLEEP_TOLERANCE 300
+#define	HARDCODE_SLEEP 200
 
 #define PREFETCH_EXIT __asm__ volatile("PREFETCHT1 %0" : : "m" (philo->death_t))
 
@@ -168,7 +168,8 @@ bool					drop_forks(t_philo *restrict const philo);
 bool					check_exit(t_philo *restrict const philo);
 bool					eat(t_philo *restrict const philo);
 bool					print_status(t_philo *restrict const philo, char *const status);
-
+void					drop_left_fork(t_philo *restrict const philo);
+void					drop_right_fork(t_philo *restrict const philo);
 bool					do_exit(t_philo *restrict const philo, const bool locked_mutex);
 
 // time

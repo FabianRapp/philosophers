@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:46:34 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 23:08:43 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	eat(t_philo *restrict const philo)
 		return (false);
 	if (!pickup_right_fork(philo))
 	{
-		pthread_mutex_unlock(&philo->left_fork->mutex);
+		drop_left_fork(philo);
 		return (false);
 	}
 	if (!print_status(philo, "is eating"))

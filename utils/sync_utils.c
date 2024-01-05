@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/04 22:28:31 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/04 23:09:49 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static void	kill_philo(t_philo *restrict const philo)
 {
 	if (*(philo->exit))
 	{
-		pthread_mutex_unlock(philo->status);
 		return ;
 	}
+	philo->current_t = get_microseconds_sync();
 	printf("%ld %ld died\n", death_time_millisec(philo), philo->index);
 	*(philo->exit) = true;
 	pthread_mutex_unlock(philo->status);
@@ -49,10 +49,14 @@ bool	do_exit(t_philo *restrict const philo, const bool locked_mutex)
 {
 	if (!locked_mutex)
 		pthread_mutex_lock(philo->status);
-	// philo->current_t = get_microseconds_sync();
+
 	if (!(*(philo->exit)))
 		kill_philo(philo);
-	pthread_mutex_unlock(philo->status);
+	else
+	{
+		pthread_mutex_unlock(philo->status);
+	}
+
 	return (true);
 }
 
@@ -80,8 +84,13 @@ bool	check_exit(t_philo *restrict const philo)
 	}
 	philo->current_t = get_microseconds_sync();
 	if (!(*local_ptr))
+	{
 		kill_philo(philo);
-	pthread_mutex_unlock(local_mutex_ptr);
+	}
+	else
+	{
+		pthread_mutex_unlock(local_mutex_ptr);
+	}
 	return (true);
 }
 
@@ -91,7 +100,6 @@ bool	print_status(t_philo *restrict const philo, char *const status)
 	bool			*local_ptr;
 	int64_t			local_death_t;
 	pthread_mutex_t	*local_mutex_ptr;
-
 
 	local_death_t = philo->death_t;
 	local_ptr = philo->exit;
@@ -110,6 +118,7 @@ bool	print_status(t_philo *restrict const philo, char *const status)
 		else
 		{
 			kill_philo(philo);
+			printf("in %s\n", status);
 			return (false);
 		}
 	}
