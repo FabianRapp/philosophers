@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/05 00:44:58 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 02:49:56 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,3 +69,31 @@ int	main(int ac, char *av[])
 	cleanup(general);
 	return (0);
 }
+	Cache Misses
+    Cache Line Optimization
+	Struct Packing for cachlocality so each function only acesses one cache line of a struct
+    Data Prefetching
+	Inline Assembly to force Prefetching
+
+    Threading and Thread Management
+	heap vs stack
+    Stack Variable vs Heap varialbe speeds
+	Resource Leak
+  	Cleanup(mutexes, dynamic data and threads with join)
+    System-Level Programming
+    Performance Profiling
+    Gprof (GNU Profiler)
+	Profiling Data Interpretation
+	Function Call Overhead in tight loops
+	System Call Overhead
+	C inline functions
+    Synchronization
+    printf vs. write Functions (in execution speeds)
+    Process Synchronization
+    Multi-threading
+	Mutex (Mutual Exclusion)
+	Concurrency and Concurrent Execution
+	Shared Boolean Flags for exit condtions protected by mutex
+	Deadlock Prevention with two mutex for one value and a bool state that can be checked with the first lock, the second mutex is locked if the flags alows it
+    Trade-offs in Optimization
+
