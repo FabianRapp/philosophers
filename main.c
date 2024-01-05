@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/05 02:49:56 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 14:16:43 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static inline void	intit_thread(t_philo *restrict const philo)
 	philo->next_eat_t += philo->current_t;
 	philo->death_t = philo->start_t;
 	philo->death_t += philo->starve_dur;
-	my_sleep_init(philo->current_t); // cant die before start
+	my_sleep_no_exit(philo->current_t);
 }
 
 void	*main_loop(void *arg)
@@ -37,15 +37,15 @@ void	*main_loop(void *arg)
 	intit_thread(philo);
 	while (philo->eat_count)
 	{
-		if (!print_status(philo, "is thinking"))
+		if (!change_status(philo, "is thinking"))
 			break ;
 		if (!eat(philo))
 			break ;
 		if (philo->eat_count > 0)
 			philo->eat_count--;
-		if (!print_status(philo, "is sleeping"))
+		if (!change_status(philo, "is sleeping"))
 			break ;
-		if (!my_sleep_until_small(philo->current_t + philo->sleep_dur, philo))
+		if (!my_sleep_until(philo->current_t + philo->sleep_dur, philo))
 			break ;
 		philo->current_t = get_microseconds_main();
 	}
@@ -65,35 +65,6 @@ int	main(int ac, char *av[])
 		return (0);
 	if (!intit_threading(general))
 		return (0);
-
 	cleanup(general);
 	return (0);
 }
-	Cache Misses
-    Cache Line Optimization
-	Struct Packing for cachlocality so each function only acesses one cache line of a struct
-    Data Prefetching
-	Inline Assembly to force Prefetching
-
-    Threading and Thread Management
-	heap vs stack
-    Stack Variable vs Heap varialbe speeds
-	Resource Leak
-  	Cleanup(mutexes, dynamic data and threads with join)
-    System-Level Programming
-    Performance Profiling
-    Gprof (GNU Profiler)
-	Profiling Data Interpretation
-	Function Call Overhead in tight loops
-	System Call Overhead
-	C inline functions
-    Synchronization
-    printf vs. write Functions (in execution speeds)
-    Process Synchronization
-    Multi-threading
-	Mutex (Mutual Exclusion)
-	Concurrency and Concurrent Execution
-	Shared Boolean Flags for exit condtions protected by mutex
-	Deadlock Prevention with two mutex for one value and a bool state that can be checked with the first lock, the second mutex is locked if the flags alows it
-    Trade-offs in Optimization
-

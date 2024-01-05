@@ -6,17 +6,17 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/04 21:07:38 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 14:57:56 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-D_TYPE	ft_atoi(const char *str)
+int64_t	ft_atoi(const char *str)
 {
-	D_TYPE	num;
-	D_TYPE	sign;
-	D_TYPE	digit;
+	int64_t	num;
+	int64_t	sign;
+	int64_t	digit;
 
 	num = 0;
 	sign = 1;
@@ -29,7 +29,7 @@ D_TYPE	ft_atoi(const char *str)
 	}
 	else if (*str == '+')
 		str++;
-	while ( (*str >= 48 && *str <= 57))
+	while ((*str >= 48 && *str <= 57))
 	{
 		num *= 10;
 		digit = (int64_t)(*str - '0');
@@ -51,10 +51,12 @@ int	cleanup(t_general *const general)
 		pthread_mutex_destroy(&(general->status));
 		while (i < general->count)
 		{
-			if (((general->philos) + i)->eat_dur != MUTEX_FAIL_CHECK_VAL)
-				pthread_mutex_destroy(&(((general->philos) + i)->main_fork.mutex));
-			if ((general->philos)[i].starve_dur != MUTEX_FAIL_CHECK_VAL)
-				pthread_mutex_destroy(&(((general->philos) + i)->main_fork.mutex_used));
+			if (((general->philos) + i)->eat_dur != FAIL_INIT)
+				pthread_mutex_destroy(&((general->philos) + i)
+					->main_fork.mutex);
+			if ((general->philos)[i].starve_dur != FAIL_INIT)
+				pthread_mutex_destroy(&((general->philos) + i)
+					->main_fork.mutex_used);
 			i++;
 		}
 	}

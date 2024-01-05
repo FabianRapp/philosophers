@@ -2,8 +2,7 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror -O3 -march=native -ftree-vectorize -pthread -funroll-loops
 PROFILE_FLAGS=
 INCLUDES=-I./includes
-SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c
-# debug.c
+SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c threading.c debug.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 NAME_PROFILE=$(NAME)_profile
@@ -44,3 +43,6 @@ re: fclean all
 clean2:
 	@rm -f $(OBJECTS)
 	@echo "\033[33mObject files removed.\033[0m"
+
+norm:
+	norminette $(SOURCES) includes/philo.h

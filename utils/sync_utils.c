@@ -6,13 +6,14 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/04 23:09:49 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 14:46:02 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-static inline int64_t	get_microseconds_sync(void)
+static inline int64_t __attribute__((always_inline))
+	get_microseconds_sync(void)
 {
 	struct timeval	s_time;
 	int64_t			time;
@@ -23,40 +24,35 @@ static inline int64_t	get_microseconds_sync(void)
 	return (time);
 }
 
-static inline int64_t	death_time_millisec(t_philo *restrict const philo)
-{
-	return ((philo->current_t - philo->start_t) / MICROSEC_TO_MILLISEC);
-}
-
 static inline int64_t	cur_time_millisec(t_philo *restrict const philo)
 {
-	return ((philo->current_t - philo->start_t) >> SHIFT_DIV_ESTIMATE);
+	return (((int64_t)(philo->current_t - philo->start_t)
+		* MICROSEC_TO_MILLISEC_FACTOR));
 }
 
-static void	kill_philo(t_philo *restrict const philo)
-{
-	if (*(philo->exit))
-	{
-		return ;
-	}
-	philo->current_t = get_microseconds_sync();
-	printf("%ld %ld died\n", death_time_millisec(philo), philo->index);
-	*(philo->exit) = true;
-	pthread_mutex_unlock(philo->status);
-}
+// // this gives better performence but
+//  // gives slightly inaccurate timestamp outputs
+// static inline int64_t	cur_time_millisec(t_philo *restrict const philo)
+// {
+// 	return ((philo->current_t - philo->start_t) >> SHIFT_DIV_ESTIMATE);
+// }
 
+// this function unlocks the philo->status mutex!
 bool	do_exit(t_philo *restrict const philo, const bool locked_mutex)
 {
+	int64_t	death_time;
+
 	if (!locked_mutex)
 		pthread_mutex_lock(philo->status);
-
 	if (!(*(philo->exit)))
-		kill_philo(philo);
-	else
 	{
-		pthread_mutex_unlock(philo->status);
+		philo->current_t = get_microseconds_sync();
+		death_time = (philo->current_t - philo->start_t)
+			* MICROSEC_TO_MILLISEC_FACTOR;
+		printf("%ld %ld died\n", death_time, philo->index);
+		*(philo->exit) = true;
 	}
-
+	pthread_mutex_unlock(philo->status);
 	return (true);
 }
 
@@ -78,23 +74,14 @@ bool	check_exit(t_philo *restrict const philo)
 		pthread_mutex_unlock(local_mutex_ptr);
 		if (local_current_t <= local_death_t)
 		{
-			return (false); // 99.99999999 the returns of this function
+			return (false);
 		}
-		pthread_mutex_lock(local_mutex_ptr);
+		return (do_exit(philo, false));
 	}
-	philo->current_t = get_microseconds_sync();
-	if (!(*local_ptr))
-	{
-		kill_philo(philo);
-	}
-	else
-	{
-		pthread_mutex_unlock(local_mutex_ptr);
-	}
-	return (true);
+	return (do_exit(philo, true));
 }
 
-bool	print_status(t_philo *restrict const philo, char *const status)
+bool	change_status(t_philo *restrict const philo, char *const status)
 {
 	int64_t			local_current_t;
 	bool			*local_ptr;
@@ -111,17 +98,11 @@ bool	print_status(t_philo *restrict const philo, char *const status)
 	{
 		if ((local_current_t <= local_death_t))
 		{
-			printf("%ld %ld %s\n", cur_time_millisec(philo), philo->index, status);
+			printf("%ld %ld %s\n", cur_time_millisec(philo),
+				philo->index, status);
 			pthread_mutex_unlock(local_mutex_ptr);
 			return (true);
 		}
-		else
-		{
-			kill_philo(philo);
-			printf("in %s\n", status);
-			return (false);
-		}
 	}
-	pthread_mutex_unlock(local_mutex_ptr);
-	return (false);
+	return (!do_exit(philo, true));
 }
