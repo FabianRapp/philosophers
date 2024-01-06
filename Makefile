@@ -1,8 +1,10 @@
 CC=cc
-CFLAGS=-Wall -Wextra -Werror -O3 -march=native -ftree-vectorize -pthread -funroll-loops
+CFLAGS=-Wall -Wextra -Werror
+# -O3 -march=native -ftree-vectorize -pthread -funroll-loops
 PROFILE_FLAGS=
 INCLUDES=-I./includes
-SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c threading.c debug.c
+SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c threading.c debug.c \
+ calculate_sleep_time.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 NAME_PROFILE=$(NAME)_profile
@@ -27,6 +29,9 @@ profile: fclean
 	@$(CC) $(INCLUDES) $(SOURCES) -o $(NAME_PROFILE) $(PROFILE_FLAGS)
 	@echo "\033[32mBuild complete.\033[0m"
 
+perf: fclean
+	perf record @$(CC) $(INCLUDES) $(SOURCES) -o $(NAME)_perf
+
 %.o: %.c
 	@$(CC) $(CFLAGS) $(PROFILE_FLAGS) $(INCLUDES) -o $@ -c $^
 
@@ -35,7 +40,7 @@ clean:
 	@echo "\033[33mObject files removed.\033[0m"
 
 fclean: clean
-	@rm -f $(NAME) $(NAME_PROFILE) gmon.out analysis.txt
+	@rm -f $(NAME) $(NAME_PROFILE) gmon.out analysis.txt perf.data a.out
 	@echo "\033[33mExecutable removed.\033[0m"
 
 re: fclean all
@@ -46,3 +51,4 @@ clean2:
 
 norm:
 	norminette $(SOURCES) includes/philo.h
+

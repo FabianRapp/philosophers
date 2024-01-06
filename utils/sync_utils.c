@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/05 14:46:02 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 17:15:24 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,17 @@ bool	do_exit(t_philo *restrict const philo, const bool locked_mutex)
 bool	check_exit(t_philo *restrict const philo)
 {
 	int64_t			local_current_t;
-	bool			*local_ptr;
+	bool			*local_exit_ptr;
 	int64_t			local_death_t;
 	pthread_mutex_t	*local_mutex_ptr;
 
 	local_death_t = philo->death_t;
-	local_ptr = philo->exit;
+	local_exit_ptr = philo->exit;
 	local_mutex_ptr = philo->status;
 	local_current_t = get_microseconds_sync();
 	philo->current_t = local_current_t;
 	pthread_mutex_lock(local_mutex_ptr);
-	if (!(*local_ptr))
+	if (!(*local_exit_ptr))
 	{
 		pthread_mutex_unlock(local_mutex_ptr);
 		if (local_current_t <= local_death_t)
@@ -81,20 +81,20 @@ bool	check_exit(t_philo *restrict const philo)
 	return (do_exit(philo, true));
 }
 
-bool	change_status(t_philo *restrict const philo, char *const status)
+bool	change_status(t_philo *restrict const philo, const char *restrict const status)
 {
 	int64_t			local_current_t;
-	bool			*local_ptr;
+	bool			*local_exit_ptr;
 	int64_t			local_death_t;
 	pthread_mutex_t	*local_mutex_ptr;
 
 	local_death_t = philo->death_t;
-	local_ptr = philo->exit;
+	local_exit_ptr = philo->exit;
 	local_mutex_ptr = philo->status;
 	local_current_t = get_microseconds_sync();
 	philo->current_t = local_current_t;
 	pthread_mutex_lock(local_mutex_ptr);
-	if (!(*local_ptr))
+	if (!(*local_exit_ptr))
 	{
 		if ((local_current_t <= local_death_t))
 		{

@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:31:41 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/05 14:14:46 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/05 20:25:18 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static inline int64_t __attribute__((always_inline))
 }
 
 static inline bool __attribute__((always_inline))
-	check_exit_inline(t_philo *restrict const philo)
+	check_exit_time(t_philo *restrict const philo)
 {
 	bool			*local_ptr;
 	pthread_mutex_t	*local_mutex_ptr;
@@ -54,40 +54,63 @@ static inline bool __attribute__((always_inline))
 	return (do_exit(philo, true));
 }
 
-void	my_sleep_no_exit(const int64_t target_t)
+void	my_sleep_fast(const int64_t target_t)
 {
 	int64_t			time_diff;
 	int64_t			temp_sleep;
 
 	time_diff = target_t - get_microseconds_time();
 	temp_sleep = time_diff - (time_diff >> 3);
-	while (temp_sleep > SLEEP_TOLERANCE)
+	while (temp_sleep > SLEEP_TOLERANCE_SPEED)
 	{
 		usleep(temp_sleep);
 		time_diff = target_t - get_microseconds_time();
 		temp_sleep = time_diff - (time_diff >> 3);
 	}
-	usleep(HARDCODE_SLEEP);
+	usleep(HARDCODE_SLEEP_SPEED);
 }
 
-bool	my_sleep_until(const int64_t target_t,
-	t_philo *restrict const philo)
+void	my_sleep_accurate(const int64_t target_t)
 {
 	int64_t			time_diff;
 	int64_t			temp_sleep;
 
 	time_diff = target_t - get_microseconds_time();
 	temp_sleep = time_diff - (time_diff >> 3);
-	while (temp_sleep > SLEEP_TOLERANCE)
+	while (temp_sleep > SLEEP_TOLERANCE_ACC)
 	{
 		usleep(temp_sleep);
-		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
-		if (check_exit_inline(philo))
-			return (false);
 		time_diff = target_t - get_microseconds_time();
 		temp_sleep = time_diff - (time_diff >> 3);
 	}
-	usleep(HARDCODE_SLEEP);
+	while (target_t > get_microseconds_time())
+	{
+	}
+	//usleep(HARDCODE_SLEEP);
+}
+
+bool	my_sleep_slow(const int64_t target_t,
+	t_philo *restrict const philo)
+{
 	__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
-	return (!check_exit_inline(philo));
+	if (check_exit_time(philo))
+		return (false);
+	while (get_microseconds_time() < target_t - SLEEP_TOLERANCE_SPEED)
+	{
+		usleep(SLEEP_TOLERANCE_SPEED);
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+		if (check_exit_time(philo))
+			return (false);
+	}
+	// while (get_microseconds_time() < target_t)
+	// {
+	// 	usleep(1);
+	// 	__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+	// 	if (check_exit_time(philo))
+	// 		return (false);
+	// }
+	while (target_t > get_microseconds_time())
+	{
+	}
+	return (!check_exit_time(philo));
 }
