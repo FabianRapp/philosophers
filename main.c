@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/06 11:47:34 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/06 12:39:21 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static inline void	intit_thread(t_philo *restrict const philo)
 		{
 			usleep(sleep_time);
 		}
-
 	}
 	else
 		my_sleep_accurate(philo->current_t);
@@ -80,7 +79,6 @@ void	*main_loop_even_death(void *arg)
 			break ;
 		if (!change_status(philo, THINKING_MSG))
 			break ;
-		philo->current_t = get_microseconds_main();
 	}
 	return (arg);
 }
@@ -96,14 +94,12 @@ void	*main_loop_odd_death(void *arg)
 	philo = (t_philo *)arg;
 	intit_thread(philo);
 
-	// if (!my_sleep_slow(philo->next_eat_t, philo))
-	// 	return (false);
+	if (!my_sleep_slow(philo->next_eat_t, philo))
+		return (false);
 	while (philo->eat_count)
 	{
 		if (!change_status(philo, THINKING_MSG))
 			break ;
-		if (!my_sleep_slow(philo->next_eat_t, philo))
-			return (false);
 		if (!pickup_forks_odd(philo))
 			break ;
 		if (!init_eat_odd(philo))
@@ -118,7 +114,6 @@ void	*main_loop_odd_death(void *arg)
 			break ;
 		if (!my_sleep_slow(philo->current_t + philo->sleep_dur, philo))
 			break ;
-		philo->current_t = get_microseconds_main();
 	}
 	return (arg);
 }
@@ -137,7 +132,7 @@ void	*main_loop_even(void *arg)
 		if (sleep_time > 10)
 			usleep(sleep_time);
 		//my_sleep_fast(philo->next_eat_t);
-		bool first = true;
+		//bool first = true;
 		while (philo->eat_count)
 		{
 			// int64_t	sleep_time = philo->next_eat_t - get_microseconds_main();
@@ -145,10 +140,10 @@ void	*main_loop_even(void *arg)
 			// {
 			// 	usleep((int)sleep_time);
 			// }
-			if (!first)
+			//if (!first)
 				usleep(philo->eat_wait_dur);
-			else
-				first = false;
+			//else
+			//	first = false;
 			if (!pickup_forks_even(philo))
 				break ;
 			if (!change_status(philo, EATING_MSG))
@@ -210,7 +205,6 @@ void	*main_loop_even(void *arg)
 	return (arg);
 }
 
-// odd needes a eat ealay every iteration and thus the first
 void	*main_loop_odd(void *arg)
 {
 	t_philo	*philo;

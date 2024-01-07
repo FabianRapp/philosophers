@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/05 14:57:56 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/06 12:42:22 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,3 +68,14 @@ int	cleanup(t_general *const general)
 	general->threads = NULL;
 	return (0);
 }
+
+void	align_ptr(int8_t **ptr)
+{
+	int		size_past_last_line;
+
+	size_past_last_line = ((uintptr_t)((*ptr)) % CACHE_LINE_SIZE);
+	if (!size_past_last_line)
+		return ;
+	*ptr = *ptr + CACHE_LINE_SIZE - size_past_last_line;
+}
+

@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:31:41 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/05 20:25:18 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/06 12:21:49 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ bool	my_sleep_slow(const int64_t target_t,
 	__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 	if (check_exit_time(philo))
 		return (false);
-	while (get_microseconds_time() < target_t - SLEEP_TOLERANCE_SPEED)
+	while (get_microseconds_time() < target_t - SLEEP_TOLERANCE_ACC)
 	{
-		usleep(SLEEP_TOLERANCE_SPEED);
+		usleep(SLEEP_TOLERANCE_ACC);
 		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (check_exit_time(philo))
 			return (false);

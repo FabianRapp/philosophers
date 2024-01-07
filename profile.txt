@@ -1,0 +1,353 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  us/call  us/call  name    
+  7.41      0.14     0.14                             _init
+  6.88      0.27     0.13                             check_exit_forks (forks.c:34 @ 2e4d)
+  6.35      0.39     0.12                             check_exit_forks (forks.c:34 @ 2c9e)
+  5.82      0.50     0.11                             check_exit_forks (forks.c:37 @ 2e67)
+  5.29      0.60     0.10                             get_microseconds_forks (forks.c:21 @ 2c78)
+  5.29      0.70     0.10                             pickup_forks_even (utils1.c:66 @ 20ca)
+  3.70      0.77     0.07                             change_status (sync_utils.c:101 @ 3487)
+  3.70      0.84     0.07                             check_exit_forks (forks.c:37 @ 2cb8)
+  3.70      0.91     0.07                             get_microseconds_forks (forks.c:21 @ 2e27)
+  3.17      0.97     0.06                             pickup_left_fork (forks.c:65 @ 2c40)
+  2.65      1.02     0.05                             pickup_right_fork (forks.c:88 @ 2ec1)
+  2.38      1.06     0.04                             main_loop_even (main.c:148 @ 189f)
+  2.12      1.10     0.04                             pickup_left_fork (forks.c:62 @ 2d12)
+  1.59      1.14     0.03                             change_status (sync_utils.c:97 @ 346f)
+  1.59      1.17     0.03                             change_status (sync_utils.c:103 @ 34bf)
+  1.59      1.20     0.03                             check_exit_forks (forks.c:39 @ 2ccd)
+  1.59      1.23     0.03                             check_exit_forks (forks.c:32 @ 2e39)
+  1.59      1.25     0.03                             check_exit_forks (forks.c:33 @ 2e41)
+  1.59      1.28     0.03                             check_exit_forks (forks.c:37 @ 311e)
+  1.59      1.31     0.03                             pickup_right_fork (forks.c:86 @ 2dc3)
+  1.32      1.34     0.03                             check_exit_forks (forks.c:32 @ 2c8a)
+  1.32      1.36     0.03                             main_loop_even (main.c:147 @ 188d)
+  1.06      1.39     0.02                             change_status (sync_utils.c:108 @ 34f4)
+  1.06      1.41     0.02                             check_exit_forks (forks.c:30 @ 2c50)
+  1.06      1.43     0.02                             check_exit_forks (forks.c:36 @ 2cac)
+  1.06      1.45     0.02                             cur_time_millisec (sync_utils.c:30 @ 31ac)
+  1.06      1.47     0.02                             drop_forks (forks.c:128 @ 3043)
+  1.06      1.49     0.02                             get_microseconds_forks (forks.c:20 @ 2e16)
+  1.06      1.50     0.02                             main_loop_even (main.c:172 @ 19a0)
+  1.06      1.52     0.02                             pickup_left_fork (forks.c:68 @ 2d06)
+  1.06      1.54     0.02                             pickup_right_fork (forks.c:91 @ 2def)
+  1.06      1.56     0.02                             pickup_right_fork (forks.c:94 @ 2eb5)
+  0.79      1.58     0.01                             change_status (sync_utils.c:95 @ 3457)
+  0.79      1.59     0.01                             check_exit_forks (forks.c:31 @ 2c5c)
+  0.53      1.60     0.01  1554370     0.01     0.01  get_microseconds (time.c:16 @ 350e)
+  0.53      1.61     0.01   778544     0.01     0.01  pickup_left_fork (forks.c:55 @ 2bea)
+  0.53      1.62     0.01     8000     1.25     1.25  my_sleep_fast (time.c:58 @ 3571)
+  0.53      1.64     0.01                             change_status (sync_utils.c:94 @ 3453)
+  0.53      1.65     0.01                             change_status (sync_utils.c:99 @ 347d)
+  0.53      1.66     0.01                             check_exit_forks (forks.c:30 @ 2dff)
+  0.53      1.67     0.01                             check_exit_forks (forks.c:31 @ 2e0b)
+  0.53      1.68     0.01                             check_exit_forks (forks.c:36 @ 2e5b)
+  0.53      1.69     0.01                             check_exit_forks (forks.c:34 @ 3104)
+  0.53      1.70     0.01                             drop_forks (forks.c:146 @ 316e)
+  0.53      1.71     0.01                             main_loop_even (main.c:155 @ 18e4)
+  0.53      1.72     0.01                             main_loop_even (main.c:160 @ 1914)
+  0.53      1.73     0.01                             main_loop_even (main.c:161 @ 191c)
+  0.53      1.74     0.01                             main_loop_even (main.c:163 @ 1933)
+  0.53      1.75     0.01                             main_loop_even (main.c:166 @ 1965)
+  0.53      1.75     0.01                             pickup_forks_even (utils1.c:72 @ 210d)
+  0.53      1.76     0.01                             pickup_forks_even (utils1.c:84 @ 2160)
+  0.53      1.77     0.01                             pickup_left_fork (forks.c:60 @ 2c1b)
+  0.53      1.78     0.01                             pickup_left_fork (forks.c:64 @ 2c34)
+  0.53      1.79     0.01                             pickup_left_fork (forks.c:67 @ 2cfc)
+  0.53      1.80     0.01                             pickup_left_fork (forks.c:74 @ 2d53)
+  0.53      1.81     0.01                             pickup_left_fork (forks.c:80 @ 2d88)
+  0.53      1.82     0.01                             pickup_right_fork (forks.c:100 @ 2f02)
+  0.26      1.83     0.01  3907730     0.00     0.00  change_status (sync_utils.c:85 @ 33da)
+  0.26      1.83     0.01                             check_exit (sync_utils.c:82 @ 33c4)
+  0.26      1.84     0.01                             check_exit_forks (forks.c:33 @ 2c92)
+  0.26      1.84     0.01                             check_exit_forks (forks.c:39 @ 2e7c)
+  0.26      1.85     0.01                             check_exit_forks (forks.c:41 @ 2e83)
+  0.26      1.85     0.01                             check_exit_forks (forks.c:43 @ 2e96)
+  0.26      1.86     0.01                             get_microseconds (time.c:23 @ 3557)
+  0.26      1.86     0.01                             get_microseconds (time.c:24 @ 355b)
+  0.26      1.87     0.01                             get_microseconds_forks (forks.c:20 @ 2c67)
+  0.26      1.88     0.01                             get_microseconds_sync (sync_utils.c:24 @ 344f)
+  0.26      1.88     0.01                             pickup_right_fork (forks.c:88 @ 2dde)
+  0.26      1.89     0.01                             pickup_right_fork (forks.c:90 @ 2de3)
+  0.26      1.89     0.01                             pickup_right_fork (forks.c:92 @ 2ea7)
+  0.00      1.89     0.00  3942007     0.00     0.00  cur_time_millisec (sync_utils.c:28 @ 3184)
+  0.00      1.89     0.00   782918     0.00     0.00  drop_left_fork (forks.c:118 @ 2fba)
+  0.00      1.89     0.00   782134     0.00     0.00  drop_right_fork (forks.c:109 @ 2f4d)
+  0.00      1.89     0.00   777275     0.00     0.00  pickup_right_fork (forks.c:83 @ 2d9e)
+  0.00      1.89     0.00   777022     0.00     0.00  drop_forks (forks.c:127 @ 301e)
+  0.00      1.89     0.00   772661     0.00     0.00  pickup_forks_even (utils1.c:65 @ 20b4)
+  0.00      1.89     0.00    32000     0.00     0.00  determinant (calculate_sleep_time.c:27 @ 4092)
+  0.00      1.89     0.00    24000     0.00     0.00  ft_memcpy (calculate_sleep_time.c:6 @ 4013)
+  0.00      1.89     0.00     8000     0.00     0.00  fill_odd_even (init.c:60 @ 236c)
+  0.00      1.89     0.00     8000     0.00     0.00  fill_philo (init.c:118 @ 24fe)
+  0.00      1.89     0.00     8000     0.00     0.00  intit_thread (main.c:29 @ 13bf)
+  0.00      1.89     0.00     8000     0.00     0.00  quadratic_function_even (calculate_sleep_time.c:73 @ 44e7)
+  0.00      1.89     0.00     8000     0.00     0.00  solve_quadratic (calculate_sleep_time.c:35 @ 41ac)
+  0.00      1.89     0.00     7985     0.00     0.00  get_microseconds_main (main.c:21 @ 1369)
+  0.00      1.89     0.00        6     0.00     0.00  ft_atoi (utils2.c:16 @ 29cc)
+  0.00      1.89     0.00        2     0.00     0.00  align_ptr (utils1.c:102 @ 2195)
+  0.00      1.89     0.00        1     0.00     0.00  init_philos (init.c:165 @ 27a2)
+  0.00      1.89     0.00        1     0.00     0.00  input (init.c:16 @ 21e1)
+  0.00      1.89     0.00        1     0.00     0.00  intit_threading (threading.c:28 @ 3aa4)
+  0.00      1.89     0.00        1     0.00     0.00  wait_threads (threading.c:16 @ 3a4d)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 4 byte(s) for 0.53% of 1.89 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]      7.4    0.14    0.00                 _init [1]
+-----------------------------------------------
+                0.00    0.00       1/1554370     intit_threading (threading.c:54 @ 3b4b) [77]
+                0.00    0.00  775632/1554370     pickup_right_fork (forks.c:97 @ 2ed9) [73]
+                0.01    0.00  778737/1554370     pickup_left_fork (forks.c:71 @ 2d2a) [59]
+[39]     0.5    0.01    0.00 1554370         get_microseconds (time.c:16 @ 350e) [39]
+-----------------------------------------------
+                0.00    0.00  385753/778544      pickup_forks_even (utils1.c:69 @ 20e5) [74]
+                0.01    0.00  392791/778544      pickup_forks_even (utils1.c:84 @ 2160) [33]
+[40]     0.5    0.01    0.00  778544         pickup_left_fork (forks.c:55 @ 2bea) [40]
+-----------------------------------------------
+                0.01    0.00    8000/8000        intit_thread (main.c:36 @ 1446) [49]
+[41]     0.5    0.01    0.00    8000         my_sleep_fast (time.c:58 @ 3571) [41]
+-----------------------------------------------
+                0.00    0.00    6712/3907730     main_loop_even (main.c:132 @ 181b) [76]
+                0.00    0.00  776877/3907730     pickup_right_fork (forks.c:100 @ 2f02) [38]
+                0.00    0.00  778405/3907730     pickup_left_fork (forks.c:74 @ 2d53) [37]
+                0.00    0.00  779459/3907730     main_loop_even (main.c:166 @ 1965) [36]
+                0.00    0.00  780111/3907730     main_loop_even (main.c:172 @ 19a0) [23]
+                0.00    0.00  786166/3907730     main_loop_even (main.c:150 @ 18b6) [75]
+[60]     0.3    0.01    0.00 3907730         change_status (sync_utils.c:85 @ 33da) [60]
+-----------------------------------------------
+                0.00    0.00 3942007/3942007     change_status (sync_utils.c:101 @ 3487) [7]
+[78]     0.0    0.00    0.00 3942007         cur_time_millisec (sync_utils.c:28 @ 3184) [78]
+-----------------------------------------------
+                0.00    0.00  389064/782918      drop_forks (forks.c:139 @ 309a) [210]
+                0.00    0.00  393854/782918      drop_forks (forks.c:131 @ 305e) [205]
+[79]     0.0    0.00    0.00  782918         drop_left_fork (forks.c:118 @ 2fba) [79]
+-----------------------------------------------
+                0.00    0.00  388587/782134      drop_forks (forks.c:133 @ 3075) [207]
+                0.00    0.00  393547/782134      drop_forks (forks.c:138 @ 308e) [209]
+[80]     0.0    0.00    0.00  782134         drop_right_fork (forks.c:109 @ 2f4d) [80]
+-----------------------------------------------
+                0.00    0.00  384347/777275      pickup_forks_even (utils1.c:81 @ 213e) [646]
+                0.00    0.00  392928/777275      pickup_forks_even (utils1.c:72 @ 210d) [54]
+[81]     0.0    0.00    0.00  777275         pickup_right_fork (forks.c:83 @ 2d9e) [81]
+-----------------------------------------------
+                0.00    0.00  777022/777022      main_loop_even (main.c:161 @ 191c) [52]
+[82]     0.0    0.00    0.00  777022         drop_forks (forks.c:127 @ 301e) [82]
+-----------------------------------------------
+                0.00    0.00  772661/772661      main_loop_even (main.c:148 @ 189f) [12]
+[83]     0.0    0.00    0.00  772661         pickup_forks_even (utils1.c:65 @ 20b4) [83]
+-----------------------------------------------
+                0.00    0.00    8000/32000       solve_quadratic (calculate_sleep_time.c:61 @ 4416) [755]
+                0.00    0.00    8000/32000       solve_quadratic (calculate_sleep_time.c:62 @ 4431) [756]
+                0.00    0.00    8000/32000       solve_quadratic (calculate_sleep_time.c:63 @ 444c) [757]
+                0.00    0.00    8000/32000       solve_quadratic (calculate_sleep_time.c:64 @ 4467) [758]
+[84]     0.0    0.00    0.00   32000         determinant (calculate_sleep_time.c:27 @ 4092) [84]
+-----------------------------------------------
+                0.00    0.00    8000/24000       solve_quadratic (calculate_sleep_time.c:48 @ 42db) [747]
+                0.00    0.00    8000/24000       solve_quadratic (calculate_sleep_time.c:49 @ 42f9) [748]
+                0.00    0.00    8000/24000       solve_quadratic (calculate_sleep_time.c:50 @ 4317) [749]
+[85]     0.0    0.00    0.00   24000         ft_memcpy (calculate_sleep_time.c:6 @ 4013) [85]
+-----------------------------------------------
+                0.00    0.00    8000/8000        fill_philo (init.c:160 @ 2782) [276]
+[86]     0.0    0.00    0.00    8000         fill_odd_even (init.c:60 @ 236c) [86]
+-----------------------------------------------
+                0.00    0.00    8000/8000        init_philos (init.c:185 @ 28b7) [373]
+[87]     0.0    0.00    0.00    8000         fill_philo (init.c:118 @ 24fe) [87]
+-----------------------------------------------
+                0.00    0.00    8000/8000        main_loop_even (main.c:131 @ 180f) [460]
+[88]     0.0    0.00    0.00    8000         intit_thread (main.c:29 @ 13bf) [88]
+-----------------------------------------------
+                0.00    0.00    8000/8000        fill_odd_even (init.c:75 @ 23a8) [230]
+[89]     0.0    0.00    0.00    8000         quadratic_function_even (calculate_sleep_time.c:73 @ 44e7) [89]
+-----------------------------------------------
+                0.00    0.00    8000/8000        quadratic_function_even (calculate_sleep_time.c:84 @ 455a) [738]
+[90]     0.0    0.00    0.00    8000         solve_quadratic (calculate_sleep_time.c:35 @ 41ac) [90]
+-----------------------------------------------
+                0.00    0.00    7985/7985        main_loop_even (main.c:136 @ 1855) [463]
+[91]     0.0    0.00    0.00    7985         get_microseconds_main (main.c:21 @ 1369) [91]
+-----------------------------------------------
+                0.00    0.00       1/6           input (init.c:24 @ 2223) [389]
+                0.00    0.00       1/6           input (init.c:29 @ 2254) [392]
+                0.00    0.00       1/6           input (init.c:30 @ 2270) [393]
+                0.00    0.00       1/6           input (init.c:31 @ 2292) [394]
+                0.00    0.00       1/6           input (init.c:32 @ 22b4) [395]
+                0.00    0.00       1/6           input (init.c:34 @ 22dc) [397]
+[92]     0.0    0.00    0.00       6         ft_atoi (utils2.c:16 @ 29cc) [92]
+-----------------------------------------------
+                0.00    0.00       1/2           main (main.c:280 @ 1eae) [448]
+                0.00    0.00       1/2           init_philos (init.c:179 @ 2873) [367]
+[93]     0.0    0.00    0.00       2         align_ptr (utils1.c:102 @ 2195) [93]
+-----------------------------------------------
+                0.00    0.00       1/1           main (main.c:283 @ 1ee6) [451]
+[94]     0.0    0.00    0.00       1         init_philos (init.c:165 @ 27a2) [94]
+-----------------------------------------------
+                0.00    0.00       1/1           main (main.c:281 @ 1ebd) [449]
+[95]     0.0    0.00    0.00       1         input (init.c:16 @ 21e1) [95]
+-----------------------------------------------
+                0.00    0.00       1/1           main (main.c:285 @ 1f00) [453]
+[96]     0.0    0.00    0.00       1         intit_threading (threading.c:28 @ 3aa4) [96]
+-----------------------------------------------
+                0.00    0.00       1/1           intit_threading (threading.c:92 @ 3cc8) [438]
+[97]     0.0    0.00    0.00       1         wait_threads (threading.c:16 @ 3a4d) [97]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2022 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+   [1] _init                  [19] check_exit_forks (forks.c:37 @ 311e) [52] main_loop_even (main.c:161 @ 191c)
+  [93] align_ptr (utils1.c:102 @ 2195) [78] cur_time_millisec (sync_utils.c:28 @ 3184) [53] main_loop_even (main.c:163 @ 1933)
+  [60] change_status (sync_utils.c:85 @ 33da) [27] cur_time_millisec (sync_utils.c:30 @ 31ac) [36] main_loop_even (main.c:166 @ 1965)
+  [42] change_status (sync_utils.c:94 @ 3453) [84] determinant (calculate_sleep_time.c:27 @ 4092) [23] main_loop_even (main.c:172 @ 19a0)
+  [34] change_status (sync_utils.c:95 @ 3457) [82] drop_forks (forks.c:127 @ 301e) [41] my_sleep_fast (time.c:58 @ 3571)
+  [14] change_status (sync_utils.c:97 @ 346f) [28] drop_forks (forks.c:128 @ 3043) [83] pickup_forks_even (utils1.c:65 @ 20b4)
+  [43] change_status (sync_utils.c:99 @ 347d) [48] drop_forks (forks.c:146 @ 316e) [6] pickup_forks_even (utils1.c:66 @ 20ca)
+   [7] change_status (sync_utils.c:101 @ 3487) [79] drop_left_fork (forks.c:118 @ 2fba) [54] pickup_forks_even (utils1.c:72 @ 210d)
+  [15] change_status (sync_utils.c:103 @ 34bf) [80] drop_right_fork (forks.c:109 @ 2f4d) [33] pickup_forks_even (utils1.c:84 @ 2160)
+  [24] change_status (sync_utils.c:108 @ 34f4) [86] fill_odd_even (init.c:60 @ 236c) [40] pickup_left_fork (forks.c:55 @ 2bea)
+  [61] check_exit (sync_utils.c:82 @ 33c4) [87] fill_philo (init.c:118 @ 24fe) [55] pickup_left_fork (forks.c:60 @ 2c1b)
+  [25] check_exit_forks (forks.c:30 @ 2c50) [92] ft_atoi (utils2.c:16 @ 29cc) [56] pickup_left_fork (forks.c:64 @ 2c34)
+  [35] check_exit_forks (forks.c:31 @ 2c5c) [85] ft_memcpy (calculate_sleep_time.c:6 @ 4013) [10] pickup_left_fork (forks.c:65 @ 2c40)
+  [21] check_exit_forks (forks.c:32 @ 2c8a) [39] get_microseconds (time.c:16 @ 350e) [57] pickup_left_fork (forks.c:67 @ 2cfc)
+  [62] check_exit_forks (forks.c:33 @ 2c92) [66] get_microseconds (time.c:23 @ 3557) [30] pickup_left_fork (forks.c:68 @ 2d06)
+   [3] check_exit_forks (forks.c:34 @ 2c9e) [67] get_microseconds (time.c:24 @ 355b) [13] pickup_left_fork (forks.c:62 @ 2d12)
+  [26] check_exit_forks (forks.c:36 @ 2cac) [68] get_microseconds_forks (forks.c:20 @ 2c67) [37] pickup_left_fork (forks.c:74 @ 2d53)
+   [8] check_exit_forks (forks.c:37 @ 2cb8) [5] get_microseconds_forks (forks.c:21 @ 2c78) [58] pickup_left_fork (forks.c:80 @ 2d88)
+  [16] check_exit_forks (forks.c:39 @ 2ccd) [29] get_microseconds_forks (forks.c:20 @ 2e16) [81] pickup_right_fork (forks.c:83 @ 2d9e)
+  [44] check_exit_forks (forks.c:30 @ 2dff) [9] get_microseconds_forks (forks.c:21 @ 2e27) [20] pickup_right_fork (forks.c:86 @ 2dc3)
+  [45] check_exit_forks (forks.c:31 @ 2e0b) [91] get_microseconds_main (main.c:21 @ 1369) [70] pickup_right_fork (forks.c:88 @ 2dde)
+  [17] check_exit_forks (forks.c:32 @ 2e39) [69] get_microseconds_sync (sync_utils.c:24 @ 344f) [71] pickup_right_fork (forks.c:90 @ 2de3)
+  [18] check_exit_forks (forks.c:33 @ 2e41) [94] init_philos (init.c:165 @ 27a2) [31] pickup_right_fork (forks.c:91 @ 2def)
+   [2] check_exit_forks (forks.c:34 @ 2e4d) [95] input (init.c:16 @ 21e1) [72] pickup_right_fork (forks.c:92 @ 2ea7)
+  [46] check_exit_forks (forks.c:36 @ 2e5b) [88] intit_thread (main.c:29 @ 13bf) [32] pickup_right_fork (forks.c:94 @ 2eb5)
+   [4] check_exit_forks (forks.c:37 @ 2e67) [96] intit_threading (threading.c:28 @ 3aa4) [11] pickup_right_fork (forks.c:88 @ 2ec1)
+  [63] check_exit_forks (forks.c:39 @ 2e7c) [22] main_loop_even (main.c:147 @ 188d) [38] pickup_right_fork (forks.c:100 @ 2f02)
+  [64] check_exit_forks (forks.c:41 @ 2e83) [12] main_loop_even (main.c:148 @ 189f) [89] quadratic_function_even (calculate_sleep_time.c:73 @ 44e7)
+  [65] check_exit_forks (forks.c:43 @ 2e96) [50] main_loop_even (main.c:155 @ 18e4) [90] solve_quadratic (calculate_sleep_time.c:35 @ 41ac)
+  [47] check_exit_forks (forks.c:34 @ 3104) [51] main_loop_even (main.c:160 @ 1914) [97] wait_threads (threading.c:16 @ 3a4d)

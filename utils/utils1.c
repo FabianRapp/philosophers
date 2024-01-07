@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:49:20 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/05 21:58:16 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/06 12:42:17 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,4 @@ bool	pickup_forks_even(t_philo *restrict const philo)
 // 	return (true);
 // }
 
-void	align_ptr(int8_t **ptr)
-{
-	int		size_past_last_line;
 
-	size_past_last_line = ((uintptr_t)((*ptr)) % CACHE_LINE_SIZE);
-	if (!size_past_last_line)
-		return ;
-	*ptr = *ptr + CACHE_LINE_SIZE - size_past_last_line;
-}

@@ -6,7 +6,7 @@
 /*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/05 21:23:25 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/06 12:43:03 by fabi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,6 @@ static inline bool __attribute__((always_inline))
 	}
 	return (do_exit(philo, true));
 }
-
-// static inline int64_t	get_microseconds_forks(void)
-// {
-// 	struct timeval	s_time;
-
-// 	gettimeofday(&s_time, NULL);
-// 	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
-// }
 
 bool	pickup_left_fork(t_philo *restrict const philo)
 {
