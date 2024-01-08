@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/06 12:42:22 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/08 16:43:39 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
+// not performance critical
 int64_t	ft_atoi(const char *str)
 {
 	int64_t	num;
@@ -41,6 +42,7 @@ int64_t	ft_atoi(const char *str)
 	return (num * sign);
 }
 
+// not performance critical
 int	cleanup(t_general *const general)
 {
 	int	i;
@@ -69,6 +71,7 @@ int	cleanup(t_general *const general)
 	return (0);
 }
 
+// not performance critical
 void	align_ptr(int8_t **ptr)
 {
 	int		size_past_last_line;

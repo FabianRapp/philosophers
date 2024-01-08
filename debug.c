@@ -12,6 +12,7 @@
 
 #include <philo.h>
 
+
 void	print_mutex_status(const char *name, bool status)
 {
 	if (status)
@@ -22,17 +23,17 @@ void	print_mutex_status(const char *name, bool status)
 
 void	print_timing_info(t_philo *philo)
 {
-	printf("\tstarve_ti: %ld\n\teat_ti: %ld\n\tsleep_ti: %ld\n",
+	printf("\tstarve_ti: %lld\n\teat_ti: %lld\n\tsleep_ti: %lld\n",
 		(int64_t)(philo->starve_dur * MICROSEC_TO_MILLISEC_FACTOR),
 		(int64_t)(philo->eat_dur * MICROSEC_TO_MILLISEC_FACTOR),
 		(int64_t)(philo->sleep_dur * MICROSEC_TO_MILLISEC_FACTOR));
-	printf("\teat_count: %ld\n\tstart_t %lld\n", philo->eat_count,
+	printf("\teat_count: %lld\n\tstart_t %lld\n", philo->eat_count,
 		(long long)(philo->start_t * MICROSEC_TO_MILLISEC_FACTOR));
 }
 
 void	print_basic_info(t_philo *philo)
 {
-	printf("philo %ld:\n", philo->index);
+	printf("philo %lld:\n", philo->index);
 	printf("\tdeath_time: %lld\n", (long long)
 		(philo->death_t * MICROSEC_TO_MILLISEC_FACTOR));
 }

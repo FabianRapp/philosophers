@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   threading.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:37:01 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/06 11:34:52 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/08 16:44:48 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
+// not performance critical
 void	wait_threads(t_general *const general)
 {
 	int	i;
@@ -24,28 +25,13 @@ void	wait_threads(t_general *const general)
 	}
 }
 
-bool	intit_threading(t_general *const general)
+static void	debug_info(t_general *general)
 {
-	int				i;
-	t_philo			*philo;
-	pthread_t		*thread;
-
-
-	if (general->even)
-	{
-		if (!general->death_loop)
-			printf("even normal\n");
-		else
-			printf("even death loop\n");
-	}
+	if (!general->death_loop)
+		printf("normal loop\n");
 	else
-	{
-		if (!general->death_loop)
-			printf("odd normal\n");
-		else
-			printf("odd death loop\n");
-	}
-	if (!general->philos->speed_mode)
+		printf("death loop\n");
+	if (!(general->philos->thinking_dur > 60))
 	{
 		printf("accuracy mode\n");
 	}
@@ -53,46 +39,41 @@ bool	intit_threading(t_general *const general)
 	{
 		printf("speed mode\n");
 	}
+}
+
+// not performance critical
+bool	intit_threading(t_general *const general)
+{
+	int				i;
+	t_philo			*philo;
+	pthread_t		*thread;
+
+	debug_info(general);
 	general->start_t = get_microseconds();
-	general->start_t += general->count * THREADING_INIT_TIME_MICRO;
+	general->start_t += general->count * MICROSEC_PER_THREAD_INIT_TIME;
 	i = 0;
 	while (i < general->count)
 	{
 		philo = general->philos + i;
 		thread = general->threads + i;
 		philo->start_t = general->start_t;
-		if (general->even)
+		if (!general->death_loop)
 		{
-			if (!general->death_loop)
+			if (philo->thinking_dur > SPEED_BOUNDRY)
 			{
-				if (pthread_create(thread, NULL, main_loop_even, philo))
+				if (pthread_create(thread, NULL, main_loop_fast, philo))
 					return (false);
-				usleep(1);
 			}
 			else
 			{
-				if (pthread_create(thread, NULL, main_loop_even_death, philo))
+				if (pthread_create(thread, NULL, main_loop_accurate, philo))
 					return (false);
-				usleep(1);
 			}
 		}
 		else
 		{
-			if (!general->death_loop)
-			{
-				// if (pthread_create(thread, NULL, main_loop_odd, philo))
-				// 	return (false);
-				// usleep(1);
-				if (pthread_create(thread, NULL, main_loop_even, philo))
-					return (false);
-				usleep(1);
-			}
-			else
-			{
-				if (pthread_create(thread, NULL, main_loop_odd_death, philo))
-					return (false);
-				usleep(1);
-			}
+			if (pthread_create(thread, NULL, main_loop_death, philo))
+				return (false);
 		}
 		i++;
 	}

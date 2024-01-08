@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fabi <fabi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/06 01:10:25 by fabi             ###   ########.fr       */
+/*   Updated: 2024/01/08 18:39:46 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-# ifndef THREADING_INIT_TIME_MICRO
-#  define THREADING_INIT_TIME_MICRO 2000
+# ifndef MICROSEC_PER_THREAD_INIT_TIME
+#  define MICROSEC_PER_THREAD_INIT_TIME 2000
 # endif
 
 # ifndef FAIL_INIT
@@ -37,17 +37,20 @@
 #  define MICROSEC_TO_MILLISEC_FACTOR 0.001
 # endif
 
+# ifndef SEC_TO_MICROSEC_FACTOR
+#  define SEC_TO_MICROSEC_FACTOR 1000000
+# endif
+
 # ifndef CACHE_LINE_SIZE
 #  define CACHE_LINE_SIZE 64
 # endif
-
 
 # ifndef THINKING_MSG
 #  define THINKING_MSG "is thinking"
 # endif
 
 # ifndef PICK_UP_FORK_MSG
-#  define PICK_UP_FORK_MSG "picked up a fork"
+#  define PICK_UP_FORK_MSG "has taken a fork"
 # endif
 
 # ifndef EATING_MSG
@@ -58,75 +61,84 @@
 #  define SLEEP_MSG "is sleeping"
 # endif
 
-
-#define SPEED_BOUNDRY 0
-
-#  define MIN_EAT_WAIT 500
-
-#  define EXECUTION_TIME 5000
-
 # ifndef SLEEP_TOLERANCE_SPEED
 #  define SLEEP_TOLERANCE_SPEED 60
 # endif
 
-# ifndef HARDCODE_SLEEP_SPEED
-#  define HARDCODE_SLEEP_SPEED SLEEP_TOLERANCE_SPEED
-# endif
-
 # ifndef SLEEP_TOLERANCE_ACC
-#  define SLEEP_TOLERANCE_ACC 100
+#  define SLEEP_TOLERANCE_ACC 30
 # endif
 
-// change this value for for tight timings in the programm arguments
-#define ACCURAY_SLEEP_BOUNDERY 20
+# ifndef SPEED_BOUNDRY
+#  define SPEED_BOUNDRY 0
+# endif
 
+/*
+	the x-value is the philo count (== thread count)
+	the y-value thread execution time (in microseconds)
+
+	these values are used to form a quadratic function,
+	which is used to estimate the thread needs for all
+	computations within one loop iteration
+
+	this again is used to determine the maximum time
+	a thread can sleep after the mandetory actions
+	(to leave the compute power to other threads)
+*/
+# ifndef POINT1_X
+#  define POINT1_X 4
+# endif
+
+# ifndef POINT1_Y
+#  define POINT1_Y 2000 // changed from 3000
+# endif
+
+# ifndef POINT2_X
+#  define POINT2_X 2046
+# endif
+
+# ifndef POINT2_Y
+#  define POINT2_Y 170000
+# endif
+
+# ifndef POINT3_X
+#  define POINT3_X 1024
+# endif
+
+# ifndef POINT3_Y
+#  define POINT3_Y 47000
+# endif
 
 
 // used is used as a bool, int64_t for preticable layout
 typedef struct s_fork
 {
-	pthread_mutex_t	mutex_used;
-	int8_t			used;
-	int8_t			my_padding1;
-	int8_t			my_padding2;
-	int8_t			my_padding3;
-	int8_t			my_padding4;
-	int8_t			my_padding5;
-	int8_t			my_padding6;
-	int8_t			my_padding7;
-	int8_t			my_padding8;
-	int8_t			my_padding9;
-	pthread_mutex_t	mutex;
+	int64_t			used; // 64
+	pthread_mutex_t	mutex_used; // 128
+	pthread_mutex_t	mutex; // 192
 }	t_fork;
 
 typedef struct s_philo
 {
 	// cache line 1 (0 - 64)
-	pthread_mutex_t		*status;
-	int64_t				death_t;
-	bool				*exit;
-	int64_t				current_t;
-	int64_t				my_padding1;
-	int64_t				my_padding2;
-	int64_t				my_padding3;
-	int64_t				my_padding4;
-	// cache line 2 (64 - 128)
-	t_fork				*left_fork;
-	t_fork				main_fork;
-	// cache line 3 (middle main_fork - 192)
-	t_fork				*right_fork; // 176
+	pthread_mutex_t		*status;  //8
+	int64_t				death_t; // 16
+	bool				*exit;	// 24
+	int64_t				current_t; // 32
+	t_fork				*left_fork; // 40
+	t_fork				*right_fork; // 48
+	int64_t				eat_dur; // 56
+	// cache line 2/3 (64 - 192)
+	t_fork				main_fork; // 192
 	int64_t				starve_dur; // 184
-	int64_t				eat_dur; // 192
-	// cache line 4 (192 - 256)
+	 // 192
+	int64_t				thinking_dur;
 	int64_t				next_eat_t;
-	int64_t				eat_wait_dur;
 	int64_t				eat_count;
-	int64_t				sleep_dur;
 	int64_t				start_t;
+	// cache line 4 (192 - 256)
+	int64_t				sleep_dur;
 	int64_t				index;
-	int64_t				speed_mode; /* this is to decide
-	if efficent sleeps or accurat sleeps are better*/
-	int64_t				my_padding6;
 }	t_philo;
 
 // exit and status have to be the first two values to ensure cache locality
@@ -152,10 +164,9 @@ typedef struct s_general
 
 // main.c
 //void		*main_loop(void *arg);
-void		*main_loop_even(void *arg);
-void		*main_loop_odd(void *arg);
-void		*main_loop_even_death(void *arg);
-void		*main_loop_odd_death(void *arg);
+void		*main_loop_fast(void *arg);
+void		*main_loop_accurate(void *arg);
+void		*main_loop_death(void *arg);
 void		wait_threads(t_general *const general);
 //int		main(int ac, char *av[]);
 
@@ -171,18 +182,18 @@ void		align_ptr(int8_t **ptr);
 
 bool		pickup_left_fork(t_philo *restrict const philo);
 bool		pickup_right_fork(t_philo *restrict const philo);
-bool		drop_forks(t_philo *restrict const philo);
-bool		check_exit(t_philo *restrict const philo);
+void		drop_forks(t_philo *restrict const philo);
+
 //bool		eat(t_philo *restrict const philo);
-bool		init_eat_even(t_philo *restrict const philo);
-bool		init_eat_odd(t_philo *restrict const philo);
 bool		change_status(t_philo *restrict const philo, const char *restrict const status);
+bool		check_exit(t_philo *restrict const philo);
+
+
 void		drop_left_fork(t_philo *restrict const philo);
 void		drop_right_fork(t_philo *restrict const philo);
-bool		do_exit(t_philo *restrict const philo, const bool locked_mutex);
 
-bool	pickup_forks_odd(t_philo *restrict const philo);
-bool	pickup_forks_even(t_philo *restrict const philo);
+
+bool	pickup_forks(t_philo *restrict const philo);
 // time
 bool		my_sleep_slow(const int64_t target_t,
 				t_philo *restrict const philo);
@@ -191,7 +202,7 @@ void		my_sleep_accurate(const int64_t target_t);
 int64_t		get_microseconds(void);
 
 
-int64_t		quadratic_function_even(int64_t x);
+int64_t		quadratic_function(int64_t x);
 
 
 int			cleanup(t_general *const general);

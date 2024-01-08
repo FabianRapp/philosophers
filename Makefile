@@ -1,9 +1,8 @@
 CC=cc
-CFLAGS=-Wall -Wextra -Werror
-# -O3 -march=native -ftree-vectorize -pthread -funroll-loops
+CFLAGS=-Wall -Wextra -Werror -O3 -march=native -ftree-vectorize -funroll-loops
 PROFILE_FLAGS=
 INCLUDES=-I./includes
-SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c threading.c debug.c \
+SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c threading.c \
  calculate_sleep_time.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
@@ -17,7 +16,11 @@ all:$(NAME)
 $(NAME): build clean2
 
 build: $(OBJECTS)
-	@$(CC) $(INCLUDES) $^ -o $(NAME)
+	@$(CC) $(INCLUDES) $^ -o $(NAME) $(CFLAGS)
+	@echo "\033[32mBuild complete.\033[0m"
+
+fsanitize_address: fclean
+	@$(CC) $(INCLUDES) -g $(SOURCES) -o $(NAME) -fsanitize=address
 	@echo "\033[32mBuild complete.\033[0m"
 
 fsanitize_thread: fclean
