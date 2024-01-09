@@ -27,4 +27,4 @@ Compile the project:
 make
 
 Run the program:
-./philosophers
+./p 2047 1050 200 200
