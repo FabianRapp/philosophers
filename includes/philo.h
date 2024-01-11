@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/08 18:39:46 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/12 00:53:45 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@
 #  define MICROSEC_TO_MILLISEC_FACTOR 0.001
 # endif
 
+# ifndef MILLISEC_TO_MICROSEC_FACTOR
+#  define MILLISEC_TO_MICROSEC_FACTOR 1000
+# endif
+
 # ifndef SEC_TO_MICROSEC_FACTOR
 #  define SEC_TO_MICROSEC_FACTOR 1000000
 # endif
@@ -46,27 +50,31 @@
 # endif
 
 # ifndef THINKING_MSG
-#  define THINKING_MSG "is thinking"
+#  define THINKING_MSG " is thinking\n"
 # endif
 
 # ifndef PICK_UP_FORK_MSG
-#  define PICK_UP_FORK_MSG "has taken a fork"
+#  define PICK_UP_FORK_MSG " has taken a fork\n"
 # endif
 
 # ifndef EATING_MSG
-#  define EATING_MSG "is eating"
+#  define EATING_MSG " is eating\n"
 # endif
 
 # ifndef SLEEP_MSG
-#  define SLEEP_MSG "is sleeping"
+#  define SLEEP_MSG " is sleeping\n"
 # endif
 
-# ifndef SLEEP_TOLERANCE_SPEED
-#  define SLEEP_TOLERANCE_SPEED 60
+# ifndef SLEEP_TOLERANCE_FAST
+#  define SLEEP_TOLERANCE_FAST 500
+# endif
+
+# ifndef THINK_TIME_BUFFER
+#  define THINK_TIME_BUFFER 800
 # endif
 
 # ifndef SLEEP_TOLERANCE_ACC
-#  define SLEEP_TOLERANCE_ACC 30
+#  define SLEEP_TOLERANCE_ACC 500
 # endif
 
 # ifndef SPEED_BOUNDRY
@@ -90,7 +98,7 @@
 # endif
 
 # ifndef POINT1_Y
-#  define POINT1_Y 2000 // changed from 3000
+#  define POINT1_Y 2000// 4000?
 # endif
 
 # ifndef POINT2_X
@@ -98,16 +106,24 @@
 # endif
 
 # ifndef POINT2_Y
-#  define POINT2_Y 170000
+#  define POINT2_Y 120000 // 170000
 # endif
 
 # ifndef POINT3_X
-#  define POINT3_X 1024
+#  define POINT3_X 200
 # endif
 
 # ifndef POINT3_Y
-#  define POINT3_Y 47000
+#  define POINT3_Y 6000
 # endif
+
+// # ifndef POINT3_X
+// #  define POINT3_X 1024
+// # endif
+
+// # ifndef POINT3_Y
+// #  define POINT3_Y 47000
+// # endif
 
 
 // used is used as a bool, int64_t for preticable layout
@@ -121,7 +137,7 @@ typedef struct s_fork
 typedef struct s_philo
 {
 	// cache line 1 (0 - 64)
-	pthread_mutex_t		*status;  //8
+	pthread_mutex_t		*status_mutex_ptr;  //8
 	int64_t				death_t; // 16
 	bool				*exit;	// 24
 	int64_t				current_t; // 32
@@ -139,13 +155,29 @@ typedef struct s_philo
 	// cache line 4 (192 - 256)
 	int64_t				sleep_dur;
 	int64_t				index;
+	int64_t				death_loop; //bool
+
+	// experimental
+	char				*output_buffer;
+	int64_t				*output_size;
+	int64_t				cache_filler1;
+	int64_t				cache_filler2;
+	int64_t				cache_filler3;
+	int64_t				cache_filler4;
+	int64_t				cache_filler5;
+	int64_t				cache_filler6;
 }	t_philo;
 
+# ifndef OUTPUT_BUFFER_SIZE
+#  define OUTPUT_BUFFER_SIZE 1000000
+# endif
 // exit and status have to be the first two values to ensure cache locality
 typedef struct s_general
 {
 	bool					exit;
-	pthread_mutex_t			status;
+	pthread_mutex_t			status_mutex;
+	int64_t					output_size;
+	char					output_buffer[OUTPUT_BUFFER_SIZE];
 	t_philo					*philos;
 	pthread_t				*threads;
 	// count was uint16_t before
@@ -164,17 +196,27 @@ typedef struct s_general
 
 // main.c
 //void		*main_loop(void *arg);
-void		*main_loop_fast(void *arg);
-void		*main_loop_accurate(void *arg);
-void		*main_loop_death(void *arg);
-void		wait_threads(t_general *const general);
+void		*choose_loop(void *arg);
+void		*main_loop_death(void *philos);
+
+// my_print.c
+int8_t		put_output_to_buffer(int64_t cur_time,
+				int64_t philo_nb, char *buffer, const char *restrict str);
+void		*flush_output_loop(void *gen);
+
 //int		main(int ac, char *av[]);
 
 // init.c
 int			input(int ac, char *av[], t_general *const gen);
 int			fill_philo(t_general *const general, int64_t i);
-bool		intit_threading(t_general *const general);
 int			init_philos(t_general *const general);
+
+bool		intit_threading(t_general *const general);
+bool		intit_thread(t_philo *restrict const philo);
+void		wait_threads(t_general *const general, pthread_t *status_thread);
+
+
+
 
 // utils
 int64_t		ft_atoi(const char *str);
@@ -184,21 +226,24 @@ bool		pickup_left_fork(t_philo *restrict const philo);
 bool		pickup_right_fork(t_philo *restrict const philo);
 void		drop_forks(t_philo *restrict const philo);
 
-//bool		eat(t_philo *restrict const philo);
-bool		change_status(t_philo *restrict const philo, const char *restrict const status);
-bool		check_exit(t_philo *restrict const philo);
+
+
+// sync_utils
+bool		change_status(t_philo *restrict const philo, const char *restrict status);
+bool		is_dead(t_philo *restrict const philo);
 
 
 void		drop_left_fork(t_philo *restrict const philo);
 void		drop_right_fork(t_philo *restrict const philo);
 
+bool		pickup_forks(t_philo *restrict const philo);
 
-bool	pickup_forks(t_philo *restrict const philo);
 // time
 bool		my_sleep_slow(const int64_t target_t,
 				t_philo *restrict const philo);
 void		my_sleep_fast(const int64_t target_t);
 void		my_sleep_accurate(const int64_t target_t);
+void		my_sleep_think(const int64_t target_t);
 int64_t		get_microseconds(void);
 
 
@@ -210,5 +255,6 @@ int			cleanup(t_general *const general);
 // debug
 void		print_philo_info(t_philo *restrict const philo,
 				bool timings, bool check_mutexes);
+void		debug_info_loop_conditoning(t_general *general);
 
 #endif

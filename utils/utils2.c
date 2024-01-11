@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/08 16:43:39 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/10 21:14:28 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	cleanup(t_general *const general)
 	if (general->philos && general->threads)
 	{
 		i = 0;
-		pthread_mutex_destroy(&(general->status));
+		pthread_mutex_destroy(&(general->status_mutex));
 		while (i < general->count)
 		{
 			if (((general->philos) + i)->eat_dur != FAIL_INIT)

@@ -6,14 +6,14 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 13:37:01 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/08 16:44:48 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/12 00:37:43 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
 // not performance critical
-void	wait_threads(t_general *const general)
+void	wait_threads(t_general *const general, pthread_t *status_thread)
 {
 	int	i;
 
@@ -23,60 +23,52 @@ void	wait_threads(t_general *const general)
 		pthread_join(general->threads[i], NULL);
 		i++;
 	}
+	usleep(2000);
+	pthread_join(*status_thread, NULL);
 }
 
-static void	debug_info(t_general *general)
-{
-	if (!general->death_loop)
-		printf("normal loop\n");
-	else
-		printf("death loop\n");
-	if (!(general->philos->thinking_dur > 60))
-	{
-		printf("accuracy mode\n");
-	}
-	else
-	{
-		printf("speed mode\n");
-	}
-}
+
 
 // not performance critical
 bool	intit_threading(t_general *const general)
 {
 	int				i;
 	t_philo			*philo;
-	pthread_t		*thread;
+	pthread_t		*cur_thread;
+	pthread_t		status_thread;
 
-	debug_info(general);
+	debug_info_loop_conditoning(general);
+	if (pthread_create(&status_thread, NULL, flush_output_loop, general))
+		return (false);
 	general->start_t = get_microseconds();
 	general->start_t += general->count * MICROSEC_PER_THREAD_INIT_TIME;
-	i = 0;
-	while (i < general->count)
+	if (general->count == 1)
 	{
-		philo = general->philos + i;
-		thread = general->threads + i;
+		printf("only 1\n");
+		philo = general->philos;
+		philo->next_eat_t = 0;
+		cur_thread = general->threads;
 		philo->start_t = general->start_t;
-		if (!general->death_loop)
-		{
-			if (philo->thinking_dur > SPEED_BOUNDRY)
-			{
-				if (pthread_create(thread, NULL, main_loop_fast, philo))
-					return (false);
-			}
-			else
-			{
-				if (pthread_create(thread, NULL, main_loop_accurate, philo))
-					return (false);
-			}
-		}
-		else
-		{
-			if (pthread_create(thread, NULL, main_loop_death, philo))
-				return (false);
-		}
-		i++;
+		philo->thinking_dur = -10000;
+		philo->next_eat_t = 0;
+		philo->death_loop = true;
+		intit_thread(philo);
+		if (pthread_create(cur_thread, NULL, main_loop_death, philo))
+			return (false);
 	}
-	wait_threads(general);
+	else
+	{
+		i = 0;
+		while (i < general->count)
+		{
+			philo = general->philos + i;
+			cur_thread = general->threads + i;
+			philo->start_t = general->start_t;
+			if (pthread_create(cur_thread, NULL, choose_loop, philo))
+				return (false);
+			i++;
+		}
+	}
+	wait_threads(general, &status_thread);
 	return (false);
 }

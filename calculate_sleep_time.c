@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 15:45:20 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/08 17:28:30 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/10 22:33:38 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	solve_quadratic(double points[3][2], double *a, double *b, double *c)
 	*c = determinant(matrix_c) / det;
 }
 
-// not performance critical
+// // not performance critical
 int64_t	quadratic_function(int64_t x)
 {
 	double	a;
@@ -97,3 +97,16 @@ int64_t	quadratic_function(int64_t x)
 	// Calculate y using the quadratic function y = ax^2 + bx + c
 	return ((int64_t)(a * x * x + b * x + c));
 }
+
+// int64_t	quadratic_function(int64_t x)
+// {
+// 	double	a = 0.040218;
+// 	double	b = 19.345708;
+// 	double	c = 3922.133678;
+
+// 	// Calculate y using the quadratic function y = ax^2 + bx + c
+// 	return ((int64_t)(a * x * x + b * x + c));
+// }
+// a: 0.030218
+// b: 19.345708
+// c: 3922.133678

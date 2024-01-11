@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 07:30:05 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/08 18:35:00 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/12 00:48:04 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,6 @@ static inline int64_t __attribute__((always_inline))
 	return (time);
 }
 
-// performence critical
-static inline int64_t	cur_time_millisec(t_philo *restrict const philo)
-{
-	return ((philo->current_t - philo->start_t)
-		* MICROSEC_TO_MILLISEC_FACTOR);
-}
-
-// // this gives better performence but
-//  // gives slightly inaccurate timestamp outputs
-// static inline int64_t	cur_time_millisec(t_philo *restrict const philo)
-// {
-// 	return ((philo->current_t - philo->start_t) >> SHIFT_DIV_ESTIMATE);
-// }
-
 // this function is responsible for the mutex unlock
 // not performance critical
 static void	do_exit(t_philo *restrict const philo, const bool locked_mutex)
@@ -46,20 +32,32 @@ static void	do_exit(t_philo *restrict const philo, const bool locked_mutex)
 	int64_t	death_time;
 
 	if (!locked_mutex)
-		pthread_mutex_lock(philo->status);
+		pthread_mutex_lock(philo->status_mutex_ptr);
 	if (!(*(philo->exit)))
 	{
-		philo->current_t = get_microseconds_sync();
-		death_time = (philo->current_t - philo->start_t)
+		death_time = (get_microseconds_sync() - philo->start_t)
 			* MICROSEC_TO_MILLISEC_FACTOR;
-		printf("%lld %lld died\n", death_time, philo->index);
+		//usleep(20000);
+		//printf("%lld %lld died\n", death_time,  philo->index);
+		*(philo->output_size) += put_output_to_buffer(get_microseconds_sync() - philo->start_t, philo->index, philo->output_buffer + *(philo->output_size), " died\n");
 		*(philo->exit) = true;
 	}
-	pthread_mutex_unlock(philo->status);
+	pthread_mutex_unlock(philo->status_mutex_ptr);
+}
+
+// performance critical in forks and death loop
+bool	is_dead(t_philo *restrict const philo)
+{
+	if (philo->death_t >= get_microseconds())
+	{
+		return (false);
+	}
+	do_exit(philo, false);
+	return (true);
 }
 
 // performence critical
-bool	change_status(t_philo *restrict const philo, const char *restrict const status)
+bool	change_status(t_philo *restrict const philo, const char *restrict status)
 {
 	int64_t			local_current_t;
 	bool			*local_exit_ptr;
@@ -68,44 +66,19 @@ bool	change_status(t_philo *restrict const philo, const char *restrict const sta
 
 	local_death_t = philo->death_t;
 	local_exit_ptr = philo->exit;
-	local_mutex_ptr = philo->status;
-	local_current_t = get_microseconds_sync();
+	local_mutex_ptr = philo->status_mutex_ptr;
 	pthread_mutex_lock(local_mutex_ptr);
+	philo->current_t = get_microseconds_sync();
+	local_current_t = philo->current_t;
 	if (!(*local_exit_ptr))
 	{
-		if ((local_current_t <= local_death_t))
+		if (local_death_t >= local_current_t)
 		{
-			printf("%lld %lld %s\n", cur_time_millisec(philo),
-				philo->index, status);
+			*(philo->output_size) += put_output_to_buffer((local_current_t - philo->start_t), philo->index, philo->output_buffer + *(philo->output_size), status);
 			pthread_mutex_unlock(local_mutex_ptr);
-			philo->current_t = get_microseconds_sync();
 			return (true);
 		}
 	}
 	do_exit(philo, true);
 	return (false);
-}
-
-// not performance critical (only called in death loop)
-bool	check_exit(t_philo *restrict const philo)
-{
-	bool			*local_ptr;
-	pthread_mutex_t	*local_mutex_ptr;
-
-	local_ptr = philo->exit;
-	local_mutex_ptr = philo->status;
-	philo->current_t = get_microseconds();
-	pthread_mutex_lock(local_mutex_ptr);
-	if (!(*local_ptr))
-	{
-		pthread_mutex_unlock(local_mutex_ptr);
-		if (philo->current_t <= philo->death_t)
-		{
-			return (false);
-		}
-		do_exit(philo, false);
-		return (true);
-	}
-	do_exit(philo, true);
-	return (true);
 }

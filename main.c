@@ -6,148 +6,166 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:04 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/08 18:37:26 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/12 00:44:30 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-/*
-6000 800 200 200 100	works
-
-*/
-
-// static inline int64_t	get_microseconds_main(void)
-// {
-// 	struct timeval	s_time;
-
-// 	gettimeofday(&s_time, NULL);
-// 	return (((int64_t)s_time.tv_sec) * 1000000 + s_time.tv_usec);
-// }
-
-
 // performence critical ending
-static inline bool	intit_thread(t_philo *restrict const philo)
+bool	intit_thread(t_philo *restrict const philo)
 {
+	
 	philo->current_t = philo->start_t;
 	philo->next_eat_t += philo->current_t;
 	philo->death_t = philo->start_t;
 	philo->death_t += philo->starve_dur;
-	if (philo->thinking_dur > SPEED_BOUNDRY)
+	if (philo->thinking_dur > THINK_TIME_BUFFER)
 		my_sleep_fast(philo->current_t);
 	else
 		my_sleep_accurate(philo->current_t);
+	
 	if (!change_status(philo, THINKING_MSG))
 		return (false);
+	
+	if (philo->death_loop)
+	{
+		
+		if (!my_sleep_slow(philo->next_eat_t, philo))
+			return (false);
+	}
+	else
+	{
+		my_sleep_think(philo->next_eat_t);
+	}
+	
 	return (true);
 }
 
 // is used when it is impossible that the philo survies with the given timings
-// this allows optimisations in the regular cases
+// this allows optimisations in other cases
 // performence critical
-void	*main_loop_death(void *arg)
+void	*main_loop_death(void *philos)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)arg;
-	if (!intit_thread(philo))
-		return (arg);
-	if (!my_sleep_slow(philo->next_eat_t, philo))
-		return (false);
-	while (philo->eat_count)
+	philo = (t_philo *)philos;
+	while (1)
 	{
+		if (philo->eat_count == 0)
+			return (NULL);
 		if (!pickup_forks(philo))
-			break ;
+			return (NULL);
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, EATING_MSG))
 		{
 			drop_forks(philo);
-			break ;
+			return (NULL);
 		}
 		philo->death_t = philo->current_t + philo->starve_dur;
 		my_sleep_accurate(philo->current_t + philo->eat_dur);
 		drop_forks(philo);
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, SLEEP_MSG))
-			break ;
+			return (NULL);
 		if (!my_sleep_slow(philo->current_t + philo->sleep_dur, philo))
-			break ;
+			return (NULL);
 		if (!change_status(philo, THINKING_MSG))
-			break ;
+			return (NULL);
 		if (philo->eat_count > 0)
 			philo->eat_count--;
 	}
-	return (arg);
 }
 
+// runs when there is extra time where the threads can go into sleep
+//	so the other threads get compute (allows a huge philo count)
 // performence critical
-void	*main_loop_fast(void *arg)
+void	main_loop_loose(t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	if (!intit_thread(philo))
-		return (arg);
-	my_sleep_fast(philo->next_eat_t);
-	while (philo->eat_count)
+	philo->thinking_dur -= THINK_TIME_BUFFER;
+	while (1)
 	{
+		if (philo->eat_count == 0)
+			return ;
 		if (!pickup_forks(philo))
-			break ;
+			return ;
 		if (!change_status(philo, EATING_MSG))
 		{
 			drop_forks(philo);
-			break ;
+			return ;
 		}
-		philo->death_t = philo->current_t + philo->starve_dur;
 		philo->next_eat_t = (philo->current_t + philo->eat_dur + philo->sleep_dur + philo->thinking_dur);
-		my_sleep_fast(philo->current_t + philo->eat_dur);
-		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->left_fork));
+		philo->death_t = philo->current_t  + philo->starve_dur;
+		philo->next_eat_t = (philo->current_t + philo->eat_dur + philo->sleep_dur + philo->thinking_dur);
+		my_sleep_accurate(philo->current_t + philo->eat_dur);
 		drop_forks(philo);
-		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, SLEEP_MSG))
-			break ;
+			return ;
 		my_sleep_fast(philo->current_t + philo->sleep_dur);
-		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+		//my_sleep_accurate(philo->current_t + philo->sleep_dur);
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, THINKING_MSG))
-			break ;
-		//my_sleep_fast(philo->next_eat_t);
-		my_sleep_accurate(philo->next_eat_t);
-		//usleep(philo->thinking_dur);
+			return ;
+		my_sleep_think(philo->next_eat_t);
 		if (philo->eat_count > 0)
 			philo->eat_count--;
 	}
-	return (arg);
 }
 
+// runs when the estimated computed time is larger than the starve time
 // performence critical
-void	*main_loop_accurate(void *arg)
+void	main_loop_critical_timings(t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	if (!intit_thread(philo))
-		return (arg);
-	my_sleep_accurate(philo->next_eat_t);
-	while (philo->eat_count)
+	while (1)
 	{
+		if (philo->eat_count == 0)
+			return ;
 		if (!pickup_forks(philo))
-			break ;
+			return ;
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, EATING_MSG))
 		{
 			drop_forks(philo);
-			break ;
+			return ;
 		}
 		philo->death_t = philo->current_t + philo->starve_dur;
 		my_sleep_accurate(philo->current_t + philo->eat_dur);
-		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->left_fork));
 		drop_forks(philo);
-		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, SLEEP_MSG))
-			break ;
+			return ;
 		my_sleep_accurate(philo->current_t + philo->sleep_dur);
-		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (!change_status(philo, THINKING_MSG))
-			break ;
+			return ;
 		if (philo->eat_count > 0)
 			philo->eat_count--;
+	}
+}
+
+// not performence critical
+void	*choose_loop(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	if (!intit_thread(philo))
+		return (arg);
+	if (philo->death_loop)
+	{
+		//printf("death loop\n");
+		main_loop_death(philo);
+	}
+	else if (philo->thinking_dur < THINK_TIME_BUFFER)
+	{
+		//printf("acc loop\n");
+		main_loop_critical_timings(philo);
+	}
+	else
+	{
+		//printf("loose loop\n");
+		main_loop_loose(philo);
 	}
 	return (arg);
 }

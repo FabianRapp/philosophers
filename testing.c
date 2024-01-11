@@ -13,4 +13,3 @@ int main() {
 	printf("pthread_mutex_t: %ld\n", sizeof(pthread_mutex_t));
 	return 0;
 }
-
