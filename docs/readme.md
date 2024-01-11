@@ -1,3 +1,5 @@
+###  Unfinished Project!
+
 # Dining Philosophers Problem
 
 This project is an implementation of the classic concurrency problem known as the Dining Philosophers Problem. It is written in C and uses the POSIX threads (pthreads) library for threading and synchronization.
@@ -25,4 +27,4 @@ Compile the project:
 make
 
 Run the program:
-./philosophers
+./p 2047 1050 200 200
