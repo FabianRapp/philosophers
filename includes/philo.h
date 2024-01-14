@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/12 00:53:45 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/14 00:40:24 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <stdint.h>
+# include "types.h"
+
+
 
 # ifndef MICROSEC_PER_THREAD_INIT_TIME
 #  define MICROSEC_PER_THREAD_INIT_TIME 2000
@@ -29,8 +32,8 @@
 #  define FAIL_INIT -1
 # endif
 
-# ifndef SHIFT_DIV_ESTIMATE
-#  define SHIFT_DIV_ESTIMATE 10
+# ifndef MAX_STR_NBRS
+#  define MAX_STR_NBRS 15
 # endif
 
 # ifndef MICROSEC_TO_MILLISEC_FACTOR
@@ -66,20 +69,17 @@
 # endif
 
 # ifndef SLEEP_TOLERANCE_FAST
-#  define SLEEP_TOLERANCE_FAST 500
+#  define SLEEP_TOLERANCE_FAST 200
 # endif
 
 # ifndef THINK_TIME_BUFFER
-#  define THINK_TIME_BUFFER 800
+#  define THINK_TIME_BUFFER 700
 # endif
 
 # ifndef SLEEP_TOLERANCE_ACC
 #  define SLEEP_TOLERANCE_ACC 500
 # endif
 
-# ifndef SPEED_BOUNDRY
-#  define SPEED_BOUNDRY 0
-# endif
 
 /*
 	the x-value is the philo count (== thread count)
@@ -98,7 +98,7 @@
 # endif
 
 # ifndef POINT1_Y
-#  define POINT1_Y 2000// 4000?
+#  define POINT1_Y 7000// 4000?
 # endif
 
 # ifndef POINT2_X
@@ -106,7 +106,7 @@
 # endif
 
 # ifndef POINT2_Y
-#  define POINT2_Y 120000 // 170000
+#  define POINT2_Y 170000 // 170000
 # endif
 
 # ifndef POINT3_X
@@ -114,85 +114,9 @@
 # endif
 
 # ifndef POINT3_Y
-#  define POINT3_Y 6000
+#  define POINT3_Y 8000 // was 6000 unstable now...
 # endif
 
-// # ifndef POINT3_X
-// #  define POINT3_X 1024
-// # endif
-
-// # ifndef POINT3_Y
-// #  define POINT3_Y 47000
-// # endif
-
-
-// used is used as a bool, int64_t for preticable layout
-typedef struct s_fork
-{
-	int64_t			used; // 64
-	pthread_mutex_t	mutex_used; // 128
-	pthread_mutex_t	mutex; // 192
-}	t_fork;
-
-typedef struct s_philo
-{
-	// cache line 1 (0 - 64)
-	pthread_mutex_t		*status_mutex_ptr;  //8
-	int64_t				death_t; // 16
-	bool				*exit;	// 24
-	int64_t				current_t; // 32
-	t_fork				*left_fork; // 40
-	t_fork				*right_fork; // 48
-	int64_t				eat_dur; // 56
-	// cache line 2/3 (64 - 192)
-	t_fork				main_fork; // 192
-	int64_t				starve_dur; // 184
-	 // 192
-	int64_t				thinking_dur;
-	int64_t				next_eat_t;
-	int64_t				eat_count;
-	int64_t				start_t;
-	// cache line 4 (192 - 256)
-	int64_t				sleep_dur;
-	int64_t				index;
-	int64_t				death_loop; //bool
-
-	// experimental
-	char				*output_buffer;
-	int64_t				*output_size;
-	int64_t				cache_filler1;
-	int64_t				cache_filler2;
-	int64_t				cache_filler3;
-	int64_t				cache_filler4;
-	int64_t				cache_filler5;
-	int64_t				cache_filler6;
-}	t_philo;
-
-# ifndef OUTPUT_BUFFER_SIZE
-#  define OUTPUT_BUFFER_SIZE 1000000
-# endif
-// exit and status have to be the first two values to ensure cache locality
-typedef struct s_general
-{
-	bool					exit;
-	pthread_mutex_t			status_mutex;
-	int64_t					output_size;
-	char					output_buffer[OUTPUT_BUFFER_SIZE];
-	t_philo					*philos;
-	pthread_t				*threads;
-	// count was uint16_t before
-	int32_t					count;
-	// were int32_t:
-	int32_t					starve_dur;
-	int32_t					eat_dur;
-	int32_t					sleep_dur;
-	int32_t					eat_count;
-	// ^^were int32_t^^
-	int64_t					start_t;
-	t_philo					*ptr_to_free_philos;
-	bool					even;
-	bool					death_loop;
-}	t_general;
 
 // main.c
 //void		*main_loop(void *arg);
@@ -200,8 +124,8 @@ void		*choose_loop(void *arg);
 void		*main_loop_death(void *philos);
 
 // my_print.c
-int8_t		put_output_to_buffer(int64_t cur_time,
-				int64_t philo_nb, char *buffer, const char *restrict str);
+int8_t		put_output_to_buffer(const int64_t cur_time, const int64_t philo_nb,
+				char *restrict buffer, const char *restrict str);
 void		*flush_output_loop(void *gen);
 
 //int		main(int ac, char *av[]);
@@ -215,27 +139,22 @@ bool		intit_threading(t_general *const general);
 bool		intit_thread(t_philo *restrict const philo);
 void		wait_threads(t_general *const general, pthread_t *status_thread);
 
-
-
-
 // utils
 int64_t		ft_atoi(const char *str);
 void		align_ptr(int8_t **ptr);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
 
 bool		pickup_left_fork(t_philo *restrict const philo);
 bool		pickup_right_fork(t_philo *restrict const philo);
 void		drop_forks(t_philo *restrict const philo);
 
-
-
 // sync_utils
-bool		change_status(t_philo *restrict const philo, const char *restrict status);
+bool		change_status(t_philo *restrict const philo,
+				const char *restrict status);
 bool		is_dead(t_philo *restrict const philo);
-
 
 void		drop_left_fork(t_philo *restrict const philo);
 void		drop_right_fork(t_philo *restrict const philo);
-
 bool		pickup_forks(t_philo *restrict const philo);
 
 // time
@@ -246,9 +165,7 @@ void		my_sleep_accurate(const int64_t target_t);
 void		my_sleep_think(const int64_t target_t);
 int64_t		get_microseconds(void);
 
-
-int64_t		quadratic_function(int64_t x);
-
+int64_t		calculate_iteration_time(int64_t x);
 
 int			cleanup(t_general *const general);
 

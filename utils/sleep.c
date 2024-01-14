@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:31:41 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/11 16:58:03 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/13 23:59:46 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-
-// not performance critical
-int64_t	get_microseconds(void)
-{
-	struct timeval	s_time;
-	int64_t			time;
-
-	gettimeofday(&s_time, NULL);
-	time = (int64_t)s_time.tv_sec * SEC_TO_MICROSEC_FACTOR;
-	time += s_time.tv_usec;
-	return (time);
-}
 
 // performence critical
 static inline int64_t __attribute__((always_inline))
@@ -58,7 +46,8 @@ void	my_sleep_fast(const int64_t target_t)
 // sleeps atleast until target_t
 // does sleep atleast until target_t and max very few micro sec more
 // performence critical
-// used for eating to unlock forks as fast as possible and when the given timings might be too tight
+// used for eating to unlock forks as fast as possible and
+// when the given timings might be too tight
 void	my_sleep_accurate(const int64_t target_t)
 {
 	int64_t			time_diff;

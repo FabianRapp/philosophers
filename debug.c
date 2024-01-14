@@ -24,7 +24,8 @@ void	debug_info_loop_conditoning(t_general *general)
 	{
 		printf("critical_timings loop \n");
 	}
-	printf("min exection time: %lld\n", quadratic_function(general->count));
+	printf("min exection time: %lld\n",
+		calculate_iteration_time(general->count));
 	printf("thinking_dur: %lld\n", general->philos->thinking_dur);
 	usleep(2000000);
 }
@@ -39,7 +40,7 @@ void	print_mutex_status(const char *name, bool status)
 
 void	print_timing_info(t_philo *philo)
 {
-	printf("\tcur time:%lld\n", philo->current_t / 1000);
+	printf("\tcur time:%lld\n", get_microseconds() / 1000);
 	printf("\tstarve_ti: %lld\n\teat_ti: %lld\n\tsleep_ti: %lld\n",
 		(int64_t)(philo->starve_dur * MICROSEC_TO_MILLISEC_FACTOR),
 		(int64_t)(philo->eat_dur * MICROSEC_TO_MILLISEC_FACTOR),

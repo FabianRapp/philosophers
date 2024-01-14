@@ -1,10 +1,10 @@
 CC=cc
-CFLAGS=-Wall -Wextra
-FLAGS_SPEED=-Werror -O3 -march=native -ftree-vectorize -funroll-loops
+CFLAGS=-Wall -Wextra -Werror -O3 -march=native -ftree-vectorize -funroll-loops
+FLAGS_SPEED=
 PROFILE_FLAGS=
 INCLUDES=-I./includes
-SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/time.c threading.c \
- calculate_sleep_time.c debug.c my_print.c
+SOURCES= main.c utils/utils1.c init.c utils/utils2.c forks.c utils/sync_utils.c utils/sleep.c threading.c \
+ calculate_iteration_time.c debug.c my_print.c main_loop.c
 OBJECTS= $(SOURCES:.c=.o)
 NAME=p
 NAME_PROFILE=$(NAME)_profile
@@ -25,7 +25,7 @@ nWWW:
 	@echo "\033[32mBuild complete.\033[0m"
 
 
-fsanitize_address: fclean
+fsanitize_adress: fclean
 	@$(CC) $(INCLUDES) $(CFLAGS) $(FLAGS_SPEED) -g $(SOURCES) -o $(NAME) -fsanitize=address
 	@echo "\033[32mBuild complete.\033[0m"
 
@@ -63,5 +63,6 @@ clean2:
 	@echo "\033[33mObject files removed.\033[0m"
 
 norm:
-	norminette $(SOURCES) includes/philo.h
+	norminette $(SOURCES)
+#includes/philo.h
 

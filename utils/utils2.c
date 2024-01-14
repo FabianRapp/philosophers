@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 03:53:59 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/10 21:14:28 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/14 02:59:29 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,16 @@ int	cleanup(t_general *const general)
 			if ((general->philos)[i].starve_dur != FAIL_INIT)
 				pthread_mutex_destroy(&((general->philos) + i)
 					->main_fork.mutex_used);
+			if ((general->philos)[i].sleep_dur != FAIL_INIT)
+				pthread_mutex_destroy(&((general->philos) + i)
+					->testing_exit_mutext);
 			i++;
 		}
 	}
 	if (general->philos)
 		free(general->ptr_to_free_philos);
-	general->philos = NULL;
 	if (general->threads)
 		free(general->threads);
-	general->threads = NULL;
 	return (0);
 }
 
@@ -82,3 +83,14 @@ void	align_ptr(int8_t **ptr)
 	*ptr = *ptr + CACHE_LINE_SIZE - size_past_last_line;
 }
 
+// not performance critical
+int64_t	get_microseconds(void)
+{
+	struct timeval	s_time;
+	int64_t			time;
+
+	gettimeofday(&s_time, NULL);
+	time = (int64_t)s_time.tv_sec * SEC_TO_MICROSEC_FACTOR;
+	time += s_time.tv_usec;
+	return (time);
+}
