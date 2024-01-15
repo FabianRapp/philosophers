@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 15:21:45 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/14 02:31:20 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/15 06:49:55 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,28 +47,33 @@ static void	fill_odd_even(t_general *const general,
 {
 	int64_t	min_execution_time;
 
+	min_execution_time = calculate_iteration_time(general->count);
+	philo->thinking_dur = (
+				(philo->starve_dur - (philo->eat_dur) - philo->sleep_dur)
+				- min_execution_time);
 	philo->next_eat_t = 0;
+	if ((i % 2) == 0)
+		philo->next_eat_t = philo->eat_dur;
 	if (general->even)
 	{
-		min_execution_time = calculate_iteration_time(general->count);
-		philo->thinking_dur = (
-				(philo->starve_dur - philo->eat_dur - philo->sleep_dur)
-				- min_execution_time);
-		if (i % 2)
-			philo->next_eat_t = philo->eat_dur;
+		philo->surplus_starve_dur = philo->starve_dur - philo->eat_dur - philo->sleep_dur;
+		// philo->thinking_dur = (
+		// 		(philo->starve_dur - philo->eat_dur - philo->sleep_dur)
+		// 		- min_execution_time);
+		//(void)i;
 	}
 	else
 	{
-		min_execution_time = calculate_iteration_time(general->count);
-		philo->thinking_dur = (
-				(philo->starve_dur - (philo->eat_dur * 2) - philo->sleep_dur)
-				- min_execution_time);
-		if (!(i % 3))
-			philo->next_eat_t = 0;
-		else if (!((i + 2) % 3))
-			philo->next_eat_t = philo->thinking_dur;
-		else
-			philo->next_eat_t = philo->thinking_dur + philo->sleep_dur;
+		philo->surplus_starve_dur = philo->starve_dur - philo->eat_dur * 2 - philo->sleep_dur;
+		// philo->thinking_dur = (
+		// 		(philo->starve_dur - (philo->eat_dur * 2) - philo->sleep_dur)
+		// 		- min_execution_time);
+		// if (!(i % 3))
+		// 	philo->next_eat_t = 0;
+		// else if (!((i + 2) % 3))
+		// 	philo->next_eat_t = philo->thinking_dur;
+		// else
+		// 	philo->next_eat_t = philo->thinking_dur + philo->eat_dur;
 	}
 }
 
@@ -80,9 +85,9 @@ void	cpy_general_to_philo(t_general *general, t_philo *philo, int i)
 	philo->eat_count = general->eat_count;
 	philo->left_fork = &(philo->main_fork);
 	(philo->exit) = &(general->exit);
-	(philo->status_mutex_ptr) = &(general->status_mutex);
+	(philo->buffer_mutex) = &(general->buffer_mutex);
 	philo->main_fork.used = false;
-	philo->output_buffer = general->output_buffer;
+	philo->output_buffer = &(general->cur_buffer);
 	philo->output_size = &(general->output_size);
 	philo->index = i;
 	philo->debug = general->debug;
@@ -122,9 +127,11 @@ int	init_philos(t_general *const general)
 {
 	int64_t	i;
 
-	if (pthread_mutex_init(&general->status_mutex, NULL))
+	if (pthread_mutex_init(&general->buffer_mutex, NULL))
 		return (0);
 	general->exit = false;
+	general->cur_buffer = general->output_buffer_a;
+	general->output_size = 0;
 	general->even = true;
 	if (general->count % 2)
 		general->even = false;
@@ -132,8 +139,11 @@ int	init_philos(t_general *const general)
 	if ((general->eat_dur * 2) > general->starve_dur
 		|| (general->eat_dur + general->sleep_dur) > general->starve_dur
 		|| general->count == 1
-		|| (!general->even && (general->starve_dur / 3) <= general->eat_dur))
+		|| (!general->even && (general->starve_dur / 3) <= general->eat_dur)
+		)
+	{
 		general->death_loop = true;
+	}
 	general->philos = NULL;
 	general->threads = malloc(sizeof(pthread_t) * (general->count + 1));
 	general->philos = malloc(sizeof(t_philo) * (general->count + 2));

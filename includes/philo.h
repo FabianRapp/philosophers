@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 08:45:07 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/14 00:40:24 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/15 09:44:02 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,6 @@
 
 # ifndef FAIL_INIT
 #  define FAIL_INIT -1
-# endif
-
-# ifndef MAX_STR_NBRS
-#  define MAX_STR_NBRS 15
 # endif
 
 # ifndef MICROSEC_TO_MILLISEC_FACTOR
@@ -73,7 +69,7 @@
 # endif
 
 # ifndef THINK_TIME_BUFFER
-#  define THINK_TIME_BUFFER 700
+#  define THINK_TIME_BUFFER 0
 # endif
 
 # ifndef SLEEP_TOLERANCE_ACC
@@ -93,12 +89,13 @@
 	a thread can sleep after the mandetory actions
 	(to leave the compute power to other threads)
 */
+
 # ifndef POINT1_X
-#  define POINT1_X 4
+#  define POINT1_X 2
 # endif
 
 # ifndef POINT1_Y
-#  define POINT1_Y 7000// 4000?
+#  define POINT1_Y 4000
 # endif
 
 # ifndef POINT2_X
@@ -106,22 +103,21 @@
 # endif
 
 # ifndef POINT2_Y
-#  define POINT2_Y 170000 // 170000
+#  define POINT2_Y 170000
 # endif
 
 # ifndef POINT3_X
-#  define POINT3_X 200
+#  define POINT3_X 201
 # endif
 
 # ifndef POINT3_Y
-#  define POINT3_Y 8000 // was 6000 unstable now...
+#  define POINT3_Y 7000
 # endif
 
 
 // main.c
 //void		*main_loop(void *arg);
 void		*choose_loop(void *arg);
-void		*main_loop_death(void *philos);
 
 // my_print.c
 int8_t		put_output_to_buffer(const int64_t cur_time, const int64_t philo_nb,

@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:31:41 by fabi              #+#    #+#             */
-/*   Updated: 2024/01/13 23:59:46 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/15 09:02:05 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	my_sleep_accurate(const int64_t target_t)
 }
 
 // sleeps atleast until target_t
-// can sleep more or less than the target
+// can sleep less than the target
 // performence critical
 void	my_sleep_think(const int64_t target_t)
 {
@@ -91,9 +91,10 @@ bool	my_sleep_slow(const int64_t target_t,
 {
 	while (target_t > get_microseconds_time())
 	{
-		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
+		//__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (is_dead(philo))
 			return (false);
 	}
+	
 	return (!is_dead(philo));
 }

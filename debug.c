@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   debug.c											:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: fabi <fabi@student.42.fr>				  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2023/12/19 17:14:06 by frapp			 #+#	#+#			 */
-/*   Updated: 2024/01/05 14:36:48 by fabi			 ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/15 06:45:38 by frapp             #+#    #+#             */
+/*   Updated: 2024/01/15 06:45:41 by frapp            ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
@@ -64,9 +64,9 @@ void	print_mutexes_info(t_philo *philo)
 	pthread_mutex_lock(&philo->right_fork->mutex_used);
 	print_mutex_status("right_fork->used", philo->right_fork->used);
 	pthread_mutex_unlock(&philo->right_fork->mutex_used);
-	pthread_mutex_lock(philo->status_mutex_ptr);
+	pthread_mutex_lock(philo->buffer_mutex);
 	print_mutex_status("exit", *philo->exit);
-	pthread_mutex_unlock(philo->status_mutex_ptr);
+	pthread_mutex_unlock(philo->buffer_mutex);
 }
 
 void	print_philo_info(

@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 05:15:23 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/14 02:58:15 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/15 09:40:38 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,24 @@ bool	pickup_left_fork(t_philo *restrict const philo)
 {
 	t_fork				*local_left_fork_ptr;
 	pthread_mutex_t		*local_used_mutex_ptr;
+	int64_t				usleep_dur;
+	int32_t			usleep_buffer;
 
 	local_left_fork_ptr = philo->left_fork;
 	local_used_mutex_ptr = &local_left_fork_ptr->mutex_used;
+	usleep_buffer = philo->surplus_starve_dur >> 8;
+	usleep_dur = usleep_buffer >> 2;
 	pthread_mutex_lock(local_used_mutex_ptr);
 	while (local_left_fork_ptr->used)
 	{
 		pthread_mutex_unlock(local_used_mutex_ptr);
 		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (is_dead(philo))
+		{
 			return (false);
-		if (philo->death_t > get_microseconds() + 2000)
-			usleep(1);
+		}
+		if (philo->death_t > get_microseconds() + usleep_buffer && usleep_dur > 0)
+			usleep(usleep_dur);
 		pthread_mutex_lock(local_used_mutex_ptr);
 	}
 	local_left_fork_ptr->used = true;
@@ -43,12 +49,16 @@ bool	pickup_left_fork(t_philo *restrict const philo)
 }
 
 // performence critical
+// remove this make 1 pickup fork fucntion
 bool	pickup_right_fork(t_philo *restrict const philo)
 {
-	t_fork	*local_right_fork_ptr;
-	int64_t	cur_time;
+	t_fork			*local_right_fork_ptr;
+	int32_t			usleep_dur;
+	int32_t			usleep_buffer;
 
 	local_right_fork_ptr = philo->right_fork;
+	usleep_buffer = philo->surplus_starve_dur >> 8;
+	usleep_dur = usleep_buffer >> 2;
 	pthread_mutex_lock(&local_right_fork_ptr->mutex_used);
 	while (local_right_fork_ptr->used)
 	{
@@ -56,9 +66,8 @@ bool	pickup_right_fork(t_philo *restrict const philo)
 		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->death_t));
 		if (is_dead(philo))
 			return (false);
-		cur_time = get_microseconds();
-		if (philo->death_t > cur_time + 2000)
-			usleep(1);
+		if (philo->death_t > get_microseconds() + usleep_buffer && usleep_dur > 0)
+			usleep(usleep_dur);
 		pthread_mutex_lock(&local_right_fork_ptr->mutex_used);
 	}
 	local_right_fork_ptr->used = true;
@@ -116,6 +125,7 @@ bool	pickup_forks(t_philo *restrict const philo)
 {
 	if (!(philo->index % 2))
 	{
+		
 		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->left_fork));
 		if (!pickup_left_fork(philo))
 			return (false);
@@ -127,9 +137,11 @@ bool	pickup_forks(t_philo *restrict const philo)
 	}
 	else
 	{
+		//usleep(1000);//////////////wtf is this
 		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->right_fork));
 		if (!pickup_right_fork(philo))
 			return (false);
+		
 		__asm__ volatile ("PREFETCHT1 %0" : : "m" (philo->left_fork));
 		if (!pickup_left_fork(philo))
 		{

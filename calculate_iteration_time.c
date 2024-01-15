@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 02:37:18 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/14 02:51:50 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/15 08:41:28 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static double	determinant(double matrix[3][3])
 // not performance critical
 // matrices[4][3][3] are 4 matrices; it has to be this way to to make it
 // look somewhat reasonable and pass the norm
-static void	cramers_rule(double points[3][2], double *a, double *b, double *c)
+void static	cramers_rule(double points[3][2], double *a, double *b, double *c)
 {
 	double	matrices[4][3][3];
 	double	det;
@@ -58,8 +58,11 @@ static void	cramers_rule(double points[3][2], double *a, double *b, double *c)
 	*c = determinant(matrices[3]) / det;
 }
 
-// // not performance critical
-int64_t	calculate_iteration_time(int64_t x)
+//not performance critical
+// hardcoded 5000 c offset to improve performence for small
+// philo counts without inverting up the entire curve
+// (for x = 2 y has to be 0 duo to this)
+int64_t	calculate_iteration_time(int64_t philo_count)
 {
 	double	a;
 	double	b;
@@ -73,5 +76,16 @@ int64_t	calculate_iteration_time(int64_t x)
 	points[2][0] = POINT3_X;
 	points[2][1] = POINT3_Y;
 	cramers_rule(points, &a, &b, &c);
-	return ((int64_t)(a * x * x + b * x + c));
+	//c += 8000;
+	if (DEBUGING)
+	{
+		static int was_here = 0;
+		if (!was_here)
+		{
+			was_here = 1;
+			printf("a: %f; b: %f; c: %f\n", a, b, c);
+		}
+	}
+	return ((int64_t)(a * philo_count * philo_count
+			+ b * philo_count + c));
 }

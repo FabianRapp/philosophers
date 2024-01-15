@@ -6,7 +6,7 @@
 /*   By: frapp <frapp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:57:30 by frapp             #+#    #+#             */
-/*   Updated: 2024/01/14 02:36:05 by frapp            ###   ########.fr       */
+/*   Updated: 2024/01/15 02:46:20 by frapp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ static inline void	set_exit(t_general *general)
 	general->exit = true;
 }
 
+
+# ifndef MAX_STR_NBRS
+#  define MAX_STR_NBRS 25
+# endif
+
 // numbers must be >= 0
 // buffer size is handled by flushing thread
 // status mutex must be locked during this
@@ -107,33 +112,65 @@ int8_t	put_output_to_buffer(const int64_t cur_time, const int64_t philo_nb,
 	{
 		buffer[entered_chars++] = *str++;
 	}
+	if (DEBUGING)
+		buffer[entered_chars] = 0;
 	return (entered_chars);
+}
+
+int	ft_strlen(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len])
+	{
+		len++;
+	}
+	return (len);
 }
 
 // TODO: figure out a non brute force way to prevent a buffer overflow
 void	*flush_output_loop(void *gen)
 {
 	t_general	*general;
-	int64_t		interval;
 	int			death_index;
+	int32_t		operating_size;
+	char		*operating_buffer;
 
 	general = (t_general *)gen;
-	interval = 1000;
 	while (!general->exit)
 	{
-		pthread_mutex_lock(&general->status_mutex);
-		death_index = check_death(general->output_buffer, general->output_size);
+		usleep(1000);
+		__asm__ volatile ("PREFETCHT2 %0" : : "m" (general->buffer_mutex));
+		pthread_mutex_lock(&general->buffer_mutex);
+		if (!general->output_size)
+		{
+			pthread_mutex_unlock(&general->buffer_mutex);
+			continue;
+		}
+		operating_size = general->output_size;
+		operating_buffer = general->cur_buffer;
+		if (operating_buffer == general->output_buffer_a)
+			general->cur_buffer = general->output_buffer_b;
+		else
+			general->cur_buffer = general->output_buffer_a;
+		general->output_size = 0;
+		pthread_mutex_unlock(&general->buffer_mutex);
+		if (general->debug >= 1)
+		{
+			if (ft_strlen(operating_buffer) != operating_size)
+			{
+				printf("wrong operating size:\noperating size: %d\nactual: %d\n", operating_size, ft_strlen(operating_buffer));
+				usleep(3000000);
+			}
+		}
+		death_index = check_death(operating_buffer, operating_size);
 		if (death_index != -1)
 		{
 			set_exit(general);
-			general->output_size = death_index;
+			operating_size = death_index;
 		}
-		if (general->output_size)
-			write(1, general->output_buffer, general->output_size);
-		general->output_size = 0;
-		pthread_mutex_unlock(&general->status_mutex);
-		usleep(interval);
-		__asm__ volatile ("PREFETCHT2 %0" : : "m" (general->status_mutex));
+		write(1, operating_buffer, operating_size);
 	}
 	return (gen);
 }
