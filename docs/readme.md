@@ -90,7 +90,7 @@ Example:
 
 ## Performance & Timing Insights
 
-- **Overhead:** With high thread counts (e.g., 2000 philosophers), the average execution window per thread loop is just ~25 microseconds.
+- **Overhead:** With high thread counts (e.g., 2000 philosophers), the average execution window per thread loop is just ~125 microseconds (25 microseconds/core * 5 cores), which is shared with the OS and the huge overhead the 2000 threads give
 - **Precision:** Traditional `usleep()` cannot reliably provide such timing granularity due to OS scheduling. Instead, this project uses micro-sleep increments combined with empirical curve fitting to achieve sub-millisecond precision without busy-waiting.
 - **Output:** Writing directly to `stdout` from every thread would be too costly. Instead, each philosopher writes to a shared buffer, a dedicated flushing thread swaps it out and flushes it so output—keeping within the project requirement of less than 10 ms delay for output messages is possible for even philo counts far beyond what the subject intended.
 
